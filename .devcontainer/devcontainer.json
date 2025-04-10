@@ -1,29 +1,22 @@
 {
   "name": "Streaming Platform Dev Environment",
-  "build": {
-    "dockerfile": "Dockerfile",
-    "context": "."
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {},
+    "ghcr.io/warrenbuckley/codespace-features/sqlite:1": {}
   },
   "forwardPorts": [3000, 8000, 3306],
-  "onCreateCommand": "npm install && cd frontend && npm install && cd ../services/backend && npm install && cd ../database && npm install",
+  "postCreateCommand": "npm install && cd frontend && npm install && cd ../services/backend && npm install && cd ../database && npm install",
   "customizations": {
     "vscode": {
       "extensions": [
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "mtxr.sqltools",
-        "mtxr.sqltools-driver-sqlite",
-        "mikestead.dotenv"
+        "mtxr.sqltools-driver-sqlite"
       ],
       "settings": {
-        "editor.formatOnSave": true,
-        "sqltools.connections": [
-          {
-            "name": "SQLite Database",
-            "driver": "SQLite",
-            "database": "${workspaceFolder}/services/database/database.sqlite"
-          }
-        ]
+        "editor.formatOnSave": true
       }
     }
   },
@@ -38,6 +31,5 @@
     "3306": {
       "label": "Database Service"
     }
-  },
-  "remoteUser": "node"
+  }
 }

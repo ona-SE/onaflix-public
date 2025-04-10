@@ -1,26 +1,13 @@
 FROM gitpod/workspace-full
 
-# Install PostgreSQL
-RUN sudo install-packages postgresql postgresql-contrib
+# Install SQLite
+RUN sudo apt-get update && sudo apt-get install -y sqlite3
 
-# Install Node.js dependencies
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-RUN sudo apt-get install -y nodejs
-
-# Install additional tools
+# Install Node.js (using the default version in Gitpod)
 RUN sudo apt-get update && sudo apt-get install -y \
     jq \
     httpie \
-    redis-tools \
     && sudo rm -rf /var/lib/apt/lists/*
-
-# Setup PostgreSQL server
-RUN sudo mkdir -p /var/run/postgresql && \
-    sudo chown gitpod:gitpod /var/run/postgresql
-
-# Setup environment for running PostgreSQL
-ENV PATH="$PATH:/usr/lib/postgresql/12/bin"
-ENV PGDATA="/workspace/.pgsql/data"
 
 # Switch back to gitpod user
 USER gitpod

@@ -54,10 +54,8 @@ vscode:
   extensions:
     - dbaeumer.vscode-eslint
     - esbenp.prettier-vscode
-    - ms-azuretools.vscode-docker
     - mtxr.sqltools
-    - mtxr.sqltools-driver-pg
+    - mtxr.sqltools-driver-sqlite
     - mikestead.dotenv
-    - graphql.vscode-graphql
 
 

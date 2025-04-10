@@ -56,6 +56,25 @@ The project consists of several interconnected components:
    cd frontend && npm run dev
    ```
 
+#### Using DevContainers in Gitpod
+
+Gitpod now supports DevContainers! You can use our DevContainer configuration in Gitpod by:
+
+1. Opening the command palette in Gitpod (Ctrl+Shift+P or Cmd+Shift+P)
+2. Selecting "Rebuild Container"
+3. Wait for the container to rebuild with our DevContainer configuration
+
+#### Troubleshooting DevContainer Issues
+
+If you encounter issues with the DevContainer build:
+
+1. **In Gitpod**: You can fall back to Gitpod's native containerization which is already configured in `.gitpod.yml`
+
+2. **In VS Code**: 
+   - Ensure Docker Desktop is running and has sufficient resources
+   - Delete any cached images with `docker system prune` and try again
+   - Try opening only the specific service you're working on in a container
+
 ### Manual Setup
 
 If not using Gitpod:
