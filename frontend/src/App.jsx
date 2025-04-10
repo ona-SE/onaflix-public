@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import GraphVisualization from './components/GraphVisualization';
 import ServiceDetails from './components/ServiceDetails';
 import Header from './components/Header';
@@ -18,7 +18,63 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [selectedServiceButton, setSelectedServiceButton] = useState(null);
+  const [appState, setAppState] = useState('initializing'); // 'initializing', 'connecting', 'ready', 'error'
   const { isConnected, nodes, connections, simulateLoad } = useWebSocket();
+
+  // Handle app state changes
+  useEffect(() => {
+    if (!isConnected) {
+      setAppState('connecting');
+    } else if (nodes.length === 0 || connections.length === 0) {
+      setAppState('error');
+    } else {
+      setAppState('ready');
+    }
+  }, [isConnected, nodes, connections]);
+
+  // Handle node selection with a stable reference
+  const handleNodeSelect = useCallback((node) => {
+    setSelectedNode(node);
+    if (node) {
+      setSelectedServiceButton(node.id);
+    }
+  }, []);
+
+  // Memoize simulateLoadWithFeedback to prevent recreating on every render
+  const simulateLoadWithFeedback = useCallback((serviceId) => {
+    if (!serviceId) return;
+
+    setIsLoading(true);
+    simulateLoad(serviceId);
+
+    // Simulate a loading state for visual feedback
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  }, [simulateLoad]);
+
+  // Memoize the handleSimulateLoad function
+  const handleSimulateLoad = useCallback(() => {
+    if (selectedNode) {
+      simulateLoadWithFeedback(selectedNode.id);
+    }
+  }, [selectedNode, simulateLoadWithFeedback]);
+
+  // Memoize the handleToggleTheme function
+  const handleToggleTheme = useCallback(() => {
+    setIsDarkMode((prev) => !prev);
+  }, []);
+
+  // Memoize the handleSelectService function
+  const handleSelectService = useCallback((serviceId) => {
+    setSelectedServiceButton(serviceId);
+
+    // Find the service node
+    const serviceNode = nodes.find((node) => node.id === serviceId);
+    if (serviceNode) {
+      setSelectedNode(serviceNode);
+    }
+  }, [nodes]);
 
   // Listen for custom simulate-load events from child components
   useEffect(() => {
@@ -32,7 +88,7 @@ function App() {
     return () => {
       window.removeEventListener('simulate-load', handleSimulateLoadEvent);
     };
-  }, [simulateLoad]);
+  }, [simulateLoadWithFeedback]);
 
   // Handle theme toggle
   useEffect(() => {
@@ -43,99 +99,55 @@ function App() {
     }
   }, [isDarkMode]);
 
+  // Memoize nodes and connections to prevent unnecessary rerenders
+  const memoizedNodes = useMemo(() => nodes || [], [nodes]);
+  const memoizedConnections = useMemo(() => connections || [], [connections]);
+
   // Set initial selected service from nodes when they load
   useEffect(() => {
     if (nodes && nodes.length > 0 && !selectedNode) {
+      console.log("Setting initial selected node");
       // Find analytics node to select by default
       const analyticsNode = nodes.find((node) => node.id === 'analytics');
       if (analyticsNode) {
         setSelectedNode(analyticsNode);
         setSelectedServiceButton('analytics');
+      } else if (nodes[0]) {
+        // Fallback to first node
+        setSelectedNode(nodes[0]);
+        setSelectedServiceButton(nodes[0].id);
       }
     }
   }, [nodes, selectedNode]);
 
-  /**
-   * Handle node selection
-   * @param {ServiceNode|null} node - The selected service node
-   */
-  const handleNodeSelect = (node) => {
-    setSelectedNode(node);
-    if (node) {
-      setSelectedServiceButton(node.id);
-    }
-  };
-
-  const handleSimulateLoad = () => {
-    if (selectedNode && selectedNode.id) {
-      simulateLoadWithFeedback(selectedNode.id);
-    }
-  };
-
-  const handleToggleTheme = () => {
-    setIsDarkMode((prevMode) => !prevMode);
-  };
-
-  const handleSelectService = (serviceId) => {
-    setSelectedServiceButton(serviceId);
-    // Find the corresponding node to select
-    const node = nodes.find((n) => n.id === serviceId);
-
-    if (node) {
-      setSelectedNode(node);
-    }
-  };
-
-  // Add feedback for simulation
-  const simulateLoadWithFeedback = (serviceId) => {
-    setIsLoading(true);
-
-    // Show loading state for a second
-    setTimeout(() => {
-      // Call the actual simulation
-      simulateLoad(serviceId);
-      setIsLoading(false);
-
-      // Show success notification
-      showNotification(`Simulated load on ${serviceId} service`);
-    }, 1000);
-  };
-
-  // Simple notification system
-  const showNotification = (message) => {
-    const notification = document.createElement('div');
-    notification.className = 'load-notification';
-    notification.innerHTML = `
-      <div class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg flex items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-        </svg>
-        ${message}
-      </div>
-    `;
-
-    document.body.appendChild(notification);
-
-    // Fade in
-    setTimeout(() => {
-      notification.style.opacity = '1';
-    }, 10);
-
-    // Remove after 3 seconds
-    setTimeout(() => {
-      notification.style.opacity = '0';
-      setTimeout(() => {
-        document.body.removeChild(notification);
-      }, 300);
-    }, 3000);
-  };
-
-  if (!isConnected) {
+  // Display loading state during connection
+  if (appState === 'connecting') {
     return (
       <div className="container mx-auto px-4 min-h-screen flex items-center justify-center">
         <div className="loading">
           <div className="spinner"></div>
           <p>Connecting to streaming platform services...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Display error state if data failed to load
+  if (appState === 'error') {
+    return (
+      <div className="container mx-auto px-4 min-h-screen flex items-center justify-center">
+        <div className="error-state text-center">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto mb-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <h2 className="text-xl font-bold mb-2">Error Loading Data</h2>
+          <p className="mb-4">We couldn't load the service data. Please try refreshing the page.</p>
+          <button
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded"
+            onClick={() => window.location.reload()}
+          >
+            Refresh Page
+          </button>
         </div>
       </div>
     );
@@ -153,8 +165,8 @@ function App() {
       <main className="mt-6 flex-grow flex flex-col">
         <div className="graph-container bg-gray-900 rounded-lg shadow-xl border border-gray-800 flex-grow flex">
           <GraphVisualization
-            nodes={nodes}
-            connections={connections}
+            nodes={memoizedNodes}
+            connections={memoizedConnections}
             onNodeSelect={handleNodeSelect}
           />
 

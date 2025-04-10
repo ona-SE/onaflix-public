@@ -100,15 +100,21 @@ body.light-mode .node-detail {
 
 .service-node {
   cursor: pointer;
-  transition: filter 0.2s ease;
+  transition: filter 0.1s ease;
+  will-change: filter;
 }
 
 .service-node:hover {
-  filter: brightness(1.1);
+  filter: brightness(1.02);
+}
+
+.service-node.selected {
+  filter: brightness(1.05);
 }
 
 .service-node circle {
-  fill-opacity: 0.8;
+  fill-opacity: 0.9;
+  transition: none;
 }
 
 .service-node.catalog circle {
@@ -189,8 +195,8 @@ marker#arrow-data path {
 }
 
 .pulse-circle {
-  transform-origin: center;
-  transform-box: fill-box;
+  animation: pulse 2s ease-in-out infinite;
+  will-change: opacity;
 }
 
 .graph-tooltip {
@@ -336,18 +342,10 @@ marker#arrow-data path {
   animation: none;
 }
 
-@keyframes pulse-button {
-  0% {
-    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7);
-  }
-
-  70% {
-    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0);
-  }
-
-  100% {
-    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
-  }
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 0.3; }
+  100% { opacity: 0.6; }
 }
 
 .simulate-load-btn {
@@ -552,19 +550,18 @@ marker#arrow-data path {
   align-items: center;
   justify-content: center;
   padding: 5px;
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   position: relative;
   overflow: visible;
-  transition: all 0.2s ease;
+  transition: background-color 0.1s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   margin-bottom: 6px;
+  will-change: background-color;
 }
 
 .service-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-  background-color: rgba(30, 41, 59, 0.9);
+  background-color: rgba(30, 41, 59, 0.85);
 }
 
 .service-button svg {
