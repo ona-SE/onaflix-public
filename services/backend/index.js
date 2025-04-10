@@ -44,45 +44,51 @@ const serviceNodes = {
   recommend: { id: 'recommend', name: 'Recommendation Engine', status: 'active', connections: [] },
   stream: { id: 'stream', name: 'Streaming Service', status: 'active', connections: [] },
   analytics: { id: 'analytics', name: 'Analytics Service', status: 'active', connections: [] },
-  database: { id: 'database', name: 'Database', status: 'active', connections: [] }
+  database: { id: 'database', name: 'Database', status: 'active', connections: [] },
 };
 
 // WebSocket connection handling
 wss.on('connection', (ws) => {
   console.log('New client connected');
-  
+
   // Send initial service nodes state
-  ws.send(JSON.stringify({
-    type: 'INIT',
-    data: {
-      nodes: Object.values(serviceNodes),
-      connections: generateServiceConnections()
-    }
-  }));
-  
+  ws.send(
+    JSON.stringify({
+      type: 'INIT',
+      data: {
+        nodes: Object.values(serviceNodes),
+        connections: generateServiceConnections(),
+      },
+    })
+  );
+
   // Setup interval to simulate service activity
   const interval = setInterval(() => {
     const updates = simulateServiceActivity();
-    ws.send(JSON.stringify({
-      type: 'UPDATE',
-      data: updates
-    }));
+    ws.send(
+      JSON.stringify({
+        type: 'UPDATE',
+        data: updates,
+      })
+    );
   }, 3000);
-  
+
   ws.on('message', (message) => {
     try {
       const data = JSON.parse(message);
       console.log('Received message:', data);
-      
+
       // Handle different message types
       if (data.type === 'SIMULATE_LOAD') {
         const updates = simulateIncreasedLoad(data.serviceId);
-        wss.clients.forEach(client => {
+        wss.clients.forEach((client) => {
           if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({
-              type: 'UPDATE',
-              data: updates
-            }));
+            client.send(
+              JSON.stringify({
+                type: 'UPDATE',
+                data: updates,
+              })
+            );
           }
         });
       }
@@ -90,7 +96,7 @@ wss.on('connection', (ws) => {
       console.error('Error processing message:', error);
     }
   });
-  
+
   ws.on('close', () => {
     console.log('Client disconnected');
     clearInterval(interval);
@@ -112,58 +118,58 @@ function generateServiceConnections() {
     { source: 'stream', target: 'catalog', type: 'request' },
     { source: 'analytics', target: 'catalog', type: 'data' },
     { source: 'analytics', target: 'identity', type: 'data' },
-    { source: 'analytics', target: 'stream', type: 'data' }
+    { source: 'analytics', target: 'stream', type: 'data' },
   ];
 }
 
 // Simulate service activity
 function simulateServiceActivity() {
   const updates = {
-    connections: []
+    connections: [],
   };
-  
+
   // Generate random activity between services
   const services = Object.keys(serviceNodes);
   const randomSource = services[Math.floor(Math.random() * services.length)];
   let randomTarget;
-  
+
   do {
     randomTarget = services[Math.floor(Math.random() * services.length)];
   } while (randomTarget === randomSource);
-  
+
   updates.connections.push({
     source: randomSource,
     target: randomTarget,
     type: Math.random() > 0.5 ? 'request' : 'data',
-    volume: Math.floor(Math.random() * 10) + 1
+    volume: Math.floor(Math.random() * 10) + 1,
   });
-  
+
   return updates;
 }
 
 // Simulate increased load for a service
 function simulateIncreasedLoad(serviceId) {
   console.log(`Simulating increased load for ${serviceId}`);
-  
+
   const updates = {
-    connections: []
+    connections: [],
   };
-  
+
   // Generate multiple connections to/from the service
-  const services = Object.keys(serviceNodes).filter(id => id !== serviceId);
-  
+  const services = Object.keys(serviceNodes).filter((id) => id !== serviceId);
+
   for (let i = 0; i < 5; i++) {
     const randomService = services[Math.floor(Math.random() * services.length)];
     const isIncoming = Math.random() > 0.5;
-    
+
     updates.connections.push({
       source: isIncoming ? randomService : serviceId,
       target: isIncoming ? serviceId : randomService,
       type: Math.random() > 0.3 ? 'request' : 'data',
-      volume: Math.floor(Math.random() * 20) + 5
+      volume: Math.floor(Math.random() * 20) + 5,
     });
   }
-  
+
   return updates;
 }
 
