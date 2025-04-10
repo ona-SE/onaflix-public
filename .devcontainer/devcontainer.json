@@ -6,7 +6,7 @@
     "ghcr.io/warrenbuckley/codespace-features/sqlite:1": {}
   },
   "forwardPorts": [3000, 8000, 3306],
-  "postCreateCommand": "npm install && cd frontend && npm install && cd ../services/backend && npm install && cd ../database && npm install",
+  "postCreateCommand": "cd frontend && npm install && cd ../services/backend && npm install && cd ../database && npm install",
   "customizations": {
     "vscode": {
       "extensions": [

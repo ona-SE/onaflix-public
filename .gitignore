@@ -35,3 +35,5 @@ coverage/
 
 # PostgreSQL data directory
 .pgsql/
+
+services/database/database.sqlite
