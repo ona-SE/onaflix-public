@@ -1,0 +1,249 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+:root {
+  --color-bg: #121826;
+  --color-text: #e2e8f0;
+  --color-primary: #4f46e5;
+  --color-secondary: #10b981;
+  --color-accent: #f97316;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.graph-container {
+  width: 100%;
+  height: 80vh;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.service-node {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.service-node:hover {
+  filter: brightness(1.2);
+}
+
+.service-node circle {
+  fill-opacity: 0.8;
+}
+
+.service-node.catalog circle {
+  fill: var(--color-primary);
+}
+
+.service-node.identity circle {
+  fill: var(--color-secondary);
+}
+
+.service-node.recommend circle {
+  fill: var(--color-accent);
+}
+
+.service-node.stream circle {
+  fill: var(--color-warning);
+}
+
+.service-node.analytics circle {
+  fill: var(--color-danger);
+}
+
+.service-node.database circle {
+  fill: #9333ea;
+}
+
+.node-label {
+  fill: var(--color-text);
+  font-size: 12px;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.link {
+  stroke-opacity: 0.6;
+  stroke-width: 2;
+}
+
+.link.request {
+  stroke: #9ca3af;
+}
+
+.link.data {
+  stroke: #6366f1;
+}
+
+.flow-particle {
+  fill: #d1d5db;
+}
+
+.flow-particle.data {
+  fill: #a5b4fc;
+}
+
+.controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.node-detail {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  z-index: 10;
+  background-color: rgba(17, 24, 39, 0.8);
+  border-radius: 8px;
+  padding: 16px;
+  max-width: 300px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.node-detail h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.node-detail p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.btn {
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #4338ca;
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #059669;
+}
+
+.btn-danger {
+  background-color: var(--color-danger);
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #dc2626;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  padding: 16px;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 12px 8px;
+  background-color: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--color-primary);
+  animation: spin 1s ease-in-out infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
