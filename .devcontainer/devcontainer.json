@@ -1,26 +1,22 @@
 {
   "name": "Streaming Platform Dev Environment",
-  "dockerFile": "Dockerfile",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
   "forwardPorts": [3000, 8000, 3306],
-  "postCreateCommand": "npm install && cd frontend && npm install && cd ../services/backend && npm install && cd ../database && npm install",
-  "postStartCommand": "cd services/database && npm run start",
+  "onCreateCommand": "npm install && cd frontend && npm install && cd ../services/backend && npm install && cd ../database && npm install",
   "customizations": {
     "vscode": {
       "extensions": [
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
-        "ms-azuretools.vscode-docker",
         "mtxr.sqltools",
         "mtxr.sqltools-driver-sqlite",
-        "mikestead.dotenv",
-        "graphql.vscode-graphql",
-        "ms-vscode.vscode-typescript-next"
+        "mikestead.dotenv"
       ],
       "settings": {
         "editor.formatOnSave": true,
-        "editor.codeActionsOnSave": {
-          "source.fixAll.eslint": true
-        },
         "sqltools.connections": [
           {
             "name": "SQLite Database",
@@ -30,9 +26,6 @@
         ]
       }
     }
-  },
-  "features": {
-    "node": "latest"
   },
   "portsAttributes": {
     "3000": {

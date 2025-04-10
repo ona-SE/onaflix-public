@@ -1,0 +1,13 @@
+# Simplified Docker Compose for Gitpod
+version: '3'
+
+services:
+  workspace:
+    image: gitpod/workspace-full
+    ports:
+      - "3000:3000"
+      - "8000:8000"
+      - "3306:3306"
+    volumes:
+      - ../:/workspace:cached
+    command: sleep infinity
