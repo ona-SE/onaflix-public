@@ -10,7 +10,7 @@ function MovieRow({ title, movies }) {
             <div key={movie.id} className="group">
               <div className="relative">
                 <img
-                  src={movie.image}
+                  src={movie.image_url}
                   alt={movie.title}
                   className="w-full h-64 object-cover rounded movie-card"
                 />

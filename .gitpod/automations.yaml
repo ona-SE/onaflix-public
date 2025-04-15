@@ -124,12 +124,29 @@ tasks:
 
   seedDatabase:
     name: "Seed Database"
-    description: "Seed the database with sample movies"
+    description: "Seed the database with sample movies in a dramatic sequence"
     triggeredBy:
       - manual
     command: |
       cd /workspaces/flex-demo/database/main
-      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f seeds/seed_movies.sql
+      echo "Clearing existing data..."
+      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c "TRUNCATE TABLE movies;"
+
+      echo "Seeding trending movies..."
+      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f seeds/01_seed_trending.sql
+      sleep 4
+
+      echo "Seeding popular movies..."
+      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f seeds/02_seed_popular.sql
+      sleep 4
+
+      echo "Seeding classic movies..."
+      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f seeds/03_seed_classics.sql
+      sleep 4
+
+      echo "Seeding sci-fi movies..."
+      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f seeds/04_seed_scifi.sql
+      echo "Database seeding complete!"
 
   clearDatabase:
     name: "Clear Database"

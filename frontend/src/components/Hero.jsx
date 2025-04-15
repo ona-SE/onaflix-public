@@ -1,18 +1,40 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { fetchMovies } from '../services/api'
 
 function Hero() {
+  const [featuredMovie, setFeaturedMovie] = useState(null);
+
+  useEffect(() => {
+    const loadFeaturedMovie = async () => {
+      try {
+        const movies = await fetchMovies();
+        if (movies.length > 0) {
+          setFeaturedMovie(movies[0]);
+        }
+      } catch (error) {
+        console.error('Error loading featured movie:', error);
+      }
+    };
+
+    loadFeaturedMovie();
+  }, []);
+
+  if (!featuredMovie) {
+    return null;
+  }
+
   return (
     <div className="relative h-screen">
       <div className="absolute inset-0 bg-gradient-to-r from-black to-transparent z-10"></div>
       <img
-        src="https://image.tmdb.org/t/p/original/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg"
-        alt="Hero Background"
+        src={featuredMovie.image_url}
+        alt={featuredMovie.title}
         className="w-full h-full object-cover"
       />
       <div className="absolute bottom-0 left-0 p-16 z-20 max-w-2xl">
-        <h1 className="text-5xl font-bold mb-4">Inception</h1>
+        <h1 className="text-5xl font-bold mb-4">{featuredMovie.title}</h1>
         <p className="text-lg mb-4">
-          A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.
+          {featuredMovie.description}
         </p>
         <div className="flex space-x-4">
           <button className="bg-white text-black px-8 py-2 rounded flex items-center space-x-2 hover:bg-opacity-80">

@@ -1,32 +1,35 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import MovieRow from './components/MovieRow'
-
-// Sample movie data
-const movies = {
-  trending: [
-    { id: 1, title: 'The Matrix', image: 'https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg' },
-    { id: 2, title: 'Inception', image: 'https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg' },
-    { id: 3, title: 'Interstellar', image: 'https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg' },
-    { id: 4, title: 'The Dark Knight', image: 'https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg' },
-  ],
-  popular: [
-    { id: 5, title: 'Pulp Fiction', image: 'https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg' },
-    { id: 6, title: 'Fight Club', image: 'https://image.tmdb.org/t/p/w500/a26cQPRhJPX6GbWfQbvZdrrp9j9.jpg' },
-    { id: 7, title: 'Goodfellas', image: 'https://image.tmdb.org/t/p/w500/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg' },
-    { id: 8, title: 'The Godfather', image: 'https://image.tmdb.org/t/p/w500/rPdtLWNsZmAtoZl9PK7S2wE3qiS.jpg' },
-  ],
-  scifi: [
-    { id: 9, title: 'Blade Runner 2049', image: 'https://image.tmdb.org/t/p/w500/aMpyrCizvSdc0UIMblJ1srVgAEF.jpg' },
-    { id: 10, title: 'Dune', image: 'https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg' },
-    { id: 11, title: 'Arrival', image: 'https://image.tmdb.org/t/p/w500/x2FJsf1ElAgr63Y3PNPtJrcmpoe.jpg' },
-    { id: 12, title: 'Ex Machina', image: 'https://image.tmdb.org/t/p/w500/pmAv14TPE2vKMIRrVeCd1Ll7K94.jpg' },
-  ]
-}
+import { fetchMovies } from './services/api'
 
 function Home() {
+  const [movies, setMovies] = useState({
+    trending: [],
+    popular: [],
+    scifi: []
+  });
+
+  useEffect(() => {
+    const loadMovies = async () => {
+      try {
+        const allMovies = await fetchMovies();
+        // Organize movies into categories based on rating
+        const trending = allMovies.slice(0, 4);
+        const popular = allMovies.slice(4, 8);
+        const scifi = allMovies.slice(8, 12);
+        
+        setMovies({ trending, popular, scifi });
+      } catch (error) {
+        console.error('Error loading movies:', error);
+      }
+    };
+
+    loadMovies();
+  }, []);
+
   return (
     <div className="bg-black min-h-screen text-white">
       <Navbar />
