@@ -48,20 +48,20 @@ tasks:
       echo "Installing database service dependencies..."
       cd /workspaces/flex-demo/services/database && npm install
 
-  setupDatabase:
-    name: "Setup Database"
-    description: "Initialize database schema and seed data"
-    triggeredBy:
-      - postDevcontainerStart
-    dependsOn:
-      - installDependencies
-    command: |
-      echo "Setting up database..."
-      cd /workspaces/flex-demo/services/database
-      # Create database directory if it doesn't exist
-      mkdir -p data
-      # Run the setup script
-      node setup.js
+  # setupDatabase:
+  #   name: "Setup Database"
+  #   description: "Initialize database schema and seed data"
+  #   triggeredBy:
+  #     - postDevcontainerStart
+  #   dependsOn:
+  #     - installDependencies
+  #   command: |
+  #     echo "Setting up database..."
+  #     cd /workspaces/flex-demo/services/database
+  #     # Create database directory if it doesn't exist
+  #     mkdir -p data
+  #     # Run the setup script
+  #     node setup.js
 
   runTests:
     name: "Run Tests"
