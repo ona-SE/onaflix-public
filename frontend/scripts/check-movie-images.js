@@ -1,10 +1,3 @@
-import React from 'react'
-import { BrowserRouter as Router, Routes, Route, createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import MovieRow from './components/MovieRow'
-
-// Sample movie data
 const movies = {
   trending: [
     { id: 1, title: 'The Matrix', image: 'https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg' },
@@ -22,38 +15,34 @@ const movies = {
     { id: 9, title: 'Blade Runner 2049', image: 'https://image.tmdb.org/t/p/w500/aMpyrCizvSdc0UIMblJ1srVgAEF.jpg' },
     { id: 10, title: 'Dune', image: 'https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg' },
     { id: 11, title: 'Arrival', image: 'https://image.tmdb.org/t/p/w500/x2FJsf1ElAgr63Y3PNPtJrcmpoe.jpg' },
-    { id: 12, title: 'Ex Machina', image: 'https://image.tmdb.org/t/p/w500/pmAv14TPE2vKMIRrVeCd1Ll7K94.jpg' },
+    { id: 12, title: 'Ex Machina', image: 'https://image.tmdb.org/t/p/original/dmJW8IAKHKxFNiUnoDR7JfsK7Rp.jpg' },
   ]
-}
+};
 
-function Home() {
-  return (
-    <div className="bg-black min-h-screen text-white">
-      <Navbar />
-      <Hero />
-      <div className="mt-8 space-y-8">
-        <MovieRow title="Trending Now" movies={movies.trending} />
-        <MovieRow title="Popular on Gitpod Flix" movies={movies.popular} />
-        <MovieRow title="Sci-Fi & Fantasy" movies={movies.scifi} />
-      </div>
-    </div>
-  )
-}
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
+async function checkImage(url) {
+  try {
+    const response = await fetch(url);
+    if (response.ok) {
+      return { status: 'OK', statusCode: response.status };
+    } else {
+      return { status: 'ERROR', statusCode: response.status };
+    }
+  } catch (error) {
+    return { status: 'ERROR', error: error.message };
   }
-], {
-  future: {
-    v7_startTransition: true,
-    v7_relativeSplatPath: true
-  }
-})
-
-function App() {
-  return <RouterProvider router={router} />
 }
 
-export default App 
+async function checkAllImages() {
+  console.log('Checking all movie images...\n');
+  
+  for (const [category, movieList] of Object.entries(movies)) {
+    console.log(`Category: ${category}`);
+    for (const movie of movieList) {
+      const result = await checkImage(movie.image);
+      console.log(`${movie.title} (ID: ${movie.id}): ${result.status} - ${result.statusCode || result.error}`);
+    }
+    console.log('');
+  }
+}
+
+checkAllImages(); 

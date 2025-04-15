@@ -23,9 +23,20 @@ services:
         npm install
         npm start
 
-  frontend:
-    name: "Frontend Application"
-    description: "Vite-based React frontend"
+  management-ui:
+    name: "Management UI"
+    description: "Development environment visualization dashboard"
+    triggeredBy:
+      - postEnvironmentStart
+    commands:
+      start: |
+        cd /workspaces/flex-demo/management-ui
+        npm install
+        npm run dev
+
+  gitpod-flix:
+    name: "Gitpod Flix"
+    description: "Streaming platform frontend"
     triggeredBy:
       - postEnvironmentStart
     commands:
@@ -41,7 +52,9 @@ tasks:
     triggeredBy:
       - postDevcontainerStart
     command: |
-      echo "Installing frontend dependencies..."
+      echo "Installing management UI dependencies..."
+      cd /workspaces/flex-demo/management-ui && npm install
+      echo "Installing Gitpod Flix dependencies..."
       cd /workspaces/flex-demo/frontend && npm install
       echo "Installing backend dependencies..."
       cd /workspaces/flex-demo/services/backend && npm install
@@ -69,7 +82,9 @@ tasks:
     triggeredBy:
       - manual
     command: |
-      echo "Running frontend tests..."
+      echo "Running management UI tests..."
+      cd /workspaces/flex-demo/management-ui && npm test
+      echo "Running Gitpod Flix tests..."
       cd /workspaces/flex-demo/frontend && npm test
       echo "Running backend tests..."
       cd /workspaces/flex-demo/services/backend && npm test
