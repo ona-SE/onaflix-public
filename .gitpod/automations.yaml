@@ -6,11 +6,12 @@ services:
       - postDevcontainerStart
     commands:
       start: |
-        # Check if PostgreSQL is already running
-        if pg_isready -h localhost -p 5432 > /dev/null 2>&1; then
-          echo "PostgreSQL is already running"
-          exit 0
-        fi
+        sudo apt-get update && sudo apt-get install -y postgresql-client
+
+        # Force cleanup of any existing PostgreSQL containers
+        echo "Cleaning up any existing PostgreSQL containers..."
+        docker rm -f postgres 2>/dev/null || true
+        sleep 2  # Give Docker time to clean up
 
         echo "Starting PostgreSQL with Docker..."
         docker run --rm -d \
@@ -22,10 +23,29 @@ services:
           -v postgres_data:/var/lib/postgresql/data \
           -v /workspaces/flex-demo/database/main/migrations:/docker-entrypoint-initdb.d \
           postgres:15
+
+        # Keep the service running and monitor the container
+        while true; do
+          if ! docker ps | grep -q postgres; then
+            echo "PostgreSQL container stopped unexpectedly"
+            exit 1
+          fi
+          sleep 5
+        done
       ready: |
-        pg_isready -h localhost -p 5432 -U gitpod || echo "PostgreSQL not ready"
+        if ! command -v pg_isready &> /dev/null; then
+          sudo apt-get update && sudo apt-get install -y postgresql-client
+        fi
+        if pg_isready -h localhost -p 5432 -U gitpod; then
+          echo "PostgreSQL is ready and accepting connections"
+          exit 0
+        else
+          echo "PostgreSQL not ready"
+          exit 1
+        fi
       stop: |
         docker stop postgres || true
+        docker rm postgres || true
 
   catalog:
     name: "Catalog Service"
@@ -71,9 +91,9 @@ services:
           exit 1
         fi
         npm install
-        npm run dev
+        PORT=3001 npm run dev
       ready: |
-        curl -s http://localhost:3000 || echo "Management UI not ready"
+        curl -s http://localhost:3001 || echo "Management UI not ready"
       stop: |
         pkill -f "node.*management-ui" || true
 
@@ -84,17 +104,17 @@ services:
       - postEnvironmentStart
     commands:
       start: |
-        cd /workspaces/flex-demo/frontend/gitpodflix
-        if [ ! -d "/workspaces/flex-demo/frontend/gitpodflix" ]; then
-          echo "Error: Gitpod Flix directory not found"
+        cd /workspaces/flex-demo/frontend
+        if [ ! -d "/workspaces/flex-demo/frontend" ]; then
+          echo "Error: Frontend directory not found"
           exit 1
         fi
         npm install
-        npm run dev
+        PORT=3000 npm run dev
       ready: |
-        curl -s http://localhost:3002 || echo "Gitpod Flix not ready"
+        curl -s http://localhost:3000 || echo "Gitpod Flix not ready"
       stop: |
-        pkill -f "node.*gitpodflix" || true
+        pkill -f "node.*frontend" || true
 
 tasks:
   installDependencies:

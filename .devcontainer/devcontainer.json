@@ -30,8 +30,7 @@
       "onAutoForward": "openPreview"
     },
     "3001": {
-      "label": "Management UI",
-      "onAutoForward": "openPreview"
+      "label": "Management UI"
     },
     "8000": {
       "label": "Backend API"

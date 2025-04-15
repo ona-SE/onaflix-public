@@ -1,0 +1,14 @@
+vscode:
+  extensions:
+    - dbaeumer.vscode-eslint
+    - esbenp.prettier-vscode
+    - ms-azuretools.vscode-docker
+    - ms-vscode.vscode-typescript-next
+
+ports:
+  - port: 3000
+    onOpen: open-preview
+  - port: 3001
+    onOpen: open-preview
+  - port: 5432
+    onOpen: ignore
