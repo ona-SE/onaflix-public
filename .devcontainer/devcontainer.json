@@ -6,7 +6,7 @@
     "ghcr.io/warrenbuckley/codespace-features/sqlite:1": {}
   },
   "forwardPorts": [3000, 8000, 3306],
-  "postCreateCommand": "apt-get update && apt-get install -y default-mysql-client default-mysql-server && service mysql start && cd frontend && npm install && cd ../services/backend && npm install && cd ../database && npm install",
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y default-mysql-client default-mysql-server && sudo service mysql start && cd frontend && npm install && cd ../services/backend && npm install && cd ../database && npm install",
   "customizations": {
     "vscode": {
       "extensions": [
