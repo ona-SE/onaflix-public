@@ -433,3 +433,215 @@ tasks:
 ```
 
 By following these best practices and examples, you can create powerful and maintainable automations that enhance your development workflow in Gitpod.
+
+## CLI Commands and Workflow
+
+The Gitpod CLI provides several commands for managing automations:
+
+```bash
+# List all automation commands
+gitpod automations --help
+
+# Validate an automations file
+gitpod automations validate .gitpod/automations.yaml
+
+# List available services and their status
+gitpod automations service list
+
+# List available tasks
+gitpod automations task list
+
+# Start a specific service
+gitpod automations service start <service-name>
+
+# Stop a specific service
+gitpod automations service stop <service-name>
+
+# Update automations configuration
+gitpod automations update .gitpod/automations.yaml
+```
+
+### CLI Workflow Best Practices
+
+1. **Always Validate First**
+
+   - Validate configuration before applying changes
+   - Fix any schema errors before deployment
+
+   ```bash
+   gitpod automations validate .gitpod/automations.yaml
+   ```
+
+2. **Check Service Status**
+
+   - List services to understand current state
+   - Stop running services before updates
+
+   ```bash
+   gitpod automations service list
+   gitpod automations service stop <service>
+   ```
+
+3. **Update with Care**
+   - Stop affected services before updating
+   - Update configuration after validation
+   - Restart services after update
+   ```bash
+   gitpod automations update .gitpod/automations.yaml
+   ```
+
+## Service Resilience
+
+1. **Environment Checks**
+
+   - Check for required tools before starting
+   - Provide meaningful error messages
+   - Include fallback options when possible
+
+   ```yaml
+   services:
+     database:
+       commands:
+         start: |
+           if command -v docker > /dev/null 2>&1; then
+             echo "Using Docker..."
+             docker run postgres
+           elif command -v pg_ctl > /dev/null 2>&1; then
+             echo "Using local PostgreSQL..."
+             pg_ctl start
+           else
+             echo "Error: Required tools not found"
+             exit 1
+           fi
+   ```
+
+2. **Resource Verification**
+
+   - Check for required directories
+   - Verify file existence
+   - Create resources if missing
+
+   ```yaml
+   services:
+     api:
+       commands:
+         start: |
+           if [ ! -d "/workspaces/project/api" ]; then
+             echo "Error: API directory not found"
+             exit 1
+           fi
+           npm start
+   ```
+
+3. **Timeout Mechanisms**
+   - Add timeouts to all wait operations
+   - Provide progress feedback
+   - Handle timeout failures gracefully
+   ```yaml
+   services:
+     app:
+       commands:
+         start: |
+           timeout=30
+           while [ $timeout -gt 0 ] && ! nc -z localhost 5432; do
+             echo "Waiting... ($timeout seconds remaining)"
+             sleep 1
+             timeout=$((timeout-1))
+           done
+           if [ $timeout -eq 0 ]; then
+             echo "Error: Operation timed out"
+             exit 1
+           fi
+   ```
+
+## Error Handling
+
+1. **Graceful Shutdowns**
+
+   - Handle stop commands safely
+   - Use fallbacks for cleanup
+   - Prevent error propagation
+
+   ```yaml
+   services:
+     database:
+       commands:
+         stop: |
+           docker stop container_name || true
+           rm -f /tmp/pid.file || true
+   ```
+
+2. **Status Reporting**
+
+   - Provide clear status messages
+   - Include error context
+   - Use consistent formatting
+
+   ```yaml
+   services:
+     api:
+       commands:
+         ready: |
+           if ! curl -s http://localhost:3000/health; then
+             echo "API not ready: Health check failed"
+             return 1
+           fi
+   ```
+
+3. **Resource Cleanup**
+   - Clean up temporary files
+   - Remove stale processes
+   - Handle cleanup failures
+   ```yaml
+   services:
+     app:
+       commands:
+         stop: |
+           pkill -f "node.*app" || true
+           rm -f /tmp/*.pid || true
+   ```
+
+## DevContainer Integration
+
+1. **Tool Dependencies**
+
+   - Specify required tools in devcontainer.json
+   - Include version constraints
+   - Add necessary features
+
+   ```json
+   {
+     "features": {
+       "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+       "ghcr.io/devcontainers/features/node:1": {},
+       "ghcr.io/devcontainers/features/postgresql:1": {}
+     }
+   }
+   ```
+
+2. **Port Forwarding**
+
+   - Define all required ports
+   - Add port labels
+   - Group related ports
+
+   ```json
+   {
+     "forwardPorts": [3000, 3001, 5432],
+     "portsAttributes": {
+       "3000": { "label": "Frontend" },
+       "3001": { "label": "API" },
+       "5432": { "label": "Database" }
+     }
+   }
+   ```
+
+3. **Post-Create Commands**
+   - Install additional dependencies
+   - Set up environment
+   - Initialize services
+   ```json
+   {
+     "postCreateCommand": "apt-get update && apt-get install -y postgresql-client"
+   }
+   ```

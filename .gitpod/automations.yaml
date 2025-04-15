@@ -1,27 +1,62 @@
 services:
-  database:
-    name: "Database Service"
-    description: "SQLite database service for the application"
+  postgres:
+    name: "PostgreSQL Database"
+    description: "PostgreSQL database for Gitpod Flix"
     triggeredBy:
       - postDevcontainerStart
     commands:
       start: |
-        cd /workspaces/flex-demo/services/database
-        npm install
-        # Create database directory if it doesn't exist
-        mkdir -p data
-        npm start
+        # Check if PostgreSQL is already running
+        if pg_isready -h localhost -p 5432 > /dev/null 2>&1; then
+          echo "PostgreSQL is already running"
+          exit 0
+        fi
 
-  backend:
-    name: "Backend API"
-    description: "Node.js backend service"
+        echo "Starting PostgreSQL with Docker..."
+        docker run --rm -d \
+          --name postgres \
+          -e POSTGRES_USER=gitpod \
+          -e POSTGRES_PASSWORD=gitpod \
+          -e POSTGRES_DB=gitpodflix \
+          -p 5432:5432 \
+          -v postgres_data:/var/lib/postgresql/data \
+          -v /workspaces/flex-demo/database/main/migrations:/docker-entrypoint-initdb.d \
+          postgres:15
+      ready: |
+        pg_isready -h localhost -p 5432 -U gitpod || echo "PostgreSQL not ready"
+      stop: |
+        docker stop postgres || true
+
+  catalog:
+    name: "Catalog Service"
+    description: "Movie catalog API service"
     triggeredBy:
       - postDevcontainerStart
     commands:
       start: |
-        cd /workspaces/flex-demo/services/backend
-        npm install
-        npm start
+        cd /workspaces/flex-demo/backend/catalog
+        # Ensure directory exists
+        if [ ! -d "/workspaces/flex-demo/backend/catalog" ]; then
+          echo "Error: Catalog service directory not found"
+          exit 1
+        fi
+        npm run setup
+        # Wait for PostgreSQL with timeout
+        timeout=30
+        while [ $timeout -gt 0 ] && ! pg_isready -h localhost -p 5432 -U gitpod; do
+          echo "Waiting for PostgreSQL... ($timeout seconds remaining)"
+          sleep 1
+          timeout=$((timeout-1))
+        done
+        if [ $timeout -eq 0 ]; then
+          echo "Error: PostgreSQL connection timed out"
+          exit 1
+        fi
+        npm run dev
+      ready: |
+        curl -s http://localhost:3001/health || echo "Catalog service not ready"
+      stop: |
+        pkill -f "node.*catalog" || true
 
   management-ui:
     name: "Management UI"
@@ -31,8 +66,16 @@ services:
     commands:
       start: |
         cd /workspaces/flex-demo/management-ui
+        if [ ! -d "/workspaces/flex-demo/management-ui" ]; then
+          echo "Error: Management UI directory not found"
+          exit 1
+        fi
         npm install
         npm run dev
+      ready: |
+        curl -s http://localhost:3000 || echo "Management UI not ready"
+      stop: |
+        pkill -f "node.*management-ui" || true
 
   gitpod-flix:
     name: "Gitpod Flix"
@@ -41,9 +84,17 @@ services:
       - postEnvironmentStart
     commands:
       start: |
-        cd /workspaces/flex-demo/frontend
+        cd /workspaces/flex-demo/frontend/gitpodflix
+        if [ ! -d "/workspaces/flex-demo/frontend/gitpodflix" ]; then
+          echo "Error: Gitpod Flix directory not found"
+          exit 1
+        fi
         npm install
         npm run dev
+      ready: |
+        curl -s http://localhost:3002 || echo "Gitpod Flix not ready"
+      stop: |
+        pkill -f "node.*gitpodflix" || true
 
 tasks:
   installDependencies:
@@ -55,26 +106,50 @@ tasks:
       echo "Installing management UI dependencies..."
       cd /workspaces/flex-demo/management-ui && npm install
       echo "Installing Gitpod Flix dependencies..."
-      cd /workspaces/flex-demo/frontend && npm install
-      echo "Installing backend dependencies..."
-      cd /workspaces/flex-demo/services/backend && npm install
-      echo "Installing database service dependencies..."
-      cd /workspaces/flex-demo/services/database && npm install
+      cd /workspaces/flex-demo/frontend/gitpodflix && npm install
+      echo "Installing catalog service dependencies..."
+      cd /workspaces/flex-demo/backend/catalog && npm install
 
-  # setupDatabase:
-  #   name: "Setup Database"
-  #   description: "Initialize database schema and seed data"
-  #   triggeredBy:
-  #     - postDevcontainerStart
-  #   dependsOn:
-  #     - installDependencies
-  #   command: |
-  #     echo "Setting up database..."
-  #     cd /workspaces/flex-demo/services/database
-  #     # Create database directory if it doesn't exist
-  #     mkdir -p data
-  #     # Run the setup script
-  #     node setup.js
+  seedDatabase:
+    name: "Seed Database"
+    description: "Seed the database with sample movies"
+    triggeredBy:
+      - manual
+    command: |
+      # Wait for PostgreSQL with timeout
+      timeout=30
+      while [ $timeout -gt 0 ] && ! pg_isready -h localhost -p 5432 -U gitpod; do
+        echo "Waiting for PostgreSQL... ($timeout seconds remaining)"
+        sleep 1
+        timeout=$((timeout-1))
+      done
+      if [ $timeout -eq 0 ]; then
+        echo "Error: PostgreSQL connection timed out"
+        exit 1
+      fi
+      echo "Seeding database with sample movies..."
+      cd /workspaces/flex-demo/database/main
+      psql -h localhost -U gitpod -d gitpodflix -f seeds/seed_movies.sql
+
+  clearDatabase:
+    name: "Clear Database"
+    description: "Clear all data from the database"
+    triggeredBy:
+      - manual
+    command: |
+      # Wait for PostgreSQL with timeout
+      timeout=30
+      while [ $timeout -gt 0 ] && ! pg_isready -h localhost -p 5432 -U gitpod; do
+        echo "Waiting for PostgreSQL... ($timeout seconds remaining)"
+        sleep 1
+        timeout=$((timeout-1))
+      done
+      if [ $timeout -eq 0 ]; then
+        echo "Error: PostgreSQL connection timed out"
+        exit 1
+      fi
+      echo "Clearing database..."
+      psql -h localhost -U gitpod -d gitpodflix -c "TRUNCATE TABLE movies;"
 
   runTests:
     name: "Run Tests"
@@ -85,9 +160,9 @@ tasks:
       echo "Running management UI tests..."
       cd /workspaces/flex-demo/management-ui && npm test
       echo "Running Gitpod Flix tests..."
-      cd /workspaces/flex-demo/frontend && npm test
-      echo "Running backend tests..."
-      cd /workspaces/flex-demo/services/backend && npm test
+      cd /workspaces/flex-demo/frontend/gitpodflix && npm test
+      echo "Running catalog service tests..."
+      cd /workspaces/flex-demo/backend/catalog && npm test
 
   # lint:
   #   name: "Run Linters"
