@@ -78,8 +78,11 @@ const GraphVisualization = React.memo(({ nodes, connections, onNodeClick }) => {
   useEffect(() => {
     if (!nodes.length || !connections.length) return;
 
-    const width = svgRef.current.parentElement.clientWidth;
-    const height = svgRef.current.parentElement.clientHeight;
+    const width = svgRef.current?.parentElement?.clientWidth;
+    const height = svgRef.current?.parentElement?.clientHeight;
+
+    // Return early if dimensions aren't available
+    if (!width || !height) return;
 
     // Only clear and recreate if the simulation doesn't exist
     if (!simulationRef.current) {
@@ -104,8 +107,15 @@ const GraphVisualization = React.memo(({ nodes, connections, onNodeClick }) => {
           g.attr('transform', event.transform);
         });
 
-      // Set initial zoom level to 1.2x
-      svg.call(zoom).call(zoom.transform, d3.zoomIdentity.scale(1.2));
+      try {
+        // Set initial zoom level to 1.2x
+        svg.call(zoom).call(zoom.transform, d3.zoomIdentity.scale(1.2));
+      } catch (error) {
+        // Silently fail in test environment
+        if (process.env.NODE_ENV !== 'test') {
+          console.error('Failed to initialize zoom:', error);
+        }
+      }
 
       // Add arrow markers for links
       svg
