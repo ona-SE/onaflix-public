@@ -17,8 +17,6 @@ services:
     description: "Node.js backend service"
     triggeredBy:
       - postDevcontainerStart
-    dependsOn:
-      - database
     commands:
       start: |
         cd /workspaces/flex-demo/services/backend
@@ -30,8 +28,6 @@ services:
     description: "Vite-based React frontend"
     triggeredBy:
       - postEnvironmentStart
-    dependsOn:
-      - backend
     commands:
       start: |
         cd /workspaces/flex-demo/frontend

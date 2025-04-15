@@ -115,17 +115,36 @@ tasks:
 
 ### Service-Specific Best Practices
 
-1. **Use Docker for Isolated Services**
+1. **Service Dependencies**
+
+   - Services cannot have dependencies on other services
+   - If you need to ensure a service starts after another, use the `ready` command to check for the required service
+   - Example:
+     ```yaml
+     services:
+       database:
+         name: "Database"
+         commands:
+           start: "docker run postgres"
+           ready: "pg_isready -h localhost"
+       backend:
+         name: "Backend"
+         commands:
+           start: "npm start"
+           ready: "curl -s http://localhost:3000/health | grep -q 'ok'"
+     ```
+
+2. **Use Docker for Isolated Services**
 
    - Containerize databases and other infrastructure services
    - Include volume mounts for persistence when needed
 
-2. **Implement Proper Shutdown Procedures**
+3. **Implement Proper Shutdown Procedures**
 
    - Define `stop` commands that gracefully terminate services
    - This prevents data corruption and resource leaks
 
-3. **Use Network Configurations Properly**
+4. **Use Network Configurations Properly**
    - Bind to `0.0.0.0` instead of `localhost` to make services accessible
    - Expose ports using `--network=host` for single containers or `network_mode: host` in Docker Compose
 
