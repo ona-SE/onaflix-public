@@ -4,6 +4,7 @@ services:
     description: "PostgreSQL database for Gitpod Flix"
     triggeredBy:
       - postDevcontainerStart
+      - postEnvironmentStart
     commands:
       start: |
         # Wait for any existing apt processes to complete
@@ -60,6 +61,7 @@ services:
     description: "Movie catalog API service"
     triggeredBy:
       - postDevcontainerStart
+      - postEnvironmentStart
     commands:
       start: |
         cd /workspaces/flex-demo/backend/catalog
@@ -74,6 +76,7 @@ services:
     name: "Management UI"
     description: "Development environment visualization dashboard"
     triggeredBy:
+      - postDevcontainerStart
       - postEnvironmentStart
     commands:
       start: |
@@ -89,6 +92,7 @@ services:
     name: "Gitpod Flix"
     description: "Streaming platform frontend"
     triggeredBy:
+      - postDevcontainerStart
       - postEnvironmentStart
     commands:
       start: |
