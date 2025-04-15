@@ -146,6 +146,58 @@ tasks:
    - For complex scripts, use the YAML multi-line syntax
    - This improves readability for longer commands
 
+### Path Handling Best Practices
+
+1. **Use Absolute Paths**
+
+   - Always use absolute paths from the workspace root (`/workspaces/your-project-name/`)
+   - This ensures commands work consistently regardless of the current working directory
+   - Example: `cd /workspaces/your-project-name/services/backend` instead of `cd services/backend`
+
+2. **Verify Paths**
+
+   - Use `pwd` to verify the current working directory
+   - Check directory structure with `ls -la` before writing automation paths
+   - Example:
+     ```yaml
+     tasks:
+       verifyStructure:
+         name: "Verify Directory Structure"
+         command: |
+           echo "Current directory: $(pwd)"
+           echo "Directory contents:"
+           ls -la
+     ```
+
+3. **Path Consistency**
+
+   - Maintain consistent path usage throughout all automations
+   - Avoid mixing relative and absolute paths
+   - Use environment variables for workspace root when needed:
+     ```yaml
+     tasks:
+       example:
+         command: |
+           WORKSPACE_ROOT="/workspaces/your-project-name"
+           cd "${WORKSPACE_ROOT}/services/backend"
+     ```
+
+4. **Path Safety**
+   - Always check if directories exist before accessing them
+   - Use proper error handling for path operations
+   - Example:
+     ```yaml
+     tasks:
+       safePath:
+         command: |
+           if [ -d "/workspaces/your-project-name/services/backend" ]; then
+             cd "/workspaces/your-project-name/services/backend"
+           else
+             echo "Error: Directory not found"
+             exit 1
+           fi
+     ```
+
 ## Examples
 
 ### Database Setup Example

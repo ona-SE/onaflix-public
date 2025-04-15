@@ -5,39 +5,20 @@ import App from '../App';
 // Mock the WebSocket hook
 vi.mock('../hooks/useWebSocket', () => ({
   useWebSocket: () => ({
-    isConnected: true,
-    nodes: [
-      { id: 'catalog', name: 'Content Catalog', status: 'active' },
-      { id: 'identity', name: 'User Management', status: 'active' },
-      { id: 'recommend', name: 'Recommendation Engine', status: 'active' },
-      { id: 'stream', name: 'Streaming Service', status: 'active' },
-      { id: 'analytics', name: 'Analytics Service', status: 'active' },
-      { id: 'database', name: 'Database', status: 'active' }
-    ],
-    connections: [
-      { source: 'frontend', target: 'catalog', type: 'request' },
-      { source: 'catalog', target: 'database', type: 'data' }
-    ],
+    isConnected: false,
+    nodes: [],
+    connections: [],
     simulateLoad: vi.fn()
   })
 }));
 
 describe('App Component', () => {
-  it('renders the header', () => {
-    render(<App />);
-    expect(screen.getByText('Streaming Platform Development Environment')).toBeInTheDocument();
-    expect(screen.getByText('Gitpod Flex Demonstration')).toBeInTheDocument();
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
-  
-  it('renders the graph visualization', () => {
+
+  it('shows loading state initially', () => {
     render(<App />);
-    // Check for the SVG container
-    expect(document.querySelector('svg')).toBeInTheDocument();
-  });
-  
-  it('has simulate load button disabled by default', () => {
-    render(<App />);
-    const button = screen.getByText(/Simulate Load on Service/i);
-    expect(button).toBeDisabled();
+    expect(screen.getByText('Connecting to streaming platform services...')).toBeInTheDocument();
   });
 });

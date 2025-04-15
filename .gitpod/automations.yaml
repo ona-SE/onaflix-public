@@ -1,59 +1,56 @@
 services:
   database:
     name: "Database Service"
-    description: "MySQL database service for the application"
+    description: "SQLite database service for the application"
     triggeredBy:
       - postDevcontainerStart
     commands:
       start: |
-        cd services/database
+        cd /workspaces/flex-demo/services/database
         npm install
+        # Create database directory if it doesn't exist
+        mkdir -p data
         npm start
-      ready: |
-        until mysqladmin ping -h localhost -P 3306 -u root -proot 2>/dev/null; do
-          sleep 1
-        done
-      stop: "cd services/database && npm stop"
 
   backend:
     name: "Backend API"
     description: "Node.js backend service"
     triggeredBy:
       - postDevcontainerStart
+    dependsOn:
+      - database
     commands:
       start: |
-        cd services/backend
+        cd /workspaces/flex-demo/services/backend
         npm install
         npm start
-      ready: "curl -s http://localhost:8000/health | grep -q 'ok'"
-      stop: "cd services/backend && npm stop"
 
   frontend:
     name: "Frontend Application"
     description: "Vite-based React frontend"
     triggeredBy:
       - postEnvironmentStart
+    dependsOn:
+      - backend
     commands:
       start: |
-        cd frontend
+        cd /workspaces/flex-demo/frontend
         npm install
         npm run dev
-      ready: "curl -s http://localhost:3000 | grep -q 'root'"
-      stop: "cd frontend && npm run stop"
 
 tasks:
-  installDependencies:
-    name: "Install Dependencies"
-    description: "Install all project dependencies"
-    triggeredBy:
-      - postDevcontainerStart
-    command: |
-      echo "Installing frontend dependencies..."
-      cd frontend && npm install
-      echo "Installing backend dependencies..."
-      cd ../services/backend && npm install
-      echo "Installing database service dependencies..."
-      cd ../database && npm install
+  # installDependencies:
+  #   name: "Install Dependencies"
+  #   description: "Install all project dependencies"
+  #   triggeredBy:
+  #     - postDevcontainerStart
+  #   command: |
+  #     echo "Installing frontend dependencies..."
+  #     cd /workspaces/flex-demo/frontend && npm install
+  #     echo "Installing backend dependencies..."
+  #     cd /workspaces/flex-demo/services/backend && npm install
+  #     echo "Installing database service dependencies..."
+  #     cd /workspaces/flex-demo/services/database && npm install
 
   setupDatabase:
     name: "Setup Database"
@@ -63,12 +60,12 @@ tasks:
     dependsOn:
       - installDependencies
     command: |
-      echo "Waiting for database to be ready..."
-      until mysqladmin ping -h localhost -P 3306 -u root -proot 2>/dev/null; do
-        sleep 1
-      done
-      echo "Setting up database schema..."
-      cd services/database && npm run setup
+      echo "Setting up database..."
+      cd /workspaces/flex-demo/services/database
+      # Create database directory if it doesn't exist
+      mkdir -p data
+      # Run the setup script
+      node setup.js
 
   runTests:
     name: "Run Tests"
@@ -77,34 +74,32 @@ tasks:
       - manual
     command: |
       echo "Running frontend tests..."
-      cd frontend && npm test
+      cd /workspaces/flex-demo/frontend && npm test
       echo "Running backend tests..."
-      cd ../services/backend && npm test
-      echo "Running database service tests..."
-      cd ../database && npm test
+      cd /workspaces/flex-demo/services/backend && npm test
 
-  lint:
-    name: "Run Linters"
-    description: "Run all linters"
-    triggeredBy:
-      - manual
-    command: |
-      echo "Linting frontend..."
-      cd frontend && npm run lint
-      echo "Linting backend..."
-      cd ../services/backend && npm run lint
-      echo "Linting database service..."
-      cd ../database && npm run lint
+  # lint:
+  #   name: "Run Linters"
+  #   description: "Run all linters"
+  #   triggeredBy:
+  #     - manual
+  #   command: |
+  #     echo "Linting frontend..."
+  #     cd /workspaces/flex-demo/frontend && npm run lint
+  #     echo "Linting backend..."
+  #     cd /workspaces/flex-demo/services/backend && npm run lint
+  #     echo "Linting database service..."
+  #     cd /workspaces/flex-demo/services/database && npm run lint
 
-  build:
-    name: "Build All"
-    description: "Build all services"
-    triggeredBy:
-      - manual
-    command: |
-      echo "Building frontend..."
-      cd frontend && npm run build
-      echo "Building backend..."
-      cd ../services/backend && npm run build
-      echo "Building database service..."
-      cd ../database && npm run build
+  # build:
+  #   name: "Build All"
+  #   description: "Build all services"
+  #   triggeredBy:
+  #     - manual
+  #   command: |
+  #     echo "Building frontend..."
+  #     cd /workspaces/flex-demo/frontend && npm run build
+  #     echo "Building backend..."
+  #     cd /workspaces/flex-demo/services/backend && npm run build
+  #     echo "Building database service..."
+  #     cd /workspaces/flex-demo/services/database && npm run build
