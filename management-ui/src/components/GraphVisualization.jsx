@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
-const GraphVisualization = ({ nodes, connections }) => {
+const GraphVisualization = ({ nodes, connections, onNodeClick }) => {
   const svgRef = useRef(null);
   const gRef = useRef(null);
 
@@ -156,7 +156,11 @@ const GraphVisualization = ({ nodes, connections }) => {
       .call(d3.drag()
         .on('start', dragstarted)
         .on('drag', dragged)
-        .on('end', dragended));
+        .on('end', dragended))
+      .on('click', (event, d) => {
+        event.stopPropagation();
+        onNodeClick(d);
+      });
 
     // Add shapes to nodes
     node.each(function(d) {
@@ -169,7 +173,8 @@ const GraphVisualization = ({ nodes, connections }) => {
           .attr('d', createDatabaseIcon(35))
           .attr('fill', '#3b82f6')
           .attr('stroke', '#1e40af')
-          .attr('stroke-width', 2);
+          .attr('stroke-width', 2)
+          .style('cursor', 'pointer');
       } else if (d.id === 'frontend') {
         // Create frontend browser icon
         nodeGroup
@@ -177,7 +182,8 @@ const GraphVisualization = ({ nodes, connections }) => {
           .attr('d', createFrontendIcon(35))
           .attr('fill', '#10b981')
           .attr('stroke', '#059669')
-          .attr('stroke-width', 2);
+          .attr('stroke-width', 2)
+          .style('cursor', 'pointer');
       } else {
         // Create hexagon for services
         nodeGroup
@@ -185,7 +191,8 @@ const GraphVisualization = ({ nodes, connections }) => {
           .attr('d', createHexagonPath(35))
           .attr('fill', '#3b82f6')
           .attr('stroke', '#1e40af')
-          .attr('stroke-width', 2);
+          .attr('stroke-width', 2)
+          .style('cursor', 'pointer');
       }
 
       // Add text labels to nodes
@@ -210,6 +217,11 @@ const GraphVisualization = ({ nodes, connections }) => {
       node.attr('transform', (d) => `translate(${d.x},${d.y})`);
     });
 
+    // Add click handler to the SVG to close the panel when clicking outside
+    svg.on('click', () => {
+      onNodeClick(null);
+    });
+
     function dragstarted(event) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
       event.subject.fx = event.subject.x;
@@ -226,7 +238,7 @@ const GraphVisualization = ({ nodes, connections }) => {
       event.subject.fx = null;
       event.subject.fy = null;
     }
-  }, [nodes, connections]);
+  }, [nodes, connections, onNodeClick]);
 
   return <svg ref={svgRef} className="w-full h-full" />;
 };

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from './components/Header';
 import GraphVisualization from './components/GraphVisualization';
+import SidePanel from './components/SidePanel';
 import './App.css';
 
 // Define static nodes and connections
@@ -30,12 +31,30 @@ const staticConnections = [
 ];
 
 function App() {
+  const [selectedNode, setSelectedNode] = useState(null);
+
+  const handleNodeClick = (node) => {
+    setSelectedNode(node);
+  };
+
+  const handleClosePanel = () => {
+    setSelectedNode(null);
+  };
+
   return (
     <div className="app">
       <Header />
       <div className="canvas-container">
-        <GraphVisualization nodes={staticNodes} connections={staticConnections} />
+        <GraphVisualization 
+          nodes={staticNodes} 
+          connections={staticConnections}
+          onNodeClick={handleNodeClick}
+        />
       </div>
+      <SidePanel 
+        selectedNode={selectedNode}
+        onClose={handleClosePanel}
+      />
     </div>
   );
 }
