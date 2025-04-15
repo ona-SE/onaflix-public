@@ -101,7 +101,8 @@ const GraphVisualization = ({ nodes, connections }) => {
         g.attr('transform', event.transform);
       });
 
-    svg.call(zoom).call(zoom.transform, d3.zoomIdentity);
+    // Set initial zoom level to 1.2x
+    svg.call(zoom).call(zoom.transform, d3.zoomIdentity.scale(1.2));
 
     // Add arrow markers for links
     svg
@@ -121,13 +122,17 @@ const GraphVisualization = ({ nodes, connections }) => {
       .attr('d', 'M0,-5L10,0L0,5')
       .attr('fill', (d) => (d === 'request' ? '#4ade80' : '#60a5fa'));
 
-    // Create a force simulation
+    // Create a force simulation with adjusted parameters
     const simulation = d3
       .forceSimulation(nodes)
-      .force('link', d3.forceLink(connections).id((d) => d.id).distance(100))
+      .force('link', d3.forceLink(connections)
+        .id((d) => d.id)
+        .distance(120)
+      )
       .force('charge', d3.forceManyBody().strength(-300))
       .force('center', d3.forceCenter(width / 2, height / 2))
-      .force('collision', d3.forceCollide().radius(50));
+      .force('collision', d3.forceCollide().radius(60))
+      .alphaDecay(0.05);
 
     // Draw links
     const link = g
@@ -161,7 +166,7 @@ const GraphVisualization = ({ nodes, connections }) => {
         // Create database stack icon
         nodeGroup
           .append('path')
-          .attr('d', createDatabaseIcon(20))
+          .attr('d', createDatabaseIcon(35))
           .attr('fill', '#3b82f6')
           .attr('stroke', '#1e40af')
           .attr('stroke-width', 2);
@@ -169,7 +174,7 @@ const GraphVisualization = ({ nodes, connections }) => {
         // Create frontend browser icon
         nodeGroup
           .append('path')
-          .attr('d', createFrontendIcon(20))
+          .attr('d', createFrontendIcon(35))
           .attr('fill', '#10b981')
           .attr('stroke', '#059669')
           .attr('stroke-width', 2);
@@ -177,7 +182,7 @@ const GraphVisualization = ({ nodes, connections }) => {
         // Create hexagon for services
         nodeGroup
           .append('path')
-          .attr('d', createHexagonPath(20))
+          .attr('d', createHexagonPath(35))
           .attr('fill', '#3b82f6')
           .attr('stroke', '#1e40af')
           .attr('stroke-width', 2);
@@ -186,11 +191,11 @@ const GraphVisualization = ({ nodes, connections }) => {
       // Add text labels to nodes
       nodeGroup
         .append('text')
-        .attr('dy', 30)
+        .attr('dy', 45)
         .attr('text-anchor', 'middle')
         .attr('fill', 'white')
         .text((d) => d.name)
-        .style('font-size', '12px')
+        .style('font-size', '14px')
         .style('pointer-events', 'none');
     });
 
