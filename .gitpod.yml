@@ -10,5 +10,7 @@ ports:
     onOpen: open-preview
   - port: 3001
     onOpen: open-preview
+  - port: 3002
+    onOpen: open-preview
   - port: 5432
     onOpen: ignore

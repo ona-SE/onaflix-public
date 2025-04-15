@@ -55,9 +55,10 @@ services:
     commands:
       start: |
         cd /workspaces/flex-demo/backend/catalog
-        npm run dev
+        npm install
+        PORT=3002 npm run dev
       ready: |
-        curl -s http://localhost:3001/health || echo "Catalog service not ready"
+        curl -s http://localhost:3002/health || echo "Catalog service not ready"
       stop: |
         pkill -f "node.*catalog" || true
 
@@ -68,6 +69,7 @@ services:
       - postEnvironmentStart
     commands:
       start: |
+        cd /workspaces/flex-demo/management-ui
         npm install
         PORT=3001 npm run dev
       ready: |
