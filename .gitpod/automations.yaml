@@ -6,12 +6,20 @@ services:
       - postDevcontainerStart
     commands:
       start: |
-        sudo apt-get update && sudo apt-get install -y postgresql-client
+        # Wait for any existing apt processes to complete
+        while fuser /var/lib/apt/lists/lock >/dev/null 2>&1; do
+          echo "Waiting for apt lock..."
+          sleep 5
+        done
+
+        # Install PostgreSQL client
+        sudo apt-get update
+        sudo apt-get install -y postgresql-client
 
         # Force cleanup of any existing PostgreSQL containers
         echo "Cleaning up any existing PostgreSQL containers..."
         docker rm -f postgres 2>/dev/null || true
-        sleep 2  # Give Docker time to clean up
+        sleep 5  # Give Docker time to clean up
 
         echo "Starting PostgreSQL with Docker..."
         docker run --rm -d \
