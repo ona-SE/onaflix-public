@@ -73,8 +73,8 @@ Just choose what works best for you and start coding right away!
 
 To see the GitpodFlix platform in action:
 
-1. Open [http://localhost:3000/](http://localhost:3000/) in your browser
-2. Watch as the application loads instantly
+1. Open [http://localhost:3000/](http://localhost:3000/) in your browser to see the frontend
+2. Open [http://localhost:3002/api/movies](http://localhost:3002/api/movies) to see the movies API
 3. Make changes and see them reflected immediately
 
 It feels just like local development, but everything is running in your Gitpod environment.

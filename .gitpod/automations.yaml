@@ -117,7 +117,7 @@ tasks:
       - manual
     command: |
       cd /workspaces/flex-demo/database/main
-      psql -h localhost -U gitpod -d gitpodflix -f seeds/seed_movies.sql
+      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f seeds/seed_movies.sql
 
   clearDatabase:
     name: "Clear Database"
@@ -125,19 +125,8 @@ tasks:
     triggeredBy:
       - manual
     command: |
-      # Wait for PostgreSQL with timeout
-      timeout=30
-      while [ $timeout -gt 0 ] && ! pg_isready -h localhost -p 5432 -U gitpod; do
-        echo "Waiting for PostgreSQL... ($timeout seconds remaining)"
-        sleep 1
-        timeout=$((timeout-1))
-      done
-      if [ $timeout -eq 0 ]; then
-        echo "Error: PostgreSQL connection timed out"
-        exit 1
-      fi
-      echo "Clearing database..."
-      psql -h localhost -U gitpod -d gitpodflix -c "TRUNCATE TABLE movies;"
+      cd /workspaces/flex-demo/database/main
+      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c "TRUNCATE TABLE movies;"
 
   # runTests:
   #   name: "Run Tests"
