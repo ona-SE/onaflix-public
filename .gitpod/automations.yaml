@@ -39,18 +39,18 @@ services:
         npm run dev
 
 tasks:
-  # installDependencies:
-  #   name: "Install Dependencies"
-  #   description: "Install all project dependencies"
-  #   triggeredBy:
-  #     - postDevcontainerStart
-  #   command: |
-  #     echo "Installing frontend dependencies..."
-  #     cd /workspaces/flex-demo/frontend && npm install
-  #     echo "Installing backend dependencies..."
-  #     cd /workspaces/flex-demo/services/backend && npm install
-  #     echo "Installing database service dependencies..."
-  #     cd /workspaces/flex-demo/services/database && npm install
+  installDependencies:
+    name: "Install Dependencies"
+    description: "Install all project dependencies"
+    triggeredBy:
+      - postDevcontainerStart
+    command: |
+      echo "Installing frontend dependencies..."
+      cd /workspaces/flex-demo/frontend && npm install
+      echo "Installing backend dependencies..."
+      cd /workspaces/flex-demo/services/backend && npm install
+      echo "Installing database service dependencies..."
+      cd /workspaces/flex-demo/services/database && npm install
 
   setupDatabase:
     name: "Setup Database"
