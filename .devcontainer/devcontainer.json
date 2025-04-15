@@ -3,17 +3,22 @@
   "image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {},
-    "ghcr.io/warrenbuckley/codespace-features/sqlite:1": {}
+    "ghcr.io/warrenbuckley/codespace-features/sqlite:1": {},
+    "ghcr.io/devcontainers/features/mysql:1": {
+      "version": "8.0",
+      "startMysql": true
+    }
   },
   "forwardPorts": [3000, 8000, 3306],
-  "postCreateCommand": "cd frontend && npm install && cd ../services/backend && npm install && cd ../database && npm install",
+  "postCreateCommand": "apt-get update && apt-get install -y default-mysql-client && cd frontend && npm install && cd ../services/backend && npm install && cd ../database && npm install",
   "customizations": {
     "vscode": {
       "extensions": [
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "mtxr.sqltools",
-        "mtxr.sqltools-driver-sqlite"
+        "mtxr.sqltools-driver-sqlite",
+        "mtxr.sqltools-driver-mysql"
       ],
       "settings": {
         "editor.formatOnSave": true
