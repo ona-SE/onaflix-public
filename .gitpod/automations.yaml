@@ -148,6 +148,7 @@ tasks:
     description: "Seed the database with sample movies in a dramatic sequence"
     triggeredBy:
       - manual
+      - postEnvironmentStart
     command: |
       cd /workspaces/flex-demo/database/main
       echo "Clearing existing data..."
@@ -216,3 +217,16 @@ tasks:
   #     cd /workspaces/flex-demo/services/backend && npm run build
   #     echo "Building database service..."
   #     cd /workspaces/flex-demo/services/database && npm run build
+
+  openDemoPorts:
+    name: "Open Demo Ports"
+    description: "Opens ports 3000, 3001, and 3002 for the demo"
+    triggeredBy:
+      - postEnvironmentStart
+      - manual
+    command: |
+      echo "Opening demo ports..."
+      gitpod environment port open 3000 --name "Gitpod Flix"
+      gitpod environment port open 3001 --name "Catalog Service"
+      gitpod environment port open 3002 --name "Management UI"
+      echo "Demo ports opened successfully!"
