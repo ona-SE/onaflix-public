@@ -10,6 +10,36 @@ A DevContainer (Development Container) is a Docker container that defines your d
 - `.devcontainer/Dockerfile`: Custom container image definition (optional)
 - `.devcontainer/setup.sh`: Post-creation setup script
 
+## Using DevContainer Features
+
+When configuring your development environment, it's recommended to use [DevContainer features](https://containers.dev/features) whenever possible. Features are reusable, pre-configured components that can be added to your devcontainer.json file. They provide a standardized way to add common tools, languages, and services to your development environment.
+
+The available features are documented in the `/workspaces/flex-demo/docs/devcontainer-features.yml` file, which is manually pulled from the [DevContainer collection index](https://github.com/devcontainers/devcontainers.github.io/blob/gh-pages/_data/collection-index.yml). This ensures you have access to the latest community-maintained features.
+
+Example usage in devcontainer.json:
+
+```json
+{
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    }
+  }
+}
+```
+
+Benefits of using features:
+
+- Standardized configurations
+- Community-maintained and tested
+- Easy version management
+- Reduced maintenance overhead
+- Better compatibility across different development environments
+
 ## Configuration Best Practices
 
 ### 1. Package Installation
