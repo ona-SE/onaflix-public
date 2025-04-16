@@ -1,7 +1,7 @@
 services:
   postgres:
     name: "PostgreSQL Database"
-    description: "PostgreSQL database for Gitpod Flix"
+    description: "PostgreSQL database for Gitpod Flix (Port: 5432)"
     triggeredBy:
       - postDevcontainerStart
       - postEnvironmentStart
@@ -49,16 +49,16 @@ services:
 
   catalog:
     name: "Catalog Service"
-    description: "Movie catalog API service"
+    description: "Movie catalog API service (Port: 3001)"
     triggeredBy:
       - postDevcontainerStart
       - postEnvironmentStart
     commands:
       start: |
         cd /workspaces/flex-demo/backend/catalog
-        PORT=3002 npx nodemon src/index.ts
+        PORT=3001 npx nodemon src/index.ts
       ready: |
-        if curl -s http://localhost:3002/health > /dev/null; then
+        if curl -s http://localhost:3001/health > /dev/null; then
           echo "Catalog service is ready"
           exit 0
         else
@@ -70,7 +70,7 @@ services:
 
   management-ui:
     name: "Management UI"
-    description: "Development environment visualization dashboard"
+    description: "Development environment visualization dashboard (Port: 3002)"
     triggeredBy:
       - postDevcontainerStart
       - postEnvironmentStart
@@ -93,9 +93,9 @@ services:
           sleep 2
         done
 
-        PORT=3001 npm run dev
+        PORT=3002 npm run dev
       ready: |
-        if curl -s http://localhost:3001 > /dev/null; then
+        if curl -s http://localhost:3002 > /dev/null; then
           echo "Management UI is ready"
           exit 0
         else
@@ -107,7 +107,7 @@ services:
 
   gitpod-flix:
     name: "Gitpod Flix"
-    description: "Streaming platform frontend"
+    description: "Streaming platform frontend (Port: 3000)"
     triggeredBy:
       - postDevcontainerStart
       - postEnvironmentStart

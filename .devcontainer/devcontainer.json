@@ -49,16 +49,10 @@
       "onAutoForward": "openPreview"
     },
     "3001": {
-      "label": "Management UI"
-    },
-    "8000": {
-      "label": "Backend API"
-    },
-    "3306": {
-      "label": "Database Service"
+      "label": "Catalog Service"
     },
     "3002": {
-      "label": "PostgreSQL Service"
+      "label": "Management UI"
     },
     "5432": {
       "label": "PostgreSQL"
