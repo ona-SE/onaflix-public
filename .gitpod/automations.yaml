@@ -142,6 +142,22 @@ tasks:
       - postEnvironmentStart
     command: |
       cd /workspaces/flex-demo/database/main
+
+      # Wait for PostgreSQL to be ready
+      echo "Waiting for PostgreSQL to be ready..."
+      for i in {1..30}; do
+        if PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c "SELECT 1" >/dev/null 2>&1; then
+          echo "✓ PostgreSQL is ready"
+          break
+        fi
+        if [ $i -eq 30 ]; then
+          echo "✗ Timeout waiting for PostgreSQL"
+          exit 1
+        fi
+        echo "Waiting for PostgreSQL... attempt $i/30"
+        sleep 2
+      done
+
       echo "Clearing existing data..."
       PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c "TRUNCATE TABLE movies;"
 
