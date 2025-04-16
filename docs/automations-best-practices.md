@@ -1,647 +1,249 @@
-# Automations Best Practices
+# Gitpod Automations Best Practices
 
-Gitpod Automations provide a powerful way to define, automate, and share common workflows within your development environment. This guide covers best practices, schema details, and practical examples to help you create effective automations.
+This guide covers best practices for configuring and using Gitpod Automations, which are defined in your `.gitpod/automations.yaml` file. Automations help you set up and maintain your development environment automatically.
 
-## What are Automations?
+## What are Gitpod Automations?
 
-Automations in Gitpod are defined configurations that allow you to automate recurring tasks and services in your development environment. They go beyond Dev Container configurations to provide a framework for:
+Gitpod Automations are defined in your `.gitpod/automations.yaml` file and come in two types:
 
-- **Setup automation** - Seed databases, provision infrastructure, authenticate with cloud services
-- **Operation workflows** - Transform runbooks into one-click self-service actions
-- **Editor interfaces** - Start specialized servers like Jupyter notebooks
-- **Policy enforcement** - Run security scanning or linting tools
-- **AI workflows** - Configure AI assistants or code analysis tools
-
-## Types of Automations
-
-Gitpod supports two primary types of automations:
-
-### 1. Services
-
-Services are designed for long-running processes that need to be continuously available throughout your development session.
-
-**Examples include:**
-
-- Database servers (PostgreSQL, MySQL)
-- Message queues (RabbitMQ, Kafka)
-- Web servers (frontend/backend applications)
-- Development servers (webpack, Next.js)
-
-### 2. Tasks
-
-Tasks are individual commands designed to perform specific, often one-off actions within your environment.
-
-**Examples include:**
-
-- Compiling code
-- Running test suites
-- Seeding databases
-- Authenticating with cloud providers
-- Setting up environment variables
+1. **Services**: Long-running processes (like databases, message queues, etc.)
+2. **Tasks**: One-time setup or initialization commands
 
 ## Automation Schema
-
-Automations are defined in YAML format, typically stored in `.gitpod/automations.yaml`. Here's the basic schema:
-
-```yaml
-services:
-  serviceReference:
-    name: "Human-readable name"
-    description: "Optional description"
-    triggeredBy:
-      - [trigger type]
-    commands:
-      start: "command to start the service"
-      ready: "command to check if service is ready"
-      stop: "command to stop the service"
-
-tasks:
-  taskReference:
-    name: "Human-readable name"
-    description: "Optional description"
-    triggeredBy:
-      - [trigger type]
-    dependsOn:
-      - [other task reference]
-    command: "command to execute"
-```
-
-### Key Properties
-
-#### For Services:
-
-- **start (required)**: The command that runs the service. This process should continue running.
-- **ready (optional)**: A health check command to determine when the service is fully operational.
-- **stop (optional)**: A command to gracefully shutdown the service.
-
-#### For Tasks:
-
-- **command (required)**: The action to be executed.
-- **dependsOn (optional)**: References to other tasks that should run before this one.
-
-#### Triggers:
-
-- **postEnvironmentStart**: Runs every time the environment starts or restarts.
-- **postDevcontainerStart**: Runs when the devcontainer starts (initial start or after rebuild).
-- **manual**: Creates a UI element allowing users to run the automation on demand.
-
-## Best Practices
-
-### General Best Practices
-
-1. **Use Descriptive Names**
-
-   - Choose clear, descriptive names for your tasks and services
-   - Include purpose in the description field
-
-2. **Keep Commands Focused**
-
-   - Each task should have a single responsibility
-   - Break complex workflows into multiple dependent tasks
-
-3. **Handle Errors Gracefully**
-
-   - Include error handling in your scripts
-   - Use conditional execution (`command || fallback`)
-
-4. **Include Ready Checks for Services**
-
-   - Always define a `ready` command for services
-   - This ensures dependent tasks only run when services are truly ready
-
-5. **Add Documentation**
-   - Use the `description` field to explain what each automation does
-   - Include any prerequisites or expected outcomes
-
-### Service-Specific Best Practices
-
-1. **Service Dependencies**
-
-   - Services cannot have dependencies on other services
-   - If you need to ensure a service starts after another, use the `ready` command to check for the required service
-   - Example:
-     ```yaml
-     services:
-       database:
-         name: "Database"
-         commands:
-           start: "docker run postgres"
-           ready: "pg_isready -h localhost"
-       backend:
-         name: "Backend"
-         commands:
-           start: "npm start"
-           ready: "curl -s http://localhost:3000/health | grep -q 'ok'"
-     ```
-
-2. **Use Docker for Isolated Services**
-
-   - Containerize databases and other infrastructure services
-   - Include volume mounts for persistence when needed
-
-3. **Implement Proper Shutdown Procedures**
-
-   - Define `stop` commands that gracefully terminate services
-   - This prevents data corruption and resource leaks
-
-4. **Use Network Configurations Properly**
-   - Bind to `0.0.0.0` instead of `localhost` to make services accessible
-   - Expose ports using `--network=host` for single containers or `network_mode: host` in Docker Compose
-
-### Task-Specific Best Practices
-
-1. **Leverage Dependencies**
-
-   - Use `dependsOn` to create task chains
-   - Re-use common tasks rather than duplicating code
-
-2. **Choose Appropriate Triggers**
-
-   - Use `postDevcontainerStart` for setup tasks
-   - Use `manual` for occasional or optional tasks
-   - Use `postEnvironmentStart` for tasks that must run on every restart
-
-3. **Use Multi-line Commands**
-   - For complex scripts, use the YAML multi-line syntax
-   - This improves readability for longer commands
-
-### Path Handling Best Practices
-
-1. **Use Absolute Paths**
-
-   - Always use absolute paths from the workspace root (`/workspaces/your-project-name/`)
-   - This ensures commands work consistently regardless of the current working directory
-   - Example: `cd /workspaces/your-project-name/services/backend` instead of `cd services/backend`
-
-2. **Verify Paths**
-
-   - Use `pwd` to verify the current working directory
-   - Check directory structure with `ls -la` before writing automation paths
-   - Example:
-     ```yaml
-     tasks:
-       verifyStructure:
-         name: "Verify Directory Structure"
-         command: |
-           echo "Current directory: $(pwd)"
-           echo "Directory contents:"
-           ls -la
-     ```
-
-3. **Path Consistency**
-
-   - Maintain consistent path usage throughout all automations
-   - Avoid mixing relative and absolute paths
-   - Use environment variables for workspace root when needed:
-     ```yaml
-     tasks:
-       example:
-         command: |
-           WORKSPACE_ROOT="/workspaces/your-project-name"
-           cd "${WORKSPACE_ROOT}/services/backend"
-     ```
-
-4. **Path Safety**
-   - Always check if directories exist before accessing them
-   - Use proper error handling for path operations
-   - Example:
-     ```yaml
-     tasks:
-       safePath:
-         command: |
-           if [ -d "/workspaces/your-project-name/services/backend" ]; then
-             cd "/workspaces/your-project-name/services/backend"
-           else
-             echo "Error: Directory not found"
-             exit 1
-           fi
-     ```
-
-## Examples
-
-### Database Setup Example
 
 ```yaml
 services:
   database:
-    name: "PostgreSQL Database"
-    description: "Primary application database"
+    name: PostgreSQL
+    description: The backend database
     triggeredBy:
-      - postDevcontainerStart
+      - postEnvironmentStart
     commands:
-      start: "docker run --rm -d --name pg-db -p 5432:5432 -e POSTGRES_PASSWORD=postgres postgres:14"
-      ready: "pg_isready -h localhost -p 5432"
+      start: "docker run --rm -t --name database postgres:latest"
+      ready: docker exec database pg_isready
 
 tasks:
-  databaseSetup:
-    name: "Initialize Database"
-    description: "Creates schema and loads sample data"
+  buildAll:
+    name: Build All
+    description: builds all code
+    command: go build .
+  runUnitTests:
+    name: Runs unit tests
+    command: go test -v ./...
+  validate:
+    name: Validate
+    description: Builds and tests the code
     triggeredBy:
-      - postDevcontainerStart
-    command: |
-      echo "Waiting for database to be ready..."
-      until pg_isready -h localhost -p 5432; do
-        sleep 1
-      done
-      echo "Creating schema..."
-      psql -h localhost -U postgres -f ./scripts/schema.sql
-      echo "Loading sample data..."
-      psql -h localhost -U postgres -f ./scripts/sample-data.sql
+      - postEnvironmentStart
+    dependsOn:
+      - buildAll
+      - runUnitTests
 ```
 
-### Development Server Example
+## Iterating on Automations
+
+The Gitpod CLI provides several commands to help you iterate on and debug your automations:
+
+### 1. Updating Automations
+
+To reload the automations configuration:
+
+```bash
+gitpod automations update [optional-path-to-automations.yaml]
+```
+
+### 2. Starting Services and Tasks
+
+To start a specific service:
+
+```bash
+gitpod automations service start <service-name>
+```
+
+To start a specific task:
+
+```bash
+gitpod automations task start <task-name>
+```
+
+### 3. Simulating Triggers
+
+To simulate environment triggers:
+
+```bash
+gitpod automations trigger postEnvironmentStart
+```
+
+### 4. Viewing Logs
+
+To view service logs:
+
+```bash
+gitpod automations service logs <service-name>
+```
+
+To view task logs:
+
+```bash
+gitpod automations task logs <task-name>
+```
+
+### 6. Debugging Tips
+
+- Use `gitpod automations service logs` to check service startup issues
+- Use `gitpod automations task logs` to debug task failures
+- Add `echo` statements in your commands for better debugging
+- Use `triggeredBy` and `dependsOn` to control task execution order
+- Check service status with `gitpod automations service list`
+
+## General Best Practices
+
+### 1. Service Configuration
+
+- **Always Include a `ready` Command**
+
+  - This helps Gitpod know when your service is ready to use
+  - Example for PostgreSQL:
+    ```yaml
+    commands:
+      start: "docker run --rm -t --name database postgres:latest"
+      ready: docker exec database pg_isready
+    ```
+
+- **Use Descriptive Names and Descriptions**
+  - Make services and tasks self-documenting
+  - Example:
+    ```yaml
+    name: PostgreSQL
+    description: The backend database for the application
+    ```
+
+### 2. Task Configuration
+
+- **Keep Tasks Focused**
+
+  - Each task should have a single responsibility
+  - Use descriptive names and descriptions
+  - Example:
+    ```yaml
+    tasks:
+      build:
+        name: Build Code
+        description: Builds the application code
+        command: yarn && yarn build
+    ```
+
+- **Use Dependencies Properly**
+  - Define task dependencies using `dependsOn`
+  - Example:
+    ```yaml
+    validate:
+      name: Validate
+      dependsOn:
+        - build
+        - test
+      command: echo "Validation complete"
+    ```
+
+## Specific Automation Best Practices
+
+### 1. Database Setup
 
 ```yaml
 services:
-  backend:
-    name: "API Server"
-    description: "Backend API running on Node.js"
+  postgresql:
+    name: PostgreSQL
+    description: A fully initialized development database
     triggeredBy:
-      - postEnvironmentStart
+      - postDevcontainerStart
     commands:
-      start: "cd backend && npm start"
-      ready: "curl -s http://localhost:3000/health | grep -q 'ok'"
+      start: docker run -d --name postgres -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 postgres:latest
+      ready: docker exec postgres pg_isready -U postgres
 
-  frontend:
-    name: "Web UI"
-    description: "React frontend application"
+tasks:
+  seedDatabase:
+    name: (Re)seed the development database
     triggeredBy:
-      - postEnvironmentStart
-    commands:
-      start: "cd frontend && npm start"
-      ready: 'curl -s http://localhost:8080 | grep -q ''<div id="root"'''
+      - manual
+    command: dev/seed-development-db.sh
 ```
 
-### Cloud Authentication Example
+### 2. Development Environment Setup
+
+```yaml
+tasks:
+  build:
+    name: Build Code
+    command: yarn && yarn build
+  test:
+    name: Run unit tests
+    dependsOn:
+      - build
+    command: yarn test
+  setup:
+    name: Set up the environment
+    dependsOn:
+      - build
+      - test
+    command: echo "all set up and ready to go"
+```
+
+### 3. Cloud Authentication
 
 ```yaml
 tasks:
   awsAuth:
-    name: "AWS Authentication"
-    description: "Authenticate with AWS"
-    triggeredBy:
-      - manual
-      - postDevcontainerStart
-    command: |
-      echo "Authenticating with AWS..."
-      gitpod idp login aws
-
-  deployStaging:
-    name: "Deploy to Staging"
-    description: "Deploy the application to staging environment"
-    triggeredBy:
-      - manual
-    dependsOn:
-      - awsAuth
-    command: |
-      echo "Running deployment to staging..."
-      cd terraform && terraform apply -auto-approve -var-file=staging.tfvars
+    name: AWS Auth
+    command: gitpod idp login aws
 ```
 
-### Testing Workflow Example
+## Common Issues and Solutions
 
-```yaml
-tasks:
-  lint:
-    name: "Run Linters"
-    description: "Check code quality with linters"
-    triggeredBy:
-      - manual
-    command: "npm run lint"
+### 1. Service Not Starting
 
-  unitTests:
-    name: "Unit Tests"
-    description: "Run all unit tests"
-    triggeredBy:
-      - manual
-    command: "npm run test:unit"
+- **Problem**: Service fails to start or becomes unresponsive
+- **Solution**:
+  - Add proper `ready` command
+  - Check service logs
+  - Ensure correct environment variables
 
-  integrationTests:
-    name: "Integration Tests"
-    description: "Run integration test suite"
-    triggeredBy:
-      - manual
-    command: "npm run test:integration"
+### 2. Task Dependencies
 
-  fullTestSuite:
-    name: "Complete Test Suite"
-    description: "Run all tests and quality checks"
-    triggeredBy:
-      - manual
-    dependsOn:
-      - lint
-      - unitTests
-      - integrationTests
-    command: "echo 'All tests completed successfully!'"
-```
+- **Problem**: Tasks running in wrong order
+- **Solution**:
+  - Use `dependsOn` to define dependencies
+  - Use `triggeredBy` to control when tasks run
+  - Structure tasks logically
 
-### Machine Learning Environment Example
+### 3. Service Dependencies
 
-```yaml
-services:
-  jupyter:
-    name: "Jupyter Notebook"
-    description: "Jupyter notebook server for data analysis"
-    triggeredBy:
-      - postDevcontainerStart
-    commands:
-      start: "jupyter notebook --no-browser --ip=0.0.0.0 --port=8888 --NotebookApp.token='gitpod'"
-      ready: "curl -s http://localhost:8888/api/status | grep -q 'running'"
+- **Problem**: Tasks trying to use services before they're ready
+- **Solution**:
+  - Use `ready` commands to ensure services are available
+  - Add appropriate delays or checks in tasks
+  - Use `triggeredBy` to control task timing
 
-tasks:
-  downloadDatasets:
-    name: "Download Datasets"
-    description: "Fetch training datasets from S3"
-    triggeredBy:
-      - postDevcontainerStart
-    command: |
-      echo "Downloading datasets..."
-      mkdir -p ./data
-      aws s3 cp s3://my-datasets/training-data.csv ./data/
-      aws s3 cp s3://my-datasets/test-data.csv ./data/
-      echo "Datasets downloaded successfully"
-```
+## Best Practices Summary
 
-## Advanced Usage
+1. **Service Configuration**
 
-### Dynamic Automation Generation
+   - Always include `ready` command
+   - Use descriptive names and descriptions
+   - Implement proper error handling
 
-You can generate automations programmatically using the Gitpod CLI:
+2. **Task Organization**
 
-```bash
-# Generate and apply automations from a script or template
-./generate-automations.sh | gitpod automations update -
-```
+   - Keep tasks focused and single-purpose
+   - Use descriptive names and descriptions
+   - Define proper dependencies
 
-### Conditional Execution
+3. **Error Handling**
 
-You can implement conditional logic in your task commands:
+   - Add proper checks in commands
+   - Use logging for debugging
+   - Handle dependencies correctly
 
-```yaml
-tasks:
-  conditionalBuild:
-    name: "Conditional Build"
-    triggeredBy:
-      - postEnvironmentStart
-    command: |
-      if [ -f "package-lock.json" ]; then
-        echo "Using npm..."
-        npm ci && npm run build
-      elif [ -f "yarn.lock" ]; then
-        echo "Using yarn..."
-        yarn install --frozen-lockfile && yarn build
-      else
-        echo "No lock file found, using npm..."
-        npm install && npm run build
-      fi
-```
-
-### Complex Dependencies
-
-For complex workflows, you can chain multiple dependent tasks:
-
-```yaml
-tasks:
-  step1:
-    name: "Step 1"
-    command: "echo 'Running step 1'"
-
-  step2:
-    name: "Step 2"
-    dependsOn: ["step1"]
-    command: "echo 'Running step 2'"
-
-  step3:
-    name: "Step 3"
-    dependsOn: ["step2"]
-    command: "echo 'Running step 3'"
-
-  parallelA:
-    name: "Parallel A"
-    dependsOn: ["step3"]
-    command: "echo 'Running parallel task A'"
-
-  parallelB:
-    name: "Parallel B"
-    dependsOn: ["step3"]
-    command: "echo 'Running parallel task B'"
-
-  final:
-    name: "Final Step"
-    dependsOn: ["parallelA", "parallelB"]
-    command: "echo 'All steps completed!'"
-```
-
-By following these best practices and examples, you can create powerful and maintainable automations that enhance your development workflow in Gitpod.
-
-## CLI Commands and Workflow
-
-The Gitpod CLI provides several commands for managing automations:
-
-```bash
-# List all automation commands
-gitpod automations --help
-
-# Validate an automations file
-gitpod automations validate .gitpod/automations.yaml
-
-# List available services and their status
-gitpod automations service list
-
-# List available tasks
-gitpod automations task list
-
-# Start a specific service
-gitpod automations service start <service-name>
-
-# Stop a specific service
-gitpod automations service stop <service-name>
-
-# Update automations configuration
-gitpod automations update .gitpod/automations.yaml
-```
-
-### CLI Workflow Best Practices
-
-1. **Always Validate First**
-
-   - Validate configuration before applying changes
-   - Fix any schema errors before deployment
-
-   ```bash
-   gitpod automations validate .gitpod/automations.yaml
-   ```
-
-2. **Check Service Status**
-
-   - List services to understand current state
-   - Stop running services before updates
-
-   ```bash
-   gitpod automations service list
-   gitpod automations service stop <service>
-   ```
-
-3. **Update with Care**
-   - Stop affected services before updating
-   - Update configuration after validation
-   - Restart services after update
-   ```bash
-   gitpod automations update .gitpod/automations.yaml
-   ```
-
-## Service Resilience
-
-1. **Environment Checks**
-
-   - Check for required tools before starting
-   - Provide meaningful error messages
-   - Include fallback options when possible
-
-   ```yaml
-   services:
-     database:
-       commands:
-         start: |
-           if command -v docker > /dev/null 2>&1; then
-             echo "Using Docker..."
-             docker run postgres
-           elif command -v pg_ctl > /dev/null 2>&1; then
-             echo "Using local PostgreSQL..."
-             pg_ctl start
-           else
-             echo "Error: Required tools not found"
-             exit 1
-           fi
-   ```
-
-2. **Resource Verification**
-
-   - Check for required directories
-   - Verify file existence
-   - Create resources if missing
-
-   ```yaml
-   services:
-     api:
-       commands:
-         start: |
-           if [ ! -d "/workspaces/project/api" ]; then
-             echo "Error: API directory not found"
-             exit 1
-           fi
-           npm start
-   ```
-
-3. **Timeout Mechanisms**
-   - Add timeouts to all wait operations
-   - Provide progress feedback
-   - Handle timeout failures gracefully
-   ```yaml
-   services:
-     app:
-       commands:
-         start: |
-           timeout=30
-           while [ $timeout -gt 0 ] && ! nc -z localhost 5432; do
-             echo "Waiting... ($timeout seconds remaining)"
-             sleep 1
-             timeout=$((timeout-1))
-           done
-           if [ $timeout -eq 0 ]; then
-             echo "Error: Operation timed out"
-             exit 1
-           fi
-   ```
-
-## Error Handling
-
-1. **Graceful Shutdowns**
-
-   - Handle stop commands safely
-   - Use fallbacks for cleanup
-   - Prevent error propagation
-
-   ```yaml
-   services:
-     database:
-       commands:
-         stop: |
-           docker stop container_name || true
-           rm -f /tmp/pid.file || true
-   ```
-
-2. **Status Reporting**
-
-   - Provide clear status messages
-   - Include error context
-   - Use consistent formatting
-
-   ```yaml
-   services:
-     api:
-       commands:
-         ready: |
-           if ! curl -s http://localhost:3000/health; then
-             echo "API not ready: Health check failed"
-             return 1
-           fi
-   ```
-
-3. **Resource Cleanup**
-   - Clean up temporary files
-   - Remove stale processes
-   - Handle cleanup failures
-   ```yaml
-   services:
-     app:
-       commands:
-         stop: |
-           pkill -f "node.*app" || true
-           rm -f /tmp/*.pid || true
-   ```
-
-## DevContainer Integration
-
-1. **Tool Dependencies**
-
-   - Specify required tools in devcontainer.json
-   - Include version constraints
-   - Add necessary features
-
-   ```json
-   {
-     "features": {
-       "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-       "ghcr.io/devcontainers/features/node:1": {},
-       "ghcr.io/devcontainers/features/postgresql:1": {}
-     }
-   }
-   ```
-
-2. **Port Forwarding**
-
-   - Define all required ports
-   - Add port labels
-   - Group related ports
-
-   ```json
-   {
-     "forwardPorts": [3000, 3001, 5432],
-     "portsAttributes": {
-       "3000": { "label": "Frontend" },
-       "3001": { "label": "API" },
-       "5432": { "label": "Database" }
-     }
-   }
-   ```
-
-3. **Post-Create Commands**
-   - Install additional dependencies
-   - Set up environment
-   - Initialize services
-   ```json
-   {
-     "postCreateCommand": "apt-get update && apt-get install -y postgresql-client"
-   }
-   ```
+4. **Performance**
+   - Minimize startup time
+   - Use caching when possible
+   - Optimize service configuration

@@ -7,16 +7,6 @@ services:
       - postEnvironmentStart
     commands:
       start: |
-        # Wait for any existing apt processes to complete
-        while fuser /var/lib/apt/lists/lock >/dev/null 2>&1; do
-          echo "Waiting for apt lock..."
-          sleep 5
-        done
-
-        # Install PostgreSQL client
-        sudo apt-get update
-        sudo apt-get install -y postgresql-client
-
         # Force cleanup of any existing PostgreSQL containers
         echo "Cleaning up any existing PostgreSQL containers..."
         docker rm -f postgres 2>/dev/null || true
@@ -42,9 +32,6 @@ services:
           sleep 5
         done
       ready: |
-        if ! command -v pg_isready &> /dev/null; then
-          sudo apt-get update && sudo apt-get install -y postgresql-client
-        fi
         if pg_isready -h localhost -p 5432 -U gitpod; then
           echo "PostgreSQL is ready and accepting connections"
           exit 0
@@ -65,10 +52,15 @@ services:
     commands:
       start: |
         cd /workspaces/flex-demo/backend/catalog
-        npm install
         PORT=3002 npm run dev
       ready: |
-        curl -s http://localhost:3002/health || echo "Catalog service not ready"
+        if curl -s http://localhost:3002/health > /dev/null; then
+          echo "Catalog service is ready"
+          exit 0
+        else
+          echo "Catalog service not ready"
+          exit 1
+        fi
       stop: |
         pkill -f "node.*catalog" || true
 
@@ -81,10 +73,15 @@ services:
     commands:
       start: |
         cd /workspaces/flex-demo/management-ui
-        npm install
         PORT=3001 npm run dev
       ready: |
-        curl -s http://localhost:3001 || echo "Management UI not ready"
+        if curl -s http://localhost:3001 > /dev/null; then
+          echo "Management UI is ready"
+          exit 0
+        else
+          echo "Management UI not ready"
+          exit 1
+        fi
       stop: |
         pkill -f "node.*management-ui" || true
 
@@ -101,10 +98,15 @@ services:
           echo "Error: Frontend directory not found"
           exit 1
         fi
-        npm install
         PORT=3000 npm run dev
       ready: |
-        curl -s http://localhost:3000 || echo "Gitpod Flix not ready"
+        if curl -s http://localhost:3000 > /dev/null; then
+          echo "Gitpod Flix is ready"
+          exit 0
+        else
+          echo "Gitpod Flix not ready"
+          exit 1
+        fi
       stop: |
         pkill -f "node.*frontend" || true
 

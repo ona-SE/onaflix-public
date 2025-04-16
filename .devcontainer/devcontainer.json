@@ -1,14 +1,33 @@
 {
-  "name": "Streaming Platform Dev Environment",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
+  "name": "GitpodFlix Dev Environment",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
   "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": {},
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installGit": true,
+      "installGitLFS": true,
+      "installGithubCli": true
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18",
+      "nodeGypDependencies": true
+    },
     "ghcr.io/warrenbuckley/codespace-features/sqlite:1": {},
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/devcontainers/features/node:1": {}
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "moby": true
+    }
   },
-  "forwardPorts": [3000, 3001, 8000, 3306, 3002, 5432],
-  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y default-mysql-client default-mysql-server && sudo service mysql start && cd management-ui && npm install && cd ../frontend && npm install && cd ../services/backend && npm install && cd ../database && npm install && sudo apt-get install -y postgresql-client",
+  "forwardPorts": [
+    3000,
+    3001,
+    8000,
+    3306,
+    3002,
+    5432
+  ],
+  "postCreateCommand": ".devcontainer/setup.sh",
   "customizations": {
     "vscode": {
       "extensions": [
