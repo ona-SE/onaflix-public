@@ -13,7 +13,7 @@ services:
         sleep 2  # Give Docker time to clean up
 
         echo "Starting PostgreSQL with Docker..."
-        docker run --rm -d \
+        docker run --rm \
           --name postgres \
           -e POSTGRES_USER=gitpod \
           -e POSTGRES_PASSWORD=gitpod \
@@ -22,15 +22,6 @@ services:
           -v postgres_data:/var/lib/postgresql/data \
           -v /workspaces/flex-demo/database/main/migrations:/docker-entrypoint-initdb.d \
           postgres:15
-
-        # Keep the service running by monitoring the container
-        while true; do
-          if ! docker ps | grep -q postgres; then
-            echo "PostgreSQL container stopped unexpectedly"
-            exit 1
-          fi
-          sleep 5
-        done
 
       ready: |
         if docker exec postgres pg_isready -U gitpod; then
