@@ -77,6 +77,22 @@ services:
     commands:
       start: |
         cd /workspaces/flex-demo/management-ui
+
+        # Wait for vite to be available
+        echo "Waiting for vite to be available..."
+        for i in {1..30}; do
+          if command -v vite >/dev/null 2>&1 || [ -f "node_modules/.bin/vite" ]; then
+            echo "✓ vite is available"
+            break
+          fi
+          if [ $i -eq 30 ]; then
+            echo "✗ Timeout waiting for vite"
+            exit 1
+          fi
+          echo "Waiting for vite... attempt $i/30"
+          sleep 2
+        done
+
         PORT=3001 npm run dev
       ready: |
         if curl -s http://localhost:3001 > /dev/null; then
@@ -98,6 +114,22 @@ services:
     commands:
       start: |
         cd /workspaces/flex-demo/frontend
+
+        # Wait for vite to be available
+        echo "Waiting for vite to be available..."
+        for i in {1..30}; do
+          if command -v vite >/dev/null 2>&1 || [ -f "node_modules/.bin/vite" ]; then
+            echo "✓ vite is available"
+            break
+          fi
+          if [ $i -eq 30 ]; then
+            echo "✗ Timeout waiting for vite"
+            exit 1
+          fi
+          echo "Waiting for vite... attempt $i/30"
+          sleep 2
+        done
+
         PORT=3000 npm run dev
       ready: |
         if curl -s http://localhost:3000 > /dev/null; then
