@@ -28,6 +28,12 @@ install_package "mariadb-client"
 install_package "mariadb-server"
 install_package "postgresql-client"
 
+# Verify PostgreSQL client tools are installed
+if ! command -v pg_isready &> /dev/null; then
+    echo "❌ PostgreSQL client tools not properly installed"
+    exit 1
+fi
+
 # Start MariaDB service
 echo "💾 Starting MariaDB service..."
 if ! service mariadb status > /dev/null 2>&1; then
@@ -44,41 +50,30 @@ fi
 
 # Install global npm packages
 echo "📦 Installing global npm packages..."
-if ! command -v vite &> /dev/null; then
-    npm install -g vite
-else
-    echo "✅ vite is already installed"
-fi
+npm install -g nodemon vite
 
 # Install project dependencies
 echo "📦 Installing project dependencies..."
 
-# Function to install npm dependencies
-install_npm_deps() {
-    local dir=$1
-    local name=$2
-    echo "  📦 Installing $name dependencies..."
-    if [ -d "$dir" ]; then
-        cd "$dir"
-        if [ -f "package.json" ]; then
-            if [ ! -d "node_modules" ]; then
-                npm install
-            else
-                echo "  ✅ $name dependencies are already installed"
-            fi
-        else
-            echo "  ⚠️ No package.json found in $dir, skipping npm install"
-        fi
-    else
-        echo "  ❌ Directory not found: $dir"
-        exit 1
-    fi
-}
+# Install management UI dependencies
+if [ -d "/workspaces/flex-demo/management-ui" ]; then
+    echo "📦 Installing management UI dependencies..."
+    cd /workspaces/flex-demo/management-ui
+    npm install
+fi
 
-# Install dependencies for each project
-install_npm_deps "/workspaces/flex-demo/management-ui" "Management UI"
-install_npm_deps "/workspaces/flex-demo/frontend" "Gitpod Flix"
-install_npm_deps "/workspaces/flex-demo/backend/catalog" "Catalog Service"
-install_npm_deps "/workspaces/flex-demo/database" "Database Service"
+# Install Gitpod Flix dependencies
+if [ -d "/workspaces/flex-demo/frontend" ]; then
+    echo "📦 Installing Gitpod Flix dependencies..."
+    cd /workspaces/flex-demo/frontend
+    npm install
+fi
+
+# Install catalog service dependencies
+if [ -d "/workspaces/flex-demo/backend/catalog" ]; then
+    echo "📦 Installing catalog service dependencies..."
+    cd /workspaces/flex-demo/backend/catalog
+    npm install
+fi
 
 echo "✅ Setup completed successfully!" 

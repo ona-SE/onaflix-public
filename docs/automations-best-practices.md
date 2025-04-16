@@ -79,22 +79,72 @@ gitpod automations trigger postEnvironmentStart
 To view service logs:
 
 ```bash
-gitpod automations service logs <service-name>
+gitpod automations service logs <service-name> | cat
 ```
+
+Note: Always pipe to `cat` to prevent paging and ensure complete log output.
 
 To view task logs:
 
 ```bash
-gitpod automations task logs <task-name>
+gitpod automations task logs <task-name> | cat
 ```
 
-### 6. Debugging Tips
+### 5. Managing Services
 
-- Use `gitpod automations service logs` to check service startup issues
-- Use `gitpod automations task logs` to debug task failures
+To list all services and their status:
+
+```bash
+gitpod automations service list
+```
+
+This will show each service's:
+
+- Reference name
+- Display name
+- Description
+- Current phase (e.g., RUNNING, STOPPED, FAILED)
+
+To stop a service:
+
+```bash
+gitpod automations service stop <service-name>
+```
+
+Note: Services must be stopped one at a time.
+
+### 6. Updating Automations
+
+When updating your automations configuration:
+
+1. **Stop Running Services First**
+
+   ```bash
+   # Stop each service individually
+   gitpod automations service stop <service-name>
+   ```
+
+2. **Update Automations**
+
+   ```bash
+   gitpod automations update
+   ```
+
+3. **Start Services Again**
+   ```bash
+   gitpod automations service start <service-name>
+   ```
+
+Important: You cannot update automations while services are running. The update will fail with a "failed_precondition" error.
+
+### 7. Debugging Tips
+
+- Use `gitpod automations service logs <service-name> | cat` to check service startup issues
+- Use `gitpod automations task logs <task-name> | cat` to debug task failures
 - Add `echo` statements in your commands for better debugging
-- Use `triggeredBy` and `dependsOn` to control task execution order
+- Use `triggeredBy` to control task execution order
 - Check service status with `gitpod automations service list`
+- When services fail to start, check their logs for dependency or configuration issues
 
 ## General Best Practices
 

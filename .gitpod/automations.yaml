@@ -10,7 +10,7 @@ services:
         # Force cleanup of any existing PostgreSQL containers
         echo "Cleaning up any existing PostgreSQL containers..."
         docker rm -f postgres 2>/dev/null || true
-        sleep 5  # Give Docker time to clean up
+        sleep 2  # Give Docker time to clean up
 
         echo "Starting PostgreSQL with Docker..."
         docker run --rm -d \
@@ -23,7 +23,7 @@ services:
           -v /workspaces/flex-demo/database/main/migrations:/docker-entrypoint-initdb.d \
           postgres:15
 
-        # Keep the service running and monitor the container
+        # Keep the service running by monitoring the container
         while true; do
           if ! docker ps | grep -q postgres; then
             echo "PostgreSQL container stopped unexpectedly"
@@ -31,17 +31,21 @@ services:
           fi
           sleep 5
         done
+
       ready: |
-        if pg_isready -h localhost -p 5432 -U gitpod; then
+        if docker exec postgres pg_isready -U gitpod; then
           echo "PostgreSQL is ready and accepting connections"
           exit 0
         else
           echo "PostgreSQL not ready"
           exit 1
         fi
+
       stop: |
+        echo "Stopping PostgreSQL container..."
         docker stop postgres || true
-        docker rm postgres || true
+        echo "Removing PostgreSQL container..."
+        docker rm -f postgres || true
 
   catalog:
     name: "Catalog Service"
@@ -52,7 +56,7 @@ services:
     commands:
       start: |
         cd /workspaces/flex-demo/backend/catalog
-        PORT=3002 npm run dev
+        PORT=3002 npx nodemon src/index.ts
       ready: |
         if curl -s http://localhost:3002/health > /dev/null; then
           echo "Catalog service is ready"
@@ -73,7 +77,7 @@ services:
     commands:
       start: |
         cd /workspaces/flex-demo/management-ui
-        PORT=3001 npm run dev
+        PORT=3001 npx vite
       ready: |
         if curl -s http://localhost:3001 > /dev/null; then
           echo "Management UI is ready"
@@ -98,7 +102,7 @@ services:
           echo "Error: Frontend directory not found"
           exit 1
         fi
-        PORT=3000 npm run dev
+        PORT=3000 npx vite
       ready: |
         if curl -s http://localhost:3000 > /dev/null; then
           echo "Gitpod Flix is ready"
@@ -111,19 +115,6 @@ services:
         pkill -f "node.*frontend" || true
 
 tasks:
-  installDependencies:
-    name: "Install Dependencies"
-    description: "Install all project dependencies"
-    triggeredBy:
-      - postDevcontainerStart
-    command: |
-      echo "Installing management UI dependencies..."
-      cd /workspaces/flex-demo/management-ui && npm install
-      echo "Installing Gitpod Flix dependencies..."
-      cd /workspaces/flex-demo/frontend && npm install
-      echo "Installing catalog service dependencies..."
-      cd /workspaces/flex-demo/backend/catalog && npm install
-
   seedDatabase:
     name: "Seed Database"
     description: "Seed the database with sample movies in a dramatic sequence"
