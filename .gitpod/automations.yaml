@@ -77,7 +77,7 @@ services:
     commands:
       start: |
         cd /workspaces/flex-demo/management-ui
-        PORT=3001 npx vite
+        PORT=3001 npm run dev
       ready: |
         if curl -s http://localhost:3001 > /dev/null; then
           echo "Management UI is ready"
@@ -98,11 +98,7 @@ services:
     commands:
       start: |
         cd /workspaces/flex-demo/frontend
-        if [ ! -d "/workspaces/flex-demo/frontend" ]; then
-          echo "Error: Frontend directory not found"
-          exit 1
-        fi
-        PORT=3000 npx vite
+        PORT=3000 npm run dev
       ready: |
         if curl -s http://localhost:3000 > /dev/null; then
           echo "Gitpod Flix is ready"

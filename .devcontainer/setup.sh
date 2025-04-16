@@ -50,7 +50,7 @@ fi
 
 # Install global npm packages
 echo "📦 Installing global npm packages..."
-npm install -g nodemon vite
+npm install -g nodemon
 
 # Install project dependencies
 echo "📦 Installing project dependencies..."
