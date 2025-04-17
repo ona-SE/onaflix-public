@@ -1,0 +1,211 @@
+Gitpod PostgreSQL Service Automation Issue Report
+=============================================
+
+Issue Description:
+-----------------
+The PostgreSQL service in Gitpod automations fails to start properly, getting stuck in a loop where it attempts to start but terminates unexpectedly. The service reports a "protocol" error after the start command completes successfully, despite the PostgreSQL container appearing to start correctly.
+
+Environment:
+-----------
+- Gitpod workspace
+- PostgreSQL 15 Docker container
+- Gitpod automations service
+
+Attempted Solutions:
+------------------
+
+1. Initial Configuration:
+```yaml
+start: |
+  docker rm -f postgres 2>/dev/null || true
+  docker run --rm -d \
+    --name postgres \
+    -e POSTGRES_USER=gitpod \
+    -e POSTGRES_PASSWORD=gitpod \
+    -e POSTGRES_DB=gitpodflix \
+    -p 5432:5432 \
+    -v postgres_data:/var/lib/postgresql/data \
+    -v /workspaces/flex-demo/database/main/migrations:/docker-entrypoint-initdb.d \
+    postgres:15
+  docker logs -f postgres
+```
+
+Issues observed:
+- Service would start but immediately terminate
+- No proper readiness check
+- Log following would prevent proper service lifecycle
+
+2. Added Readiness Check:
+```yaml
+start: |
+  docker rm -f postgres 2>/dev/null || true
+  docker run --rm -d \
+    --name postgres \
+    -e POSTGRES_USER=gitpod \
+    -e POSTGRES_PASSWORD=gitpod \
+    -e POSTGRES_DB=gitpodflix \
+    -p 5432:5432 \
+    -v postgres_data:/var/lib/postgresql/data \
+    -v /workspaces/flex-demo/database/main/migrations:/docker-entrypoint-initdb.d \
+    postgres:15
+  
+  # Wait for PostgreSQL to be ready
+  for i in {1..30}; do
+    if docker exec postgres pg_isready -U gitpod; then
+      echo "PostgreSQL is ready"
+      exit 0
+    fi
+    echo "Waiting for PostgreSQL to be ready... ($i/30)"
+    sleep 2
+  done
+  echo "PostgreSQL failed to start"
+  exit 1
+```
+
+Issues observed:
+- Service would still terminate after readiness check
+- Protocol error persisted
+- No persistent connection maintained
+
+3. Infinite Loop Monitoring:
+```yaml
+start: |
+  docker rm -f postgres 2>/dev/null || true
+  docker run --rm -d \
+    --name postgres \
+    -e POSTGRES_USER=gitpod \
+    -e POSTGRES_PASSWORD=gitpod \
+    -e POSTGRES_DB=gitpodflix \
+    -p 5432:5432 \
+    -v postgres_data:/var/lib/postgresql/data \
+    -v /workspaces/flex-demo/database/main/migrations:/docker-entrypoint-initdb.d \
+    postgres:15
+
+  while true; do
+    if ! docker ps | grep -q postgres; then
+      echo "PostgreSQL container stopped unexpectedly"
+      exit 1
+    fi
+    sleep 5
+  done
+```
+
+Issues observed:
+- Service would still terminate with protocol error
+- Infinite loop would be interrupted
+- Container would remain running but service would fail
+
+4. Debug Logging Added:
+```yaml
+start: |
+  echo "DEBUG: Starting PostgreSQL service..."
+  docker rm -f postgres 2>/dev/null || true
+  echo "DEBUG: Cleanup complete"
+  
+  docker run --rm -d \
+    --name postgres \
+    -e POSTGRES_USER=gitpod \
+    -e POSTGRES_PASSWORD=gitpod \
+    -e POSTGRES_DB=gitpodflix \
+    -p 5432:5432 \
+    -v postgres_data:/var/lib/postgresql/data \
+    -v /workspaces/flex-demo/database/main/migrations:/docker-entrypoint-initdb.d \
+    postgres:15
+  echo "DEBUG: Docker run exit code: $?"
+
+  while true; do
+    if ! docker ps | grep -q postgres; then
+      echo "DEBUG: Container not found"
+      exit 1
+    fi
+    sleep 5
+  done
+```
+
+Issues observed:
+- Debug logs showed container starting successfully
+- Service would still fail with protocol error
+- No clear indication of why the protocol error occurs
+
+Current Best Configuration:
+-------------------------
+```yaml
+services:
+  postgres:
+    name: "PostgreSQL Database"
+    description: "PostgreSQL database for Gitpod Flix"
+    triggeredBy:
+      - postDevcontainerStart
+      - postEnvironmentStart
+    commands:
+      start: |
+        # Force cleanup of any existing PostgreSQL containers
+        echo "Cleaning up any existing PostgreSQL containers..."
+        docker rm -f postgres 2>/dev/null || true
+        sleep 2  # Give Docker time to clean up
+
+        echo "Starting PostgreSQL with Docker..."
+        docker run --rm -d \
+          --name postgres \
+          -e POSTGRES_USER=gitpod \
+          -e POSTGRES_PASSWORD=gitpod \
+          -e POSTGRES_DB=gitpodflix \
+          -p 5432:5432 \
+          -v postgres_data:/var/lib/postgresql/data \
+          -v /workspaces/flex-demo/database/main/migrations:/docker-entrypoint-initdb.d \
+          postgres:15
+
+        # Keep the service running by monitoring the container
+        while true; do
+          if ! docker ps | grep -q postgres; then
+            echo "PostgreSQL container stopped unexpectedly"
+            exit 1
+          fi
+          sleep 5
+        done
+
+      ready: |
+        if docker exec postgres pg_isready -U gitpod; then
+          echo "PostgreSQL is ready and accepting connections"
+          exit 0
+        else
+          echo "PostgreSQL not ready"
+          exit 1
+        fi
+
+      stop: |
+        echo "Stopping PostgreSQL container..."
+        docker stop postgres || true
+        echo "Removing PostgreSQL container..."
+        docker rm -f postgres || true
+```
+
+Error Patterns Observed:
+----------------------
+1. Service starts successfully but terminates with "protocol" error
+2. Container remains running but service fails
+3. Infinite loops and log following are interrupted
+4. Readiness checks pass but service still fails
+5. Service gets stuck in restart loops
+
+Potential Root Causes:
+--------------------
+1. Gitpod automation service may have issues with Docker container lifecycle management
+2. Protocol error suggests communication issues between Gitpod automation service and PostgreSQL service
+3. Service may be expecting a different type of process management than what Docker containers provide
+4. Possible race conditions between service start and readiness checks
+
+Recommendations:
+--------------
+1. Investigate the "protocol" error in Gitpod automation service
+2. Review how Gitpod automation service handles Docker container lifecycle
+3. Consider adding support for Docker container services in Gitpod automation
+4. Provide clearer documentation on service lifecycle expectations
+5. Add better error reporting for service failures
+
+Additional Context:
+-----------------
+- Other services in the same configuration (catalog, management-ui, gitpod-flix) work correctly
+- These services use long-running processes (nodemon, vite) rather than Docker containers
+- PostgreSQL container itself works correctly when started manually
+- Issue appears to be specific to Gitpod automation service integration 

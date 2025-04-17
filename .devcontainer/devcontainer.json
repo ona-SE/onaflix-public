@@ -1,19 +1,42 @@
 {
-  "name": "Streaming Platform Dev Environment",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
+  "name": "GitpodFlix Dev Environment",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
   "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": {},
-    "ghcr.io/warrenbuckley/codespace-features/sqlite:1": {}
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installGit": true,
+      "installGitLFS": true,
+      "installGithubCli": true
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18",
+      "nodeGypDependencies": true
+    },
+    "ghcr.io/warrenbuckley/codespace-features/sqlite:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "moby": true
+    }
   },
-  "forwardPorts": [3000, 8000, 3306],
-  "postCreateCommand": "cd frontend && npm install && cd ../services/backend && npm install && cd ../database && npm install",
+  "forwardPorts": [
+    3000,
+    3001,
+    8000,
+    3306,
+    3002,
+    5432
+  ],
+  "postCreateCommand": ".devcontainer/setup.sh",
   "customizations": {
     "vscode": {
       "extensions": [
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "mtxr.sqltools",
-        "mtxr.sqltools-driver-sqlite"
+        "mtxr.sqltools-driver-sqlite",
+        "mtxr.sqltools-driver-mysql",
+        "bradlc.vscode-tailwindcss"
       ],
       "settings": {
         "editor.formatOnSave": true
@@ -22,14 +45,18 @@
   },
   "portsAttributes": {
     "3000": {
-      "label": "Frontend",
+      "label": "Gitpod Flix",
       "onAutoForward": "openPreview"
     },
-    "8000": {
-      "label": "Backend API"
+    "3001": {
+      "label": "Catalog Service"
     },
-    "3306": {
-      "label": "Database Service"
+    "3002": {
+      "label": "Management UI"
+    },
+    "5432": {
+      "label": "PostgreSQL"
     }
-  }
+  },
+  "remoteUser": "root"
 }

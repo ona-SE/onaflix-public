@@ -1,0 +1,113 @@
+Issue Title: Race Condition Between Devcontainer Setup and Automations Startup
+
+Description:
+A race condition has been identified between the devcontainer setup process and the automation services startup. Services are attempting to start before the npm packages are fully installed and available, leading to service failures that require manual intervention.
+
+Environment:
+- Gitpod
+- Node.js v18
+- Ubuntu-based devcontainer
+
+Relevant Configuration Files:
+
+1. Devcontainer Configuration (.devcontainer/devcontainer.json):
+```json
+{
+  "postCreateCommand": ".devcontainer/setup.sh",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18",
+      "nodeGypDependencies": true
+    }
+  }
+}
+```
+
+2. Automation Services (.gitpod/automations.yaml):
+```yaml
+services:
+  gitpod-flix:
+    name: "Gitpod Flix"
+    triggeredBy:
+      - postDevcontainerStart
+      - postEnvironmentStart
+    commands:
+      start: |
+        cd /workspaces/flex-demo/frontend
+        PORT=3000 npm run dev
+
+  management-ui:
+    name: "Management UI"
+    triggeredBy:
+      - postDevcontainerStart
+      - postEnvironmentStart
+    commands:
+      start: |
+        cd /workspaces/flex-demo/management-ui
+        PORT=3001 npm run dev
+```
+
+Issue Description:
+The services defined in automations.yaml are triggered by postDevcontainerStart, but they fail on initial startup with the error "vite: command not found". However, the same commands work when run manually or when the services are restarted, indicating a race condition rather than a missing dependency.
+
+Steps to Reproduce:
+1. Start a new Gitpod workspace
+2. Observe the devcontainer logs showing successful package installation
+3. Observe the automation services failing with "vite: command not found"
+4. Manually restart the failed services
+5. Observe services starting successfully without any additional package installation
+
+Investigation Results:
+1. Ruled out missing packages:
+   - All required npm packages are successfully installed during devcontainer setup
+   - Services work after restart without additional package installation
+
+2. Ruled out PATH issues:
+   - Services work with the same PATH after restart
+   - No PATH modifications needed between failed and successful starts
+
+3. Ruled out configuration issues:
+   - Service configurations are correct
+   - Commands work when run manually
+
+4. Confirmed timing issue:
+   - Services attempt to start before npm packages are fully available
+   - Manual restart after full initialization works consistently
+   - No changes to installed packages between failed and successful starts
+
+Logs:
+1. Initial Service Failure:
+```
+Starting service
+[ready] Gitpod Flix not ready
+[ready] Command finished with non-zero exit code: 1
+> gitpod-flix@0.1.0 dev
+> vite
+sh: 1: vite: not found
+Start command finished with exit code: 127
+```
+
+2. Successful Service Restart:
+```
+REFERENCE     NAME                DESCRIPTION                                     PHASE                 
+gitpod-flix   Gitpod Flix         Streaming platform frontend                     SERVICE_PHASE_RUNNING 
+management-ui Management UI       Development environment visualization dashboard SERVICE_PHASE_RUNNING 
+```
+
+Expected Behavior:
+The devcontainer setup should complete fully, including all package installations and environment initialization, before automation services are triggered to start.
+
+Actual Behavior:
+Automation services are starting before the environment is fully initialized, causing failures that require manual intervention.
+
+Impact:
+- Services fail on initial workspace startup
+- Manual intervention required to restart services
+- Poor developer experience
+- Inconsistent environment initialization
+
+Suggested Fix:
+The Gitpod platform should ensure that postDevcontainerStart triggers occur only after the devcontainer is fully initialized, including all postCreateCommand operations. This would prevent services from starting before their dependencies are available.
+
+Additional Notes:
+This appears to be a platform-level issue with the timing of automation triggers rather than a configuration issue in the workspace. The fact that services work after restart without any changes suggests that the problem lies in the sequencing of initialization events. 
