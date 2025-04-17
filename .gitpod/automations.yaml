@@ -186,45 +186,6 @@ tasks:
       cd /workspaces/flex-demo/database/main
       PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c "TRUNCATE TABLE movies;"
 
-  # runTests:
-  #   name: "Run Tests"
-  #   description: "Run all test suites"
-  #   triggeredBy:
-  #     - manual
-  #   command: |
-  #     echo "Running management UI tests..."
-  #     cd /workspaces/flex-demo/management-ui && npm test
-  #     echo "Running Gitpod Flix tests..."
-  #     cd /workspaces/flex-demo/frontend && npm test
-  #     echo "Running catalog service tests..."
-  #     cd /workspaces/flex-demo/backend/catalog && npm test
-
-  # lint:
-  #   name: "Run Linters"
-  #   description: "Run all linters"
-  #   triggeredBy:
-  #     - manual
-  #   command: |
-  #     echo "Linting frontend..."
-  #     cd /workspaces/flex-demo/frontend && npm run lint
-  #     echo "Linting backend..."
-  #     cd /workspaces/flex-demo/services/backend && npm run lint
-  #     echo "Linting database service..."
-  #     cd /workspaces/flex-demo/services/database && npm run lint
-
-  # build:
-  #   name: "Build All"
-  #   description: "Build all services"
-  #   triggeredBy:
-  #     - manual
-  #   command: |
-  #     echo "Building frontend..."
-  #     cd /workspaces/flex-demo/frontend && npm run build
-  #     echo "Building backend..."
-  #     cd /workspaces/flex-demo/services/backend && npm run build
-  #     echo "Building database service..."
-  #     cd /workspaces/flex-demo/services/database && npm run build
-
   openDemoPorts:
     name: "Open Demo Ports"
     description: "Opens ports 3000, 3001, and 3002 for the demo"

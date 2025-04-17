@@ -1,135 +1,169 @@
 # Welcome to GitpodFlix! 🎬
 
-Hey there, new team member! 👋 Welcome to GitpodFlix, where we're revolutionizing the streaming experience. We're thrilled to have you on board, and we've made sure your first day is as smooth as possible.
+Hey there, new team member! 👋
 
-## Table of Contents
+Welcome to GitpodFlix—providing the next generation of streaming experiences.
 
-- [🚀 Getting Started is a Breeze](#-getting-started-is-a-breeze)
-  - [🎁 Why we use Gitpod](#-why-we-use-gitpod)
-  - [🎯 Your Development Environment](#-your-development-environment)
-- [💻 Let's Start Coding](#-lets-start-coding)
-- [🎬 See Your Changes Live](#-see-your-changes-live)
-- [♻️ Connecting to Gitpod and running unit tests](#️-connecting-to-gitpod-and-running-unit-tests)
-- [🔧 Development Environment Configuration](#-development-environment-configuration)
-  - [DevContainer](#devcontainer)
-  - [Automations](#automations)
+We're thrilled you joined. Let's get started on your first day.
 
-### 🚀 Getting Started is a Breeze
+### At GitpodFlix we ship to production on your first day
 
-We believe happy developers create better products, which is why we've eliminated the frustrating "works on my machine" syndrome that plagues traditional development. We've embraced Gitpod and this revolutionary approach means you can skip the tedious setup and start coding on day one - **yes, you can ship your first fix today!**
+We know happy developers create better products. At GitpodFlix we have **zero "works on my machine" issues** because of Gitpod. Onboarding is one-click to get a running environment with everything you need to ship new fixes and features today.
 
-1. **Click this link** (or open the PR you were assigned)
-2. **That's it!** Seriously, that's all you need to do.
+That's why we want you to **ship to production today**.
 
-#### 🎁 Why we use Gitpod
+Let's get started with shipping your first fix.
 
-What are the benefits of using Gitpod?
+## Getting Started
 
-- You get the familiar interface of your favorite editor
-- All the computing power you need without taxing your machine
-- A consistent, reliable experience for every team member
-- Dramatically reduced time from "I have an idea" to "I've shipped it"
+1. **Check your email** - You should have an email invite to join the GitpodFlix organization in Gitpod as well as a link for your first GitHub issue.
+2. **Go to the projects catalog at [app.gitpod.io/projects](https://app.gitpod.io/projects)** - Here you'll see a list of every project in the organization that you have access to.
+3. **Open up GitpodFlix** - Search "GitpodFlix" in the list and click **"Create environment"** to launch your first development environment.
 
-Gitpod automatically handles all the tedious parts of development:
+And bingo, you have your first environment up and running.
 
-- Creating your perfectly configured development environment
-- Installing all dependencies and tools
-- Setting up your entire development stack
-- Configuring services, databases, and infrastructure
-- Ensuring everything is ready for you to start coding immediately
+![GitpodFlix in the projects catalog](./images/gitpodflix-loading.png)
 
-#### 🎯 Your Development Environment
+Here you have in your environment:
 
-Welcome to your new environment! You'll notice that:
+1. All your dependencies
+2. The database running
+3. The backend API running
+4. Your web server started
 
-- **Everything is ready to go** - All tools and configurations are set up
-- **Your code is already there** - The repository is cloned and configured
-- **Your favorite editor is waiting** - Use VS Code, JetBrains, or any editor you prefer
-- **All services are running** - Our microservices are up and available
+## Making a code change
 
-Our tech stack is:
+Now in the top right you can choose your favourite editor, whether that's IntelliJ, VS Code or even Cursor.
 
-- **Frontend**: React, D3.js
-- **Backend**: Node.js, Express
-- **Database**: PostgreSQL
-- **Testing**: Jest
-- **Visualization**: D3.js
+![Choose your editor](./images/choose-your-editor.png)
 
-### 💻 Let's Start Coding
+Your environment will automatically connect.
 
-No matter which editor you use, we support it through Gitpod.
+![Environment open](./images/environment-open.png)
 
-Simply go to the Gitpod interface and select your preferred editor:
+Here you have:
 
-- VS Code (in browser or desktop)
-- JetBrains IDEs
-- Cursor
-- Windsor
-- Or any terminal-based editor
+- All the source code in your favourite editor
+- Your running web server on `localhost:3000`
+- Your running ports for your API, database, etc
+- All authenticated with your GitHub account
+- A powerful environment secure in your corporate network
 
-Just choose what works best for you and start coding right away!
+> **Tip:** Let's rename "Gitpod Flix" to our name by updating `frontend/src/components/Navbar.jsx`. Watch the web server live reload the change.
 
-### 🎬 See Your Changes Live
+Now you're ready to code.
 
-To see the GitpodFlix platform in action:
+### Explore your development environment
 
-1. Open [http://localhost:3000/](http://localhost:3000/) in your browser to see the frontend
-2. Open [http://localhost:3002/api/movies](http://localhost:3002/api/movies) to see the movies API
-3. Make changes and see them reflected immediately
+Now you're setup why not explore:
 
-It feels just like local development, but everything is running in your Gitpod environment.
+1. Running a database clear and seed "automation" from the Gitpod UI
+2. Connecting to your environment with the CLI `gitpod environment ssh`
+3. Adding dotfiles for your personal preferences
 
-### ♻️ Connecting to Gitpod and running unit tests
+## ✨ How does this magic work?
 
-From outside your environment:
+### Dev Container
 
-```bash
-# List available environments
-gitpod environments list
+All of the dependencies are defined in the `devcontainer.json` file. Your platform team has configured a base image with all of your platform tooling ready to go. Any time platform tooling updates the next environment you open will automatically have the latest tooling.
 
-# SSH into the environment
-gitpod ssh <workspace-id>
+Here's a simplified version of how that looks:
 
-# Run tests using automation
-gitpod automations task start runTests
+```json
+{
+  "name": "GitpodFlix Dev Environment",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/warrenbuckley/codespace-features/sqlite:1": {}
+  },
+  "forwardPorts": [
+    3000,
+    ...
+  ],
+  "postCreateCommand": ".devcontainer/setup.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        ...
+      ]
+    }
+  }
+}
 ```
 
-From inside your environment:
+This includes:
 
-```bash
-# Run tests using automation
-gitpod automations task start runTests
-```
-
-## 🔧 Development Environment Configuration
-
-### DevContainer
-
-The development environment configuration lives in `.devcontainer/devcontainer.json`. This file defines:
-
-- All required dependencies and packages
-- Development tools and extensions
-- Environment variables
-- Container settings
-
-To add new dependencies or development tools:
-
-1. Edit `.devcontainer/devcontainer.json`
-2. Add your new packages to the appropriate section
-3. Restart your development container to apply changes
+1. Dependencies like SQLite and Node.JS
+2. Configurations of ports to forward
+3. A script for additional dependencies and setup
+4. Customizations for your editor
 
 ### Automations
 
-The automation configuration is defined in `.gitpod/automations.yaml`. This file contains:
+Your team have configured automations in `.gitpod/automations.yaml`.
 
-- Microservice definitions and configurations
-- Development workflows
-- Automated tasks and scripts
-- Environment setup procedures
+Here's a simplified version of how that looks:
 
-To add a new microservice or automation:
+```yaml
+services:
+  catalog:
+    name: "GitpodFlix Web Server"
+    triggeredBy:
+      - postEnvironmentStart
+    commands:
+      start: |
+        cd /workspaces/flex-demo/frontend
+        PORT=3001 npx nodemon src/index.ts
 
-1. Edit `.gitpod/automations.yaml`
-2. Define your new service or automation
-3. Follow the existing patterns for consistency
-4. Test your changes in a development environment
+tasks:
+  seedDatabase:
+    name: "Seed Database"
+    description: "Seed the database with sample movies in a dramatic sequence"
+    triggeredBy:
+      - manual
+      - postEnvironmentStart
+    command: |
+      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f seeds/01_seed_trending.sql
+```
+
+This includes:
+
+- Configurations to start your webservers, databases and microservices
+- Automated tasks to seed your database, run tests, etc
+
+All of these are setup to be self-serve and automatically configured. **If anything every breaks, simply delete your environment and create a new one.**
+
+## FAQs
+
+### Can I run multiple environment at once?
+
+Yes.
+
+### What happens if the environment stops?
+
+Your code is saved—restart to continue working.
+
+### How do I access logs for my running services?
+
+Either:
+
+1. In the editor "terminals" view
+2. With the Gitpod CLI (inside or outside your environment)
+
+### How do I customize my environment?
+
+With dotfiles in your user profile.
+
+### What if I need a new project?
+
+Simply create a new one in the Gitpod UI.
+
+### Can I connect via SSH?
+
+Yes via the Gitpod CLI.
+
+### How do I increase my machine size?
+
+Projects are configured with a specific machine size that's perfect to use. Admins can update defauls or create a new project with a different size.
