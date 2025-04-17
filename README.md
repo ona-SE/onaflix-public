@@ -173,4 +173,4 @@ Yes via the Gitpod CLI.
 
 ### How do I increase my machine size?
 
-Projects are configured with a specific machine size that's perfect to use. Admins can update defauls or create a new project with a different size.
+Projects are configured with a specific machine size that's perfect to use. 
