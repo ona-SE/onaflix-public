@@ -1,35 +1,41 @@
 # Welcome to GitpodFlix! 🎬
 
-Hey there, new team member! 👋
+Hey there new developer! 👋
 
-Welcome to GitpodFlix—providing the next generation of streaming experiences.
+Welcome to GitpodFlix, where we're providing the next generation of streaming experiences.
 
-We're thrilled you joined. Let's get started on your first day.
+We're thrilled you joined let's get you shipping today !
 
-### At GitpodFlix we ship to production on your first day
+### At GitpodFlix: we ship to production on your first day
 
-We know happy developers create better products. At GitpodFlix we have **zero "works on my machine" issues** because of Gitpod. Onboarding is one-click to get a running environment with everything you need to ship new fixes and features today.
+We know happy developers that are in flow create better products and ship more value.
 
-That's why we want you to **ship to production today**.
+At GitpodFlix we have **zero "works on my machine" issues** because of **Gitpod**. Onboarding is **one-click to get a running environment with everything you need to ship new fixes and features today** which is why:
 
-Let's get started with shipping your first fix.
+We expect every new developer to **ship to production on their first day**.
 
-## Getting Started
+## Starting your development environment
 
-1. **Check your email** - You should have an email invite to join the GitpodFlix organization in Gitpod as well as a link for your first GitHub issue.
-2. **Go to the projects catalog at [app.gitpod.io/projects](https://app.gitpod.io/projects)** - Here you'll see a list of every project in the organization that you have access to.
-3. **Open up GitpodFlix** - Search "GitpodFlix" in the list and click **"Create environment"** to launch your first development environment.
+1. **Check your email**
+    * You should have an email invite to join the GitpodFlix organization
+    * And a link for your first GitHub issue.
+3. **Go to the projects catalog**
+    * Find it at: [app.gitpod.io/projects](https://app.gitpod.io/projects)**
+    * Here is every project in GitpodFlix that you have access to.
+5. **Open up GitpodFlix**
+    * Search "GitpodFlix" in the list and click **"Create environment"**
 
-And bingo, you have your first environment up and running.
+And bingo! Now have your first environment up and running—that was easy.
 
 ![GitpodFlix in the projects catalog](./images/gitpodflix-loading.png)
 
-Here you have in your environment:
+See above you now have:
 
-1. All your dependencies
-2. The database running
-3. The backend API running
-4. Your web server started
+1. A personal, isolated, secure, performant development environment
+1. All required source code cloned and authenticated with git
+1. Any secrets and access credentials installed ready-to-go
+1. Your database, microservices and web server running (via "automations")
+1. All your dependencies installed from node to sqlite
 
 ## Making a code change
 
@@ -49,9 +55,9 @@ Here you have:
 - All authenticated with your GitHub account
 - A powerful environment secure in your corporate network
 
-> **Tip:** Let's rename "Gitpod Flix" to our name by updating `frontend/src/components/Navbar.jsx`. Watch the web server live reload the change.
+> **Tip:** Let's rename "Gitpod Flix" to our name by updating `frontend/src/components/Navbar.jsx`. <br/> Watch the web server live reload the change.
 
-Now you're ready to code.
+Now you're officially **ready-to-code**.
 
 ### Explore your development environment
 
@@ -61,7 +67,7 @@ Now you're setup why not explore:
 2. Connecting to your environment with the CLI `gitpod environment ssh`
 3. Adding dotfiles for your personal preferences
 
-## ✨ How does this magic work?
+## ✨ How does this Gitpod magic work?
 
 ### Dev Container
 
@@ -137,30 +143,31 @@ All of these are setup to be self-serve and automatically configured. **If anyth
 
 ## FAQs
 
+### Where is my environment running? 
+
+Environments run locally or remotely for different projects with different needs. 
+
 ### Can I run multiple environment at once?
+
+Yes. The platform team have set policies to manage cost of remote environments. 
+
+### Can I clone multiple repositories
 
 Yes.
 
+### Can I customize my environment?
+
+Yes, with dotfiles. 
+
+### Can environments run locally? 
+
+Yes for some projects with lower security requirements—but not for others. 
+
 ### What happens if the environment stops?
 
-Your code is saved—restart to continue working.
+Your code is saved—simply restart to continue working.
 
-### How do I access logs for my running services?
-
-Either:
-
-1. In the editor "terminals" view
-2. With the Gitpod CLI (inside or outside your environment)
-
-### How do I customize my environment?
-
-With dotfiles in your user profile.
-
-### What if I need a new project?
-
-Simply create a new one in the Gitpod UI.
-
-### Can I connect via SSH?
+### Can I connect via SSH for Vim, etc?
 
 Yes via the Gitpod CLI.
 
