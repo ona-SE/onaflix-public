@@ -20,7 +20,7 @@ We expect every new developer to **ship to production on their first day**.
     * You should have an email invite to join the GitpodFlix organization
     * And a link for your first GitHub issue.
 3. **Go to the projects catalog**
-    * Find it at: [app.gitpod.io/projects](https://app.gitpod.io/projects)**
+    * Find it at: [app.gitpod.io/projects](https://app.gitpod.io/projects)
     * Here is every project in GitpodFlix that you have access to.
 5. **Open up GitpodFlix**
     * Search "GitpodFlix" in the list and click **"Create environment"**
