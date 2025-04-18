@@ -59,43 +59,6 @@ services:
       stop: |
         pkill -f "node.*catalog" || true
 
-  management-ui:
-    name: "Management UI"
-    description: "Development environment visualization dashboard (Port: 3002)"
-    triggeredBy:
-      - postDevcontainerStart
-      - postEnvironmentStart
-    commands:
-      start: |
-        cd /workspaces/gitpodflix-demo/management-ui
-
-        # Wait for vite to be available
-        echo "Waiting for vite to be available..."
-        for i in {1..30}; do
-          if command -v vite >/dev/null 2>&1 || [ -f "node_modules/.bin/vite" ]; then
-            echo "✓ vite is available"
-            break
-          fi
-          if [ $i -eq 30 ]; then
-            echo "✗ Timeout waiting for vite"
-            exit 1
-          fi
-          echo "Waiting for vite... attempt $i/30"
-          sleep 2
-        done
-
-        PORT=3002 npm run dev
-      ready: |
-        if curl -s http://localhost:3002 > /dev/null; then
-          echo "Management UI is ready"
-          exit 0
-        else
-          echo "Management UI not ready"
-          exit 1
-        fi
-      stop: |
-        pkill -f "node.*management-ui" || true
-
   gitpod-flix:
     name: "Gitpod Flix"
     description: "Streaming platform frontend (Port: 3000)"
@@ -188,7 +151,7 @@ tasks:
 
   openDemoPorts:
     name: "Open Demo Ports"
-    description: "Opens ports 3000, 3001, and 3002 for the demo"
+    description: "Opens ports 3000 and 3001 for the demo"
     triggeredBy:
       - postEnvironmentStart
       - manual
@@ -196,7 +159,6 @@ tasks:
       echo "Opening demo ports..."
       gitpod environment port open 3000 --name "Gitpod Flix"
       gitpod environment port open 3001 --name "Catalog Service"
-      gitpod environment port open 3002 --name "Management UI"
       echo "Demo ports opened successfully!"
 
   RMRF:

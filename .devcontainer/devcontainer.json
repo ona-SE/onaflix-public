@@ -22,9 +22,6 @@
   "forwardPorts": [
     3000,
     3001,
-    8000,
-    3306,
-    3002,
     5432
   ],
   "postCreateCommand": ".devcontainer/setup.sh",
@@ -50,9 +47,6 @@
     },
     "3001": {
       "label": "Catalog Service"
-    },
-    "3002": {
-      "label": "Management UI"
     },
     "5432": {
       "label": "PostgreSQL"
