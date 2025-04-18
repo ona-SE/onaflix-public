@@ -4,13 +4,13 @@ Hey there new developer! 👋
 
 Welcome to GitpodFlix, where we're providing the next generation of streaming experiences.
 
-We're thrilled you joined let's get you shipping today !
+We're thrilled you joined, let's get you shipping today !
 
 ### At GitpodFlix: we ship to production on your first day
 
 We know happy developers that are in flow create better products and ship more value.
 
-At GitpodFlix we have **zero "works on my machine" issues** because of **Gitpod**. Onboarding is **one-click to get a running environment with everything you need to ship new fixes and features today** which is why:
+At GitpodFlix we have **zero 'works on my machine' issues** because of **Gitpod**. Onboarding is **one-click to get a running environment with everything you need to ship new fixes and features today** which is why:
 
 We expect every new developer to **ship to production on their first day**.
 
@@ -18,12 +18,12 @@ We expect every new developer to **ship to production on their first day**.
 
 1. **Check your email**
     * You should have an email invite to join the GitpodFlix organization
-    * And a link for your first GitHub issue.
+    * And a link for your first GitHub issue
 3. **Go to the projects catalog**
     * Find it at: [app.gitpod.io/projects](https://app.gitpod.io/projects)
-    * Here is every project in GitpodFlix that you have access to.
+    * Here is every project in GitpodFlix that you have access to
 5. **Open up GitpodFlix**
-    * Search "GitpodFlix" in the list and click **"Create environment"**
+    * Search "GitpodFlix" in the list and click **'Create environment'**
 
 And bingo! Now have your first environment up and running—that was easy.
 
@@ -39,7 +39,7 @@ See above you now have:
 
 ## Making a code change
 
-Now in the top right you can choose your favourite editor, whether that's IntelliJ, VS Code or even Cursor.
+Now in the top right you can choose your favorite editor, whether that's IntelliJ, VS Code or even Cursor.
 
 ![Choose your editor](./images/choose-your-editor.png)
 
@@ -49,7 +49,7 @@ Your environment will automatically connect.
 
 Here you have:
 
-- All the source code in your favourite editor
+- All the source code in your favorite editor
 - Your running web server on `localhost:3000`
 - Your running ports for your API, database, etc
 - All authenticated with your GitHub account
@@ -120,7 +120,7 @@ services:
       - postEnvironmentStart
     commands:
       start: |
-        cd /workspaces/flex-demo/frontend
+        cd /workspaces/gitpodflix-demo/frontend
         PORT=3001 npx nodemon src/index.ts
 
 tasks:
@@ -139,7 +139,7 @@ This includes:
 - Configurations to start your webservers, databases and microservices
 - Automated tasks to seed your database, run tests, etc
 
-All of these are setup to be self-serve and automatically configured. **If anything every breaks, simply delete your environment and create a new one.**
+All of these are setup to be self-serve and automatically configured. **If anything ever breaks, simply delete your environment and create a new one.**
 
 ## FAQs
 
@@ -151,7 +151,7 @@ Environments run locally or remotely for different projects with different needs
 
 Yes. The platform team have set policies to manage cost of remote environments. 
 
-### Can I clone multiple repositories
+### Can I clone multiple repositories?
 
 Yes.
 
