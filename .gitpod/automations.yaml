@@ -152,7 +152,7 @@ tasks:
 
   openDemoPorts:
     name: "Open Demo Ports"
-    description: "Opens ports 3000, 3001, and 3002 for the demo"
+    description: "Opens ports 3000 and 3001 for the demo"
     triggeredBy:
       - postEnvironmentStart
       - manual
