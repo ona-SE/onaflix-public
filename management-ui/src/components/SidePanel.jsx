@@ -17,13 +17,13 @@ const SidePanel = ({ selectedNode, onClose }) => {
     };
   }, [onClose]);
 
-  const baseRepoUrl = 'https://github.com/loujaybee/flex-demo';
-  const baseAutomationUrl = 'https://github.com/loujaybee/flex-demo/blob/ba748d00cc930dba002560f8f870ef59e3d18b36/.gitpod/automations.yaml';
+    const baseRepoUrl = 'https://github.com/loujaybee/gitpodflix-demo';
+  const baseAutomationUrl = 'https://github.com/loujaybee/gitpodflix-demo/blob/ba748d00cc930dba002560f8f870ef59e3d18b36/.gitpod/automations.yaml';
 
   // Mock data for repository and automation info
   const nodeInfo = {
     frontend: {
-      repository: 'flex-demo/frontend',
+      repository: 'gitpodflix-demo/frontend',
       directory: '/services/frontend',
       automation: `name: frontend
 description: Frontend service for Gitpod Flix
@@ -37,7 +37,7 @@ ports:
       automationUrl: baseAutomationUrl
     },
     catalog: {
-      repository: 'flex-demo/catalog',
+      repository: 'gitpodflix-demo/catalog',
       directory: '/services/catalog',
       automation: `name: catalog
 description: Catalog service for Gitpod Flix
@@ -51,7 +51,7 @@ ports:
       automationUrl: baseAutomationUrl
     },
     identity: {
-      repository: 'flex-demo/identity',
+      repository: 'gitpodflix-demo/identity',
       directory: '/services/identity',
       automation: `name: identity
 description: Identity service for Gitpod Flix
@@ -65,7 +65,7 @@ ports:
       automationUrl: baseAutomationUrl
     },
     recommend: {
-      repository: 'flex-demo/recommend',
+      repository: 'gitpodflix-demo/recommend',
       directory: '/services/recommend',
       automation: `name: recommend
 description: Recommendation service for Gitpod Flix
@@ -79,7 +79,7 @@ ports:
       automationUrl: baseAutomationUrl
     },
     stream: {
-      repository: 'flex-demo/stream',
+      repository: 'gitpodflix-demo/stream',
       directory: '/services/stream',
       automation: `name: stream
 description: Streaming service for Gitpod Flix
@@ -93,7 +93,7 @@ ports:
       automationUrl: baseAutomationUrl
     },
     analytics: {
-      repository: 'flex-demo/analytics',
+      repository: 'gitpodflix-demo/analytics',
       directory: '/services/analytics',
       automation: `name: analytics
 description: Analytics service for Gitpod Flix
@@ -107,7 +107,7 @@ ports:
       automationUrl: baseAutomationUrl
     },
     database: {
-      repository: 'flex-demo/database',
+      repository: 'gitpodflix-demo/database',
       directory: '/services/database',
       automation: `name: database
 description: Database service for Gitpod Flix
