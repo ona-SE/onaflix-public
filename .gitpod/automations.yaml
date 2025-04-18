@@ -20,7 +20,7 @@ services:
           -e POSTGRES_DB=gitpodflix \
           -p 5432:5432 \
           -v postgres_data:/var/lib/postgresql/data \
-          -v /workspaces/flex-demo/database/main/migrations:/docker-entrypoint-initdb.d \
+          -v /workspaces/gitpodflix-demo/database/main/migrations:/docker-entrypoint-initdb.d \
           postgres:15
 
       ready: |
@@ -46,7 +46,7 @@ services:
       - postEnvironmentStart
     commands:
       start: |
-        cd /workspaces/flex-demo/backend/catalog
+        cd /workspaces/gitpodflix-demo/backend/catalog
         PORT=3001 npx nodemon src/index.ts
       ready: |
         if curl -s http://localhost:3001/health > /dev/null; then
@@ -59,7 +59,6 @@ services:
       stop: |
         pkill -f "node.*catalog" || true
 
-  
   gitpod-flix:
     name: "Gitpod Flix"
     description: "Streaming platform frontend (Port: 3000)"
@@ -68,7 +67,7 @@ services:
       - postEnvironmentStart
     commands:
       start: |
-        cd /workspaces/flex-demo/frontend
+                cd /workspaces/gitpodflix-demo/frontend
 
         # Wait for vite to be available
         echo "Waiting for vite to be available..."
@@ -105,7 +104,7 @@ tasks:
       - manual
       - postEnvironmentStart
     command: |
-      cd /workspaces/flex-demo/database/main
+            cd /workspaces/gitpodflix-demo/database/main
 
       # Wait for PostgreSQL to be ready
       echo "Waiting for PostgreSQL to be ready..."
@@ -147,7 +146,7 @@ tasks:
     triggeredBy:
       - manual
     command: |
-      cd /workspaces/flex-demo/database/main
+      cd /workspaces/gitpodflix-demo/database/main
       PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c "TRUNCATE TABLE movies;"
 
   openDemoPorts:

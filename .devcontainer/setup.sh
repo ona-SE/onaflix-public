@@ -55,24 +55,17 @@ npm install -g nodemon
 # Install project dependencies
 echo "📦 Installing project dependencies..."
 
-# Install management UI dependencies
-if [ -d "/workspaces/flex-demo/management-ui" ]; then
-    echo "📦 Installing management UI dependencies..."
-    cd /workspaces/flex-demo/management-ui
-    npm install
-fi
-
 # Install Gitpod Flix dependencies
-if [ -d "/workspaces/flex-demo/frontend" ]; then
+if [ -d "/workspaces/gitpodflix-demo/frontend" ]; then
     echo "📦 Installing Gitpod Flix dependencies..."
-    cd /workspaces/flex-demo/frontend
+    cd /workspaces/gitpodflix-demo/frontend
     npm install
 fi
 
 # Install catalog service dependencies
-if [ -d "/workspaces/flex-demo/backend/catalog" ]; then
+if [ -d "/workspaces/gitpodflix-demo/backend/catalog" ]; then
     echo "📦 Installing catalog service dependencies..."
-    cd /workspaces/flex-demo/backend/catalog
+    cd /workspaces/gitpodflix-demo/backend/catalog
     npm install
 fi
 
