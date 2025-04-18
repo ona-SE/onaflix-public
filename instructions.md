@@ -1,4 +1,4 @@
-# Gitpod Demo Project Specification
+# Gitpodflix Demo Project Specification
 
 ## Table of Contents
 
@@ -85,7 +85,7 @@ The demo consists of several key components that work together to showcase Gitpo
 ## Directory Structure
 
 ```
-flex-demo/
+gitpodflix-demo/
 ├── .gitpod.yml
 ├── .devcontainer/
 │   └── devcontainer.json

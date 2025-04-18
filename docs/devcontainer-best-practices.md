@@ -14,7 +14,7 @@ A DevContainer (Development Container) is a Docker container that defines your d
 
 When configuring your development environment, it's recommended to use [DevContainer features](https://containers.dev/features) whenever possible. Features are reusable, pre-configured components that can be added to your devcontainer.json file. They provide a standardized way to add common tools, languages, and services to your development environment.
 
-The available features are documented in the `/workspaces/flex-demo/docs/devcontainer-features.yml` file, which is manually pulled from the [DevContainer collection index](https://github.com/devcontainers/devcontainers.github.io/blob/gh-pages/_data/collection-index.yml). This ensures you have access to the latest community-maintained features.
+The available features are documented in the `/workspaces/gitpodflix-demo/docs/devcontainer-features.yml` file, which is manually pulled from the [DevContainer collection index](https://github.com/devcontainers/devcontainers.github.io/blob/gh-pages/_data/collection-index.yml). This ensures you have access to the latest community-maintained features.
 
 Example usage in devcontainer.json:
 

@@ -25,7 +25,7 @@ start: |
     -e POSTGRES_DB=gitpodflix \
     -p 5432:5432 \
     -v postgres_data:/var/lib/postgresql/data \
-    -v /workspaces/flex-demo/database/main/migrations:/docker-entrypoint-initdb.d \
+    -v /workspaces/gitpodflix-demo/database/main/migrations:/docker-entrypoint-initdb.d \
     postgres:15
   docker logs -f postgres
 ```
@@ -46,7 +46,7 @@ start: |
     -e POSTGRES_DB=gitpodflix \
     -p 5432:5432 \
     -v postgres_data:/var/lib/postgresql/data \
-    -v /workspaces/flex-demo/database/main/migrations:/docker-entrypoint-initdb.d \
+    -v /workspaces/gitpodflix-demo/database/main/migrations:/docker-entrypoint-initdb.d \
     postgres:15
   
   # Wait for PostgreSQL to be ready
@@ -78,7 +78,7 @@ start: |
     -e POSTGRES_DB=gitpodflix \
     -p 5432:5432 \
     -v postgres_data:/var/lib/postgresql/data \
-    -v /workspaces/flex-demo/database/main/migrations:/docker-entrypoint-initdb.d \
+    -v /workspaces/gitpodflix-demo/database/main/migrations:/docker-entrypoint-initdb.d \
     postgres:15
 
   while true; do
@@ -109,7 +109,7 @@ start: |
     -e POSTGRES_DB=gitpodflix \
     -p 5432:5432 \
     -v postgres_data:/var/lib/postgresql/data \
-    -v /workspaces/flex-demo/database/main/migrations:/docker-entrypoint-initdb.d \
+    -v /workspaces/gitpodflix-demo/database/main/migrations:/docker-entrypoint-initdb.d \
     postgres:15
   echo "DEBUG: Docker run exit code: $?"
 
@@ -152,7 +152,7 @@ services:
           -e POSTGRES_DB=gitpodflix \
           -p 5432:5432 \
           -v postgres_data:/var/lib/postgresql/data \
-          -v /workspaces/flex-demo/database/main/migrations:/docker-entrypoint-initdb.d \
+          -v /workspaces/gitpodflix-demo/database/main/migrations:/docker-entrypoint-initdb.d \
           postgres:15
 
         # Keep the service running by monitoring the container
