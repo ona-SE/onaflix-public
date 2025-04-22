@@ -1,5 +1,5 @@
 const API_BASE_URL = window.location.hostname.endsWith('.gitpod.dev')
-  ? 'https://3001--01965c3b-370d-7463-845d-125a1daa5fab.eu01.gitpod.dev/api'
+  ? `https://3001--${window.location.hostname.replace(/\d{1,4}--/, '')}/api`
   : 'http://localhost:3001/api';
 
 export const fetchMovies = async () => {
