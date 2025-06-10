@@ -28,12 +28,20 @@
   "customizations": {
     "vscode": {
       "extensions": [
+        
+        // Install AI code assistants
+        "GitHub.copilot",
+        "RooVeterinaryInc.roo-cline",
+        "saoudrizwan.claude-dev",
+
+        // Install other extensions
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "mtxr.sqltools",
         "mtxr.sqltools-driver-sqlite",
         "mtxr.sqltools-driver-mysql",
         "bradlc.vscode-tailwindcss"
+        
       ],
       "settings": {
         "editor.formatOnSave": true
