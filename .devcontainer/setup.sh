@@ -71,8 +71,8 @@ fi
 
 echo "✅ Setup completed successfully!" 
 
-if [ -n "$GH_TOKEN" ]; then
-    gh auth login --with-token <<< "$GH_TOKEN"
+if [ -n "$GH_CLI_TOKEN" ]; then
+    gh auth login --with-token <<< "$GH_CLI_TOKEN"
 else
-    echo "GH_TOKEN not set, skipping authentication"
+    echo "GH_CLI_TOKEN not set, skipping authentication"
 fi
