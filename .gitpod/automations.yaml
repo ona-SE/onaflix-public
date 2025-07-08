@@ -47,7 +47,27 @@ services:
     commands:
       start: |
         cd /workspaces/gitpodflix-demo/backend/catalog
-        PORT=3001 npx nodemon src/index.ts
+        
+        # Ensure dependencies are installed
+        echo "Ensuring dependencies are installed..."
+        npm install
+        
+        # Wait for ts-node to be available
+        echo "Waiting for ts-node to be available..."
+        for i in {1..30}; do
+          if [ -f "node_modules/.bin/ts-node" ]; then
+            echo "✓ ts-node is available"
+            break
+          fi
+          if [ $i -eq 30 ]; then
+            echo "✗ Timeout waiting for ts-node"
+            exit 1
+          fi
+          echo "Waiting for ts-node... attempt $i/30"
+          sleep 1
+        done
+        
+        PORT=3001 npm run dev
       ready: |
         if curl -s http://localhost:3001/health > /dev/null; then
           echo "Catalog service is ready"
