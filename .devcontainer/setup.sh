@@ -70,3 +70,9 @@ if [ -d "/workspaces/gitpodflix-demo/backend/catalog" ]; then
 fi
 
 echo "✅ Setup completed successfully!" 
+
+if [ -n "$GH_CLI_TOKEN" ]; then
+    gh auth login --with-token <<< "$GH_CLI_TOKEN"
+else
+    echo "GH_CLI_TOKEN not set, skipping authentication"
+fi
