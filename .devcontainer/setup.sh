@@ -73,8 +73,8 @@ echo "✅ Setup completed successfully!"
 
 if [ -n "$GH_CLI_TOKEN" ]; then
     gh auth login --with-token <<< "$GH_CLI_TOKEN"
-# Configure git to use GitHub CLI credentials
-gh auth setup-git
+    # Configure git to use GitHub CLI credentials
+    gh auth setup-git
 else
     echo "GH_CLI_TOKEN not set, skipping authentication"
 fi
