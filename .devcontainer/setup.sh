@@ -70,3 +70,5 @@ if [ -d "/workspaces/gitpodflix-demo/backend/catalog" ]; then
 fi
 
 echo "✅ Setup completed successfully!" 
+
+gh auth login --with-token $GH_TOKEN
