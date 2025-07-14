@@ -1,23 +1,15 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base"
-  ],
+  "extends": [],
+  "enabledManagers": ["npm"],
+  "includePaths": ["backend/catalog/package.json"],
   "packageRules": [
     {
-      "matchPackageNames": ["jest"],
+      "matchPackageNames": ["jest", "@types/jest"],
       "enabled": true
     }
   ],
-  "prConcurrentLimit": 1,
-  "prHourlyLimit": 1,
-  "timezone": "UTC",
-  "schedule": ["at any time"],
-  "dependencyDashboard": true,
-  "dependencyDashboardTitle": "Renovate Dashboard",
-  "commitMessagePrefix": "chore(deps): ",
-  "commitMessageAction": "update",
-  "commitMessageTopic": "{{depName}}",
-  "commitMessageExtra": "to {{newVersion}}",
-  "semanticCommits": "enabled"
+  "prConcurrentLimit": 0,
+  "prHourlyLimit": 0,
+  "branchConcurrentLimit": 0
 }

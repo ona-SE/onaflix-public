@@ -9,8 +9,7 @@
     "build": "tsc",
     "test": "jest",
     "setup": "./scripts/setup.sh",
-    "renovate": "if [ \"$npm_config_live\" ]; then DRY_RUN_FLAG=\"\"; echo 'LIVE MODE: Will create actual pull requests'; else DRY_RUN_FLAG=\"--dry-run=full\"; echo 'DRY RUN MODE: No pull requests will be created (use --live to create PRs)'; fi && RENOVATE_TOKEN=$GH_CLI_TOKEN LOG_LEVEL=debug renovate --platform=github $DRY_RUN_FLAG gitpod-samples/gitpodflix-demo > renovate_debug.txt 2>&1 && echo 'Renovate scan complete! Check renovate_debug.txt for full output' && if [ \"$npm_config_filter\" ]; then echo 'Filtering results for:' $npm_config_filter && grep -i -A 20 -B 5 \"$npm_config_filter\" renovate_debug.txt; else echo 'Use --filter=<package> to filter results for specific dependency'; fi",
-    "renovate:jest": "echo 'Creating Jest v30 pull request...' && echo '{\"extends\":[],\"enabledManagers\":[\"npm\"],\"includePaths\":[\"backend/catalog/package.json\"],\"packageRules\":[{\"matchPackageNames\":[\"jest\",\"@types/jest\"],\"enabled\":true}],\"prConcurrentLimit\":0,\"prHourlyLimit\":0,\"branchConcurrentLimit\":0}' > renovate-jest-only.json && RENOVATE_TOKEN=$GH_CLI_TOKEN RENOVATE_CONFIG_FILE=renovate-jest-only.json renovate --platform=github gitpod-samples/gitpodflix-demo && rm renovate-jest-only.json"
+    "renovate:jest": "echo 'Creating Jest v30 pull request...' && cd /workspaces/gitpodflix-demo && RENOVATE_TOKEN=$GH_CLI_TOKEN renovate --platform=github gitpod-samples/gitpodflix-demo"
   },
   "dependencies": {
     "express": "^4.18.2",
