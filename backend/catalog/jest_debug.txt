@@ -1,0 +1,2384 @@
+DEBUG: Using RE2 regex engine
+DEBUG: Parsing configs
+DEBUG: Checking for config file in config.js
+DEBUG: No config file found on disk - skipping
+DEBUG: File config
+       "config": {}
+DEBUG: CLI config
+       "config": {
+         "repositories": ["gitpod-samples/gitpodflix-demo"],
+         "platform": "github",
+         "packageRules": [
+           {"matchPackageNames": ["jest", "@types/jest"], "enabled": true},
+           {
+             "matchPackageNames": ["*"],
+             "excludePackageNames": ["jest", "@types/jest"],
+             "enabled": false
+           }
+         ]
+       }
+DEBUG: Env config
+       "config": {"hostRules": [], "token": "***********"}
+DEBUG: Combined config
+       "config": {
+         "hostRules": [],
+         "token": "***********",
+         "repositories": ["gitpod-samples/gitpodflix-demo"],
+         "platform": "github",
+         "packageRules": [
+           {"matchPackageNames": ["jest", "@types/jest"], "enabled": true},
+           {
+             "matchPackageNames": ["*"],
+             "excludePackageNames": ["jest", "@types/jest"],
+             "enabled": false
+           }
+         ]
+       }
+DEBUG: Enabling forkProcessing while in non-autodiscover mode
+DEBUG: Found valid git version: 2.50.1
+DEBUG: Setting global hostRules
+DEBUG: Using default github endpoint: https://api.github.com/
+DEBUG: hostRules: authentication already set for api.github.com
+DEBUG: Using queue: host=api.github.com, concurrency=16
+DEBUG: GET https://api.github.com/user/emails = (code=ERR_NON_2XX_3XX_RESPONSE, statusCode=404 retryCount=0, duration=123)
+DEBUG: Cannot read user/emails endpoint on GitHub to retrieve gitAuthor
+DEBUG: Platform config
+       "platformConfig": {
+         "hostType": "github",
+         "endpoint": "https://api.github.com/",
+         "isGHApp": false,
+         "isGhe": false,
+         "userDetails": {
+           "username": "loujaybee",
+           "name": "Lou Bichard",
+           "id": 5528307
+         },
+         "userEmail": null
+       },
+       "renovateUsername": "loujaybee"
+DEBUG: Adding token authentication for api.github.com (hostType=github) to hostRules
+DEBUG: Using baseDir: /tmp/renovate
+DEBUG: Using cacheDir: /tmp/renovate/cache
+DEBUG: Using containerbaseDir: /tmp/renovate/cache/containerbase
+DEBUG: Initializing Renovate internal cache into /tmp/renovate/cache/renovate/renovate-cache-v1
+DEBUG: Commits limit = null
+DEBUG: Setting global hostRules
+DEBUG: Adding token authentication for api.github.com (hostType=github) to hostRules
+DEBUG: validatePresets()
+DEBUG: Reinitializing hostRules for repo
+DEBUG: Clearing hostRules
+DEBUG: Adding token authentication for api.github.com (hostType=github) to hostRules
+ INFO: Repository started (repository=gitpod-samples/gitpodflix-demo)
+       "renovateVersion": "37.440.7"
+DEBUG: Using localDir: /tmp/renovate/repos/github/gitpod-samples/gitpodflix-demo (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: PackageFiles.clear() - Package files deleted (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: initRepo("gitpod-samples/gitpodflix-demo") (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: hostRules: authentication already set for api.github.com (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using queue: host=api.github.com, concurrency=16 (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: gitpod-samples/gitpodflix-demo default branch = main (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using personal access token for git init (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Resetting npmrc (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Resetting npmrc (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: checkOnboarding() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: isOnboarded() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/configure, Configure Renovate, !open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: http cache: saving https://api.github.com/repos/gitpod-samples/gitpodflix-demo/pulls?per_page=100&state=all&sort=updated&direction=desc&page=1 (etag=W/"68f2ecfb1b69bad4f91b00a8d48ab68741c54b1768b20186a9d1fd08ec8f03f3", lastModified=undefined) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrList success (repository=gitpod-samples/gitpodflix-demo)
+       "pullsTotal": 20,
+       "requestsTotal": 1,
+       "apiQuotaAffected": true
+DEBUG: findPr(renovate/configure, chore: Configure Renovate, !open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Found PR #37 (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findFile(renovate.json) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Initializing git repository into /tmp/renovate/repos/github/gitpod-samples/gitpodflix-demo (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Performing blobless clone (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: git clone completed (repository=gitpod-samples/gitpodflix-demo)
+       "durationMs": 602
+DEBUG: latest repository commit (repository=gitpod-samples/gitpodflix-demo)
+       "latestCommit": {
+         "hash": "6d5bf4aec475457958ae7b060abb92588888b325",
+         "date": "2025-07-14T13:07:45+01:00",
+         "message": "Merge pull request #37 from gitpod-samples/renovate/configure",
+         "refs": "HEAD -> main, origin/main, origin/HEAD",
+         "body": "chore: Configure Renovate",
+         "author_name": "Lou Bichard",
+         "author_email": "louis@gitpod.io"
+       }
+DEBUG: Config file exists, fileName: renovate.json (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Retrieving issueList (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Retrieved 16 issues (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Repo is onboarded (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Found renovate.json config file (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Repository config (repository=gitpod-samples/gitpodflix-demo)
+       "fileName": "renovate.json",
+       "config": {"$schema": "https://docs.renovatebot.com/renovate-schema.json"}
+DEBUG: migrateAndValidate() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: No config migration necessary (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Found repo ignorePaths (repository=gitpod-samples/gitpodflix-demo)
+       "ignorePaths": ["**/node_modules/**", "**/bower_components/**"]
+DEBUG: GitHub vulnerability details (repository=gitpod-samples/gitpodflix-demo)
+       "alerts": {
+         "npm/esbuild": {"<= 0.24.2": "0.25.0"},
+         "npm/vite": {">= 5.0.0, <= 5.4.18": "5.4.19"}
+       }
+DEBUG: alert package rules (repository=gitpod-samples/gitpodflix-demo)
+       "alertPackageRules": [
+         {
+           "matchDatasources": ["npm"],
+           "matchPackageNames": ["esbuild"],
+           "matchCurrentVersion": "0.21.5",
+           "matchFileNames": ["frontend/package-lock.json"],
+           "allowedVersions": ">= 0.25.0",
+           "prBodyNotes": [
+             "### GitHub Vulnerability Alerts",
+             "#### [GHSA-67mh-4wv8-2f99](https://github.com/evanw/esbuild/security/advisories/GHSA-67mh-4wv8-2f99)\n\n### Summary\n\nesbuild allows any websites to send any request to the development server and read the response due to default CORS settings.\n\n### Details\n\nesbuild sets `Access-Control-Allow-Origin: *` header to all requests, including the SSE connection, which allows any websites to send any request to the development server and read the response.\n\nhttps://github.com/evanw/esbuild/blob/df815ac27b84f8b34374c9182a93c94718f8a630/pkg/api/serve_other.go#L121\nhttps://github.com/evanw/esbuild/blob/df815ac27b84f8b34374c9182a93c94718f8a630/pkg/api/serve_other.go#L363\n\n**Attack scenario**:\n\n1. The attacker serves a malicious web page (`http://malicious.example.com`).\n1. The user accesses the malicious web page.\n1. The attacker sends a `fetch('http://127.0.0.1:8000/main.js')` request by JS in that malicious web page. This request is normally blocked by same-origin policy, but that's not the case for the reasons above.\n1. The attacker gets the content of `http://127.0.0.1:8000/main.js`.\n\nIn this scenario, I assumed that the attacker knows the URL of the bundle output file name. But the attacker can also get that information by\n\n- Fetching `/index.html`: normally you have a script tag here\n- Fetching `/assets`: it's common to have a `assets` directory when you have JS files and CSS files in a different directory and the directory listing feature tells the attacker the list of files\n- Connecting `/esbuild` SSE endpoint: the SSE endpoint sends the URL path of the changed files when the file is changed (`new EventSource('/esbuild').addEventListener('change', e => console.log(e.type, e.data))`)\n- Fetching URLs in the known file: once the attacker knows one file, the attacker can know the URLs imported from that file\n\nThe scenario above fetches the compiled content, but if the victim has the source map option enabled, the attacker can also get the non-compiled content by fetching the source map file.\n\n### PoC\n\n1. Download [reproduction.zip](https://github.com/user-attachments/files/18561484/reproduction.zip)\n2. Extract it and move to that directory\n1. Run `npm i`\n1. Run `npm run watch`\n1. Run `fetch('http://127.0.0.1:8000/app.js').then(r => r.text()).then(content => console.log(content))` in a different website's dev tools.\n\n![image](https://github.com/user-attachments/assets/08fc2e4d-e1ec-44ca-b0ea-78a73c3c40e9)\n\n### Impact\n\nUsers using the serve feature may get the source code stolen by malicious websites."
+           ],
+           "isVulnerabilityAlert": true,
+           "force": {
+             "groupName": null,
+             "schedule": [],
+             "dependencyDashboardApproval": false,
+             "minimumReleaseAge": null,
+             "rangeStrategy": "update-lockfile",
+             "commitMessageSuffix": "[SECURITY]",
+             "branchTopic": "{{{datasource}}}-{{{depName}}}-vulnerability",
+             "prCreation": "immediate"
+           }
+         },
+         {
+           "matchDatasources": ["npm"],
+           "matchPackageNames": ["vite"],
+           "matchCurrentVersion": "5.4.18",
+           "matchFileNames": ["frontend/package-lock.json"],
+           "allowedVersions": ">= 5.4.19",
+           "prBodyNotes": [
+             "### GitHub Vulnerability Alerts",
+             "#### [CVE-2025-46565](https://github.com/vitejs/vite/security/advisories/GHSA-859w-5945-r5v3)\n\n### Summary\nThe contents of files in [the project `root`](https://vite.dev/config/shared-options.html#root) that are denied by a file matching pattern can be returned to the browser.\n\n### Impact\n\nOnly apps explicitly exposing the Vite dev server to the network (using --host or [server.host config option](https://vitejs.dev/config/server-options.html#server-host)) are affected.\nOnly files that are under [project `root`](https://vite.dev/config/shared-options.html#root) and are denied by a file matching pattern can be bypassed.\n\n- Examples of file matching patterns: `.env`, `.env.*`, `*.{crt,pem}`, `**/.env`\n- Examples of other patterns: `**/.git/**`, `.git/**`, `.git/**/*`\n\n### Details\n[`server.fs.deny`](https://vite.dev/config/server-options.html#server-fs-deny) can contain patterns matching against files (by default it includes `.env`, `.env.*`, `*.{crt,pem}` as such patterns).\nThese patterns were able to bypass for files under `root` by using a combination of slash and dot (`/.`).\n\n### PoC\n```\nnpm create vite@latest\ncd vite-project/\ncat \"secret\" > .env\nnpm install\nnpm run dev\ncurl --request-target /.env/. http://localhost:5173\n```\n\n![image](https://github.com/user-attachments/assets/822f4416-aa42-461f-8c95-a88d155e674b)\n![image](https://github.com/user-attachments/assets/42902144-863a-4afb-ac5b-fc16effa37cc)"
+           ],
+           "isVulnerabilityAlert": true,
+           "force": {
+             "groupName": null,
+             "schedule": [],
+             "dependencyDashboardApproval": false,
+             "minimumReleaseAge": null,
+             "rangeStrategy": "update-lockfile",
+             "commitMessageSuffix": "[SECURITY]",
+             "branchTopic": "{{{datasource}}}-{{{depName}}}-vulnerability",
+             "prCreation": "immediate"
+           }
+         }
+       ]
+DEBUG: No baseBranches (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: extract() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Setting current branch to main (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: latest commit (repository=gitpod-samples/gitpodflix-demo)
+       "branchName": "main",
+       "latestCommitDate": "2025-07-14T13:07:45+01:00"
+DEBUG: Using file match: (^|/)tasks/[^/]+\.ya?ml$ for manager ansible (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)(galaxy|requirements)(\.ansible)?\.ya?ml$ for manager ansible-galaxy (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.tool-versions$ for manager asdf (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: azure.*pipelines?.*\.ya?ml$ for manager azure-pipelines (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)batect(-bundle)?\.ya?ml$ for manager batect (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)batect$ for manager batect-wrapper (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)WORKSPACE(|\.bazel|\.bzlmod)$ for manager bazel (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: \.bzl$ for manager bazel (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)MODULE\.bazel$ for manager bazel-module (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.bazelversion$ for manager bazelisk (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: \.bicep$ for manager bicep (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.?bitbucket-pipelines\.ya?ml$ for manager bitbucket-pipelines (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: buildkite\.ya?ml for manager buildkite (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: \.buildkite/.+\.ya?ml$ for manager buildkite (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)bun\.lockb$ for manager bun (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)Gemfile$ for manager bundler (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: \.cake$ for manager cake (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)Cargo\.toml$ for manager cargo (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.circleci/.+\.ya?ml$ for manager circleci (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)cloudbuild\.ya?ml for manager cloudbuild (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)Podfile$ for manager cocoapods (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)([\w-]*)composer\.json$ for manager composer (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)conanfile\.(txt|py)$ for manager conan (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)cpanfile$ for manager cpanfile (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)(?:deps|bb)\.edn$ for manager deps-edn (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: ^.devcontainer/devcontainer.json$ for manager devcontainer (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: ^.devcontainer.json$ for manager devcontainer (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)(?:docker-)?compose[^/]*\.ya?ml$ for manager docker-compose (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/|\.)([Dd]ocker|[Cc]ontainer)file$ for manager dockerfile (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$ for manager dockerfile (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.drone\.yml$ for manager droneci (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)fleet\.ya?ml for manager fleet (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (?:^|/)gotk-components\.ya?ml$ for manager flux (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.fvm/fvm_config\.json$ for manager fvm (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.fvmrc$ for manager fvm (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.gitmodules$ for manager git-submodules (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)(workflow-templates|\.(?:github|gitea|forgejo)/(?:workflows|actions))/.+\.ya?ml$ for manager github-actions (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)action\.ya?ml$ for manager github-actions (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: \.gitlab-ci\.ya?ml$ for manager gitlabci (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: \.gitlab-ci\.ya?ml$ for manager gitlabci-include (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)go\.mod$ for manager gomod (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: \.gradle(\.kts)?$ for manager gradle (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)gradle\.properties$ for manager gradle (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)gradle/.+\.toml$ for manager gradle (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)buildSrc/.+\.kt$ for manager gradle (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: \.versions\.toml$ for manager gradle (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)versions.props$ for manager gradle (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)versions.lock$ for manager gradle (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)gradle/wrapper/gradle-wrapper\.properties$ for manager gradle-wrapper (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)requirements\.ya?ml$ for manager helm-requirements (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)values\.ya?ml$ for manager helm-values (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)helmfile\.ya?ml(?:\.gotmpl)?$ for manager helmfile (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)Chart\.ya?ml$ for manager helmv3 (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)bin/hermit$ for manager hermit (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: ^Formula/[^/]+[.]rb$ for manager homebrew (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: \.html?$ for manager html (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)plugins\.(txt|ya?ml)$ for manager jenkins (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)jsonnetfile\.json$ for manager jsonnet-bundler (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: ^.+\.main\.kts$ for manager kotlin-script (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)kustomization\.ya?ml$ for manager kustomize (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)project\.clj$ for manager leiningen (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/|\.)pom\.xml$ for manager maven (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: ^(((\.mvn)|(\.m2))/)?settings\.xml$ for manager maven (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.mvn/extensions\.xml$ for manager maven (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|\/).mvn/wrapper/maven-wrapper.properties$ for manager maven-wrapper (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)package\.js$ for manager meteor (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)Mintfile$ for manager mint (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.?mise\.toml$ for manager mise (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.?mise/config\.toml$ for manager mise (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)mix\.exs$ for manager mix (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)flake\.nix$ for manager nix (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.node-version$ for manager nodenv (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)package\.json$ for manager npm (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: \.(?:cs|fs|vb)proj$ for manager nuget (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: \.(?:props|targets)$ for manager nuget (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)dotnet-tools\.json$ for manager nuget (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)global\.json$ for manager nuget (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.nvmrc$ for manager nvm (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)src/main/features/.+\.json$ for manager osgi (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)pyproject\.toml$ for manager pep621 (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)[\w-]*requirements([-.]\w+)?\.(txt|pip)$ for manager pip_requirements (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)setup\.py$ for manager pip_setup (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)Pipfile$ for manager pipenv (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)pyproject\.toml$ for manager poetry (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.pre-commit-config\.ya?ml$ for manager pre-commit (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)pubspec\.ya?ml$ for manager pub (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)Puppetfile$ for manager puppet (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.python-version$ for manager pyenv (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.ruby-version$ for manager ruby-version (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)runtime.txt$ for manager runtime-version (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: \.sbt$ for manager sbt (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: project/[^/]*\.scala$ for manager sbt (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: project/build\.properties$ for manager sbt (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)repositories$ for manager sbt (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.scalafmt.conf$ for manager scalafmt (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)setup\.cfg$ for manager setup-cfg (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)Package\.swift for manager swift (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: \.tf$ for manager terraform (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.terraform-version$ for manager terraform-version (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)terragrunt\.hcl$ for manager terragrunt (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.terragrunt-version$ for manager terragrunt-version (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: \.tflint\.hcl$ for manager tflint-plugin (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: ^\.travis\.ya?ml$ for manager travis (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)\.vela\.ya?ml$ for manager velaci (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: (^|/)vendir\.yml$ for manager vendir (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Using file match: ^\.woodpecker(?:/[^/]+)?\.ya?ml$ for manager woodpecker (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Matched 1 file(s) for manager devcontainer: .devcontainer/devcontainer.json (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Matched 1 file(s) for manager docker-compose: database/main/docker-compose.yml (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Matched 1 file(s) for manager html: frontend/index.html (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Matched 3 file(s) for manager npm: backend/catalog/package.json, frontend/.vite/deps_temp_473809e1/package.json, frontend/package.json (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: npm file backend/catalog/package.json has name "catalog-service" (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: docker-compose.extractPackageFile(database/main/docker-compose.yml) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: npm file frontend/.vite/deps_temp_473809e1/package.json has name undefined (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Package file has no deps (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Skipping file (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: npm file frontend/package.json has name "gitpod-flix" (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Detecting pnpm Workspaces (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Detecting workspaces (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Finding locked versions (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Found backend/catalog/package-lock.json for backend/catalog/package.json (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Found frontend/package-lock.json for frontend/package.json (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: manager extract durations (ms) (repository=gitpod-samples/gitpodflix-demo)
+       "managers": {"devcontainer": 3, "html": 4, "docker-compose": 12, "npm": 29}
+DEBUG: Found devcontainer package files (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Found docker-compose package files (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Found npm package files (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Found 4 package file(s) (repository=gitpod-samples/gitpodflix-demo)
+ INFO: Dependency extraction complete (repository=gitpod-samples/gitpodflix-demo, baseBranch=main)
+       "stats": {
+         "managers": {
+           "devcontainer": {"fileCount": 1, "depCount": 6},
+           "docker-compose": {"fileCount": 1, "depCount": 1},
+           "npm": {"fileCount": 2, "depCount": 24}
+         },
+         "total": {"fileCount": 4, "depCount": 31}
+       }
+DEBUG: Dependency mcr.microsoft.com/devcontainers/base has unsupported/unversioned value ubuntu (versioning=docker) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Skipping mcr.microsoft.com/devcontainers/base because no currentDigest or pinDigests (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: PackageFiles.add() - Package file saved for base branch (repository=gitpod-samples/gitpodflix-demo, baseBranch=main)
+DEBUG: Package releases lookups complete (repository=gitpod-samples/gitpodflix-demo, baseBranch=main)
+DEBUG: branchifyUpgrades (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: detectSemanticCommits() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getCommitMessages (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: semanticCommits: detected "angular" (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: semanticCommits: enabled (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: 28 flattened updates found: postgres, express, pg, dotenv, dotenv, @types/express, @types/express, @types/node, @types/node, @types/pg, @types/cors, nodemon, jest, @types/jest, ts-jest, react, react-dom, react-router-dom, react-router-dom, @types/react, @types/react, @types/react-dom, @types/react-dom, @vitejs/plugin-react, postcss, tailwindcss, vite, vite (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Returning 23 branch(es) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Found @types - reversing upgrades to use depName in PR (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-5.x)
+DEBUG: Found @types - reversing upgrades to use depName in PR (repository=gitpod-samples/gitpodflix-demo, branch=renovate/pg-8.x-lockfile)
+DEBUG: Found @types - reversing upgrades to use depName in PR (repository=gitpod-samples/gitpodflix-demo, branch=renovate/jest-30.x)
+DEBUG: Found @types - reversing upgrades to use depName in PR (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-19.x)
+DEBUG: Found @types - reversing upgrades to use depName in PR (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-19.x)
+DEBUG: config.repoIsOnboarded=true (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Found sourceUrl with multiple branches that should probably be combined into a group (repository=gitpod-samples/gitpodflix-demo)
+       "sourceUrl": "https://github.com/facebook/react",
+       "newVersion": "19.1.0",
+       "branches": {"renovate/react-19.x": "react", "renovate/react-dom-19.x": "react-dom"}
+DEBUG: packageFiles with updates (repository=gitpod-samples/gitpodflix-demo, baseBranch=main)
+       "config": {
+         "devcontainer": [
+           {
+             "deps": [
+               {
+                 "depName": "mcr.microsoft.com/devcontainers/base",
+                 "currentValue": "ubuntu",
+                 "replaceString": "mcr.microsoft.com/devcontainers/base:ubuntu",
+                 "autoReplaceStringTemplate": "{{depName}}{{#if newValue}}:{{newValue}}{{/if}}{{#if newDigest}}@{{newDigest}}{{/if}}",
+                 "datasource": "docker",
+                 "depType": "image",
+                 "updates": [],
+                 "packageName": "mcr.microsoft.com/devcontainers/base",
+                 "versioning": "docker",
+                 "warnings": [],
+                 "skipReason": "invalid-value"
+               },
+               {
+                 "depName": "ghcr.io/devcontainers/features/common-utils",
+                 "currentValue": "2",
+                 "replaceString": "ghcr.io/devcontainers/features/common-utils:2",
+                 "autoReplaceStringTemplate": "{{depName}}{{#if newValue}}:{{newValue}}{{/if}}{{#if newDigest}}@{{newDigest}}{{/if}}",
+                 "datasource": "docker",
+                 "depType": "feature",
+                 "pinDigests": false,
+                 "updates": [],
+                 "packageName": "ghcr.io/devcontainers/features/common-utils",
+                 "versioning": "docker",
+                 "warnings": [],
+                 "registryUrl": "https://ghcr.io",
+                 "lookupName": "devcontainers/features/common-utils",
+                 "currentVersion": "2",
+                 "fixedVersion": "2"
+               },
+               {
+                 "depName": "ghcr.io/devcontainers/features/github-cli",
+                 "currentValue": "1",
+                 "replaceString": "ghcr.io/devcontainers/features/github-cli:1",
+                 "autoReplaceStringTemplate": "{{depName}}{{#if newValue}}:{{newValue}}{{/if}}{{#if newDigest}}@{{newDigest}}{{/if}}",
+                 "datasource": "docker",
+                 "depType": "feature",
+                 "pinDigests": false,
+                 "updates": [],
+                 "packageName": "ghcr.io/devcontainers/features/github-cli",
+                 "versioning": "docker",
+                 "warnings": [],
+                 "registryUrl": "https://ghcr.io",
+                 "lookupName": "devcontainers/features/github-cli",
+                 "currentVersion": "1",
+                 "fixedVersion": "1"
+               },
+               {
+                 "depName": "ghcr.io/devcontainers/features/node",
+                 "currentValue": "1",
+                 "replaceString": "ghcr.io/devcontainers/features/node:1",
+                 "autoReplaceStringTemplate": "{{depName}}{{#if newValue}}:{{newValue}}{{/if}}{{#if newDigest}}@{{newDigest}}{{/if}}",
+                 "datasource": "docker",
+                 "depType": "feature",
+                 "pinDigests": false,
+                 "updates": [],
+                 "packageName": "ghcr.io/devcontainers/features/node",
+                 "versioning": "docker",
+                 "warnings": [],
+                 "registryUrl": "https://ghcr.io",
+                 "lookupName": "devcontainers/features/node",
+                 "currentVersion": "1",
+                 "fixedVersion": "1"
+               },
+               {
+                 "depName": "ghcr.io/warrenbuckley/codespace-features/sqlite",
+                 "currentValue": "1",
+                 "replaceString": "ghcr.io/warrenbuckley/codespace-features/sqlite:1",
+                 "autoReplaceStringTemplate": "{{depName}}{{#if newValue}}:{{newValue}}{{/if}}{{#if newDigest}}@{{newDigest}}{{/if}}",
+                 "datasource": "docker",
+                 "depType": "feature",
+                 "pinDigests": false,
+                 "updates": [],
+                 "packageName": "ghcr.io/warrenbuckley/codespace-features/sqlite",
+                 "versioning": "docker",
+                 "warnings": [],
+                 "registryUrl": "https://ghcr.io",
+                 "lookupName": "warrenbuckley/codespace-features/sqlite",
+                 "currentVersion": "1",
+                 "fixedVersion": "1"
+               },
+               {
+                 "depName": "ghcr.io/devcontainers/features/docker-in-docker",
+                 "currentValue": "2",
+                 "replaceString": "ghcr.io/devcontainers/features/docker-in-docker:2",
+                 "autoReplaceStringTemplate": "{{depName}}{{#if newValue}}:{{newValue}}{{/if}}{{#if newDigest}}@{{newDigest}}{{/if}}",
+                 "datasource": "docker",
+                 "depType": "feature",
+                 "pinDigests": false,
+                 "updates": [],
+                 "packageName": "ghcr.io/devcontainers/features/docker-in-docker",
+                 "versioning": "docker",
+                 "warnings": [],
+                 "registryUrl": "https://ghcr.io",
+                 "lookupName": "devcontainers/features/docker-in-docker",
+                 "currentVersion": "2",
+                 "fixedVersion": "2"
+               }
+             ],
+             "packageFile": ".devcontainer/devcontainer.json"
+           }
+         ],
+         "docker-compose": [
+           {
+             "deps": [
+               {
+                 "depName": "postgres",
+                 "currentValue": "15",
+                 "replaceString": "postgres:15",
+                 "autoReplaceStringTemplate": "{{depName}}{{#if newValue}}:{{newValue}}{{/if}}{{#if newDigest}}@{{newDigest}}{{/if}}",
+                 "datasource": "docker",
+                 "updates": [
+                   {
+                     "bucket": "major",
+                     "newVersion": "17",
+                     "newValue": "17",
+                     "newMajor": 17,
+                     "newMinor": null,
+                     "newPatch": null,
+                     "updateType": "major",
+                     "branchName": "renovate/postgres-17.x"
+                   }
+                 ],
+                 "packageName": "postgres",
+                 "versioning": "docker",
+                 "warnings": [],
+                 "registryUrl": "https://index.docker.io",
+                 "lookupName": "library/postgres",
+                 "currentVersion": "15",
+                 "isSingleVersion": true,
+                 "fixedVersion": "15"
+               }
+             ],
+             "packageFile": "database/main/docker-compose.yml"
+           }
+         ],
+         "npm": [
+           {
+             "deps": [
+               {
+                 "depType": "dependencies",
+                 "depName": "express",
+                 "currentValue": "^4.18.2",
+                 "datasource": "npm",
+                 "prettyDepType": "dependency",
+                 "lockedVersion": "4.21.2",
+                 "updates": [
+                   {
+                     "bucket": "major",
+                     "newVersion": "5.1.0",
+                     "newValue": "^5.0.0",
+                     "releaseTimestamp": "2025-03-31T14:01:22.509Z",
+                     "newMajor": 5,
+                     "newMinor": 1,
+                     "newPatch": 0,
+                     "updateType": "major",
+                     "isRange": true,
+                     "branchName": "renovate/express-5.x"
+                   }
+                 ],
+                 "packageName": "express",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/expressjs/express",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "homepage": "https://expressjs.com/",
+                 "currentVersion": "4.21.2",
+                 "currentVersionTimestamp": "2024-12-05T22:31:40.945Z",
+                 "isSingleVersion": false,
+                 "fixedVersion": "4.21.2"
+               },
+               {
+                 "depType": "dependencies",
+                 "depName": "pg",
+                 "currentValue": "^8.11.3",
+                 "datasource": "npm",
+                 "prettyDepType": "dependency",
+                 "lockedVersion": "8.14.1",
+                 "updates": [
+                   {
+                     "bucket": "non-major",
+                     "newVersion": "8.16.3",
+                     "newValue": "^8.11.3",
+                     "releaseTimestamp": "2025-06-27T14:52:44.894Z",
+                     "newMajor": 8,
+                     "newMinor": 16,
+                     "newPatch": 3,
+                     "updateType": "minor",
+                     "isRange": true,
+                     "isLockfileUpdate": true,
+                     "branchName": "renovate/pg-8.x-lockfile"
+                   }
+                 ],
+                 "packageName": "pg",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/brianc/node-postgres",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "sourceDirectory": "packages/pg",
+                 "currentVersion": "8.14.1",
+                 "currentVersionTimestamp": "2025-03-17T15:38:24.661Z",
+                 "isSingleVersion": true,
+                 "fixedVersion": "8.14.1"
+               },
+               {
+                 "depType": "dependencies",
+                 "depName": "cors",
+                 "currentValue": "^2.8.5",
+                 "datasource": "npm",
+                 "prettyDepType": "dependency",
+                 "lockedVersion": "2.8.5",
+                 "updates": [],
+                 "packageName": "cors",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/expressjs/cors",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "currentVersion": "2.8.5",
+                 "currentVersionTimestamp": "2018-11-04T21:00:13.277Z",
+                 "fixedVersion": "2.8.5"
+               },
+               {
+                 "depType": "dependencies",
+                 "depName": "dotenv",
+                 "currentValue": "^16.3.1",
+                 "datasource": "npm",
+                 "prettyDepType": "dependency",
+                 "lockedVersion": "16.5.0",
+                 "updates": [
+                   {
+                     "bucket": "non-major",
+                     "newVersion": "16.6.1",
+                     "newValue": "^16.3.1",
+                     "releaseTimestamp": "2025-06-27T16:45:01.088Z",
+                     "newMajor": 16,
+                     "newMinor": 6,
+                     "newPatch": 1,
+                     "updateType": "minor",
+                     "isRange": true,
+                     "isLockfileUpdate": true,
+                     "branchName": "renovate/dotenv-16.x-lockfile"
+                   },
+                   {
+                     "bucket": "major",
+                     "newVersion": "17.2.0",
+                     "newValue": "^17.0.0",
+                     "releaseTimestamp": "2025-07-09T16:25:40.977Z",
+                     "newMajor": 17,
+                     "newMinor": 2,
+                     "newPatch": 0,
+                     "updateType": "major",
+                     "isRange": true,
+                     "branchName": "renovate/dotenv-17.x"
+                   }
+                 ],
+                 "packageName": "dotenv",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/motdotla/dotenv",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "currentVersion": "16.5.0",
+                 "currentVersionTimestamp": "2025-04-10T22:14:40.154Z",
+                 "isSingleVersion": true,
+                 "fixedVersion": "16.5.0"
+               },
+               {
+                 "depType": "devDependencies",
+                 "depName": "@types/express",
+                 "currentValue": "^4.17.21",
+                 "datasource": "npm",
+                 "prettyDepType": "devDependency",
+                 "lockedVersion": "4.17.21",
+                 "updates": [
+                   {
+                     "bucket": "non-major",
+                     "newVersion": "4.17.23",
+                     "newValue": "^4.17.21",
+                     "releaseTimestamp": "2025-06-07T02:19:33.740Z",
+                     "newMajor": 4,
+                     "newMinor": 17,
+                     "newPatch": 23,
+                     "updateType": "patch",
+                     "isRange": true,
+                     "isLockfileUpdate": true,
+                     "branchName": "renovate/express-4.x-lockfile"
+                   },
+                   {
+                     "bucket": "major",
+                     "newVersion": "5.0.3",
+                     "newValue": "^5.0.0",
+                     "releaseTimestamp": "2025-06-07T02:19:15.168Z",
+                     "newMajor": 5,
+                     "newMinor": 0,
+                     "newPatch": 3,
+                     "updateType": "major",
+                     "isRange": true,
+                     "branchName": "renovate/express-5.x"
+                   }
+                 ],
+                 "packageName": "@types/express",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "sourceDirectory": "types/express",
+                 "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/express",
+                 "currentVersion": "4.17.21",
+                 "currentVersionTimestamp": "2023-11-07T03:10:10.569Z",
+                 "isSingleVersion": true,
+                 "fixedVersion": "4.17.21"
+               },
+               {
+                 "depType": "devDependencies",
+                 "depName": "@types/node",
+                 "currentValue": "^20.10.5",
+                 "datasource": "npm",
+                 "prettyDepType": "devDependency",
+                 "lockedVersion": "20.17.30",
+                 "updates": [
+                   {
+                     "bucket": "non-major",
+                     "newVersion": "20.19.7",
+                     "newValue": "^20.10.5",
+                     "releaseTimestamp": "2025-07-10T19:03:22.620Z",
+                     "newMajor": 20,
+                     "newMinor": 19,
+                     "newPatch": 7,
+                     "updateType": "minor",
+                     "isRange": true,
+                     "isLockfileUpdate": true,
+                     "branchName": "renovate/node-20.x-lockfile"
+                   },
+                   {
+                     "bucket": "major",
+                     "newVersion": "24.0.13",
+                     "newValue": "^24.0.0",
+                     "releaseTimestamp": "2025-07-10T19:02:58.846Z",
+                     "newMajor": 24,
+                     "newMinor": 0,
+                     "newPatch": 13,
+                     "updateType": "major",
+                     "isRange": true,
+                     "branchName": "renovate/node-24.x"
+                   }
+                 ],
+                 "packageName": "@types/node",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "sourceDirectory": "types/node",
+                 "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/node",
+                 "currentVersion": "20.17.30",
+                 "currentVersionTimestamp": "2025-04-01T16:39:12.202Z",
+                 "isSingleVersion": true,
+                 "fixedVersion": "20.17.30"
+               },
+               {
+                 "depType": "devDependencies",
+                 "depName": "@types/pg",
+                 "currentValue": "^8.10.9",
+                 "datasource": "npm",
+                 "prettyDepType": "devDependency",
+                 "lockedVersion": "8.11.13",
+                 "updates": [
+                   {
+                     "bucket": "non-major",
+                     "newVersion": "8.15.4",
+                     "newValue": "^8.10.9",
+                     "releaseTimestamp": "2025-06-01T20:35:14.278Z",
+                     "newMajor": 8,
+                     "newMinor": 15,
+                     "newPatch": 4,
+                     "updateType": "minor",
+                     "isRange": true,
+                     "isLockfileUpdate": true,
+                     "branchName": "renovate/pg-8.x-lockfile"
+                   }
+                 ],
+                 "packageName": "@types/pg",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "sourceDirectory": "types/pg",
+                 "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/pg",
+                 "currentVersion": "8.11.13",
+                 "currentVersionTimestamp": "2025-04-14T19:02:36.466Z",
+                 "isSingleVersion": true,
+                 "fixedVersion": "8.11.13"
+               },
+               {
+                 "depType": "devDependencies",
+                 "depName": "@types/cors",
+                 "currentValue": "^2.8.17",
+                 "datasource": "npm",
+                 "prettyDepType": "devDependency",
+                 "lockedVersion": "2.8.17",
+                 "updates": [
+                   {
+                     "bucket": "non-major",
+                     "newVersion": "2.8.19",
+                     "newValue": "^2.8.17",
+                     "releaseTimestamp": "2025-06-07T02:16:26.348Z",
+                     "newMajor": 2,
+                     "newMinor": 8,
+                     "newPatch": 19,
+                     "updateType": "patch",
+                     "isRange": true,
+                     "isLockfileUpdate": true,
+                     "branchName": "renovate/cors-2.x-lockfile"
+                   }
+                 ],
+                 "packageName": "@types/cors",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "sourceDirectory": "types/cors",
+                 "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/cors",
+                 "currentVersion": "2.8.17",
+                 "currentVersionTimestamp": "2023-11-20T23:54:11.024Z",
+                 "isSingleVersion": true,
+                 "fixedVersion": "2.8.17"
+               },
+               {
+                 "depType": "devDependencies",
+                 "depName": "typescript",
+                 "currentValue": "^5.3.3",
+                 "datasource": "npm",
+                 "prettyDepType": "devDependency",
+                 "lockedVersion": "5.8.3",
+                 "updates": [],
+                 "packageName": "typescript",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/microsoft/TypeScript",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "homepage": "https://www.typescriptlang.org/",
+                 "currentVersion": "5.8.3",
+                 "currentVersionTimestamp": "2025-04-05T00:17:37.851Z",
+                 "fixedVersion": "5.8.3"
+               },
+               {
+                 "depType": "devDependencies",
+                 "depName": "ts-node",
+                 "currentValue": "^10.9.2",
+                 "datasource": "npm",
+                 "prettyDepType": "devDependency",
+                 "lockedVersion": "10.9.2",
+                 "updates": [],
+                 "packageName": "ts-node",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/TypeStrong/ts-node",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "homepage": "https://typestrong.org/ts-node",
+                 "currentVersion": "10.9.2",
+                 "currentVersionTimestamp": "2023-12-08T12:04:46.154Z",
+                 "fixedVersion": "10.9.2"
+               },
+               {
+                 "depType": "devDependencies",
+                 "depName": "nodemon",
+                 "currentValue": "^3.0.2",
+                 "datasource": "npm",
+                 "prettyDepType": "devDependency",
+                 "lockedVersion": "3.1.9",
+                 "updates": [
+                   {
+                     "bucket": "non-major",
+                     "newVersion": "3.1.10",
+                     "newValue": "^3.0.2",
+                     "releaseTimestamp": "2025-04-23T09:21:44.154Z",
+                     "newMajor": 3,
+                     "newMinor": 1,
+                     "newPatch": 10,
+                     "updateType": "patch",
+                     "isRange": true,
+                     "isLockfileUpdate": true,
+                     "branchName": "renovate/nodemon-3.x-lockfile"
+                   }
+                 ],
+                 "packageName": "nodemon",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/remy/nodemon",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "homepage": "https://nodemon.io",
+                 "currentVersion": "3.1.9",
+                 "currentVersionTimestamp": "2024-12-13T11:49:00.595Z",
+                 "isSingleVersion": true,
+                 "fixedVersion": "3.1.9"
+               },
+               {
+                 "depType": "devDependencies",
+                 "depName": "jest",
+                 "currentValue": "^29.7.0",
+                 "datasource": "npm",
+                 "prettyDepType": "devDependency",
+                 "lockedVersion": "29.7.0",
+                 "updates": [
+                   {
+                     "bucket": "major",
+                     "newVersion": "30.0.4",
+                     "newValue": "^30.0.0",
+                     "releaseTimestamp": "2025-07-02T23:46:11.637Z",
+                     "newMajor": 30,
+                     "newMinor": 0,
+                     "newPatch": 4,
+                     "updateType": "major",
+                     "isRange": true,
+                     "branchName": "renovate/jest-30.x"
+                   }
+                 ],
+                 "packageName": "jest",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/jestjs/jest",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "sourceDirectory": "packages/jest",
+                 "homepage": "https://jestjs.io/",
+                 "currentVersion": "29.7.0",
+                 "currentVersionTimestamp": "2023-09-12T06:44:08.561Z",
+                 "isSingleVersion": false,
+                 "fixedVersion": "29.7.0"
+               },
+               {
+                 "depType": "devDependencies",
+                 "depName": "@types/jest",
+                 "currentValue": "^29.5.11",
+                 "datasource": "npm",
+                 "prettyDepType": "devDependency",
+                 "lockedVersion": "29.5.14",
+                 "updates": [
+                   {
+                     "bucket": "major",
+                     "newVersion": "30.0.0",
+                     "newValue": "^30.0.0",
+                     "releaseTimestamp": "2025-06-16T07:35:50.850Z",
+                     "newMajor": 30,
+                     "newMinor": 0,
+                     "newPatch": 0,
+                     "updateType": "major",
+                     "isRange": true,
+                     "branchName": "renovate/jest-30.x"
+                   }
+                 ],
+                 "packageName": "@types/jest",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "sourceDirectory": "types/jest",
+                 "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/jest",
+                 "currentVersion": "29.5.14",
+                 "currentVersionTimestamp": "2024-10-23T03:43:49.927Z",
+                 "isSingleVersion": false,
+                 "fixedVersion": "29.5.14"
+               },
+               {
+                 "depType": "devDependencies",
+                 "depName": "ts-jest",
+                 "currentValue": "^29.1.1",
+                 "datasource": "npm",
+                 "prettyDepType": "devDependency",
+                 "lockedVersion": "29.3.2",
+                 "updates": [
+                   {
+                     "bucket": "non-major",
+                     "newVersion": "29.4.0",
+                     "newValue": "^29.1.1",
+                     "releaseTimestamp": "2025-06-12T04:02:43.158Z",
+                     "newMajor": 29,
+                     "newMinor": 4,
+                     "newPatch": 0,
+                     "updateType": "minor",
+                     "isRange": true,
+                     "isLockfileUpdate": true,
+                     "branchName": "renovate/ts-jest-29.x-lockfile"
+                   }
+                 ],
+                 "packageName": "ts-jest",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/kulshekhar/ts-jest",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "homepage": "https://kulshekhar.github.io/ts-jest",
+                 "currentVersion": "29.3.2",
+                 "currentVersionTimestamp": "2025-04-13T07:31:53.453Z",
+                 "isSingleVersion": true,
+                 "fixedVersion": "29.3.2"
+               }
+             ],
+             "extractedConstraints": {"npm": ">=7"},
+             "packageFileVersion": "1.0.0",
+             "managerData": {
+               "packageJsonName": "catalog-service",
+               "hasPackageManager": false,
+               "npmLock": "backend/catalog/package-lock.json",
+               "yarnZeroInstall": false
+             },
+             "skipInstalls": true,
+             "packageFile": "backend/catalog/package.json",
+             "lockFiles": ["backend/catalog/package-lock.json"]
+           },
+           {
+             "deps": [
+               {
+                 "depType": "dependencies",
+                 "depName": "react",
+                 "currentValue": "^18.2.0",
+                 "datasource": "npm",
+                 "prettyDepType": "dependency",
+                 "lockedVersion": "18.3.1",
+                 "updates": [
+                   {
+                     "bucket": "major",
+                     "newVersion": "19.1.0",
+                     "newValue": "^19.0.0",
+                     "releaseTimestamp": "2025-03-28T19:59:42.053Z",
+                     "newMajor": 19,
+                     "newMinor": 1,
+                     "newPatch": 0,
+                     "updateType": "major",
+                     "isRange": true,
+                     "branchName": "renovate/react-19.x"
+                   }
+                 ],
+                 "packageName": "react",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/facebook/react",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "sourceDirectory": "packages/react",
+                 "homepage": "https://react.dev/",
+                 "currentVersion": "18.3.1",
+                 "currentVersionTimestamp": "2024-04-26T16:42:26.496Z",
+                 "isSingleVersion": false,
+                 "fixedVersion": "18.3.1"
+               },
+               {
+                 "depType": "dependencies",
+                 "depName": "react-dom",
+                 "currentValue": "^18.2.0",
+                 "datasource": "npm",
+                 "prettyDepType": "dependency",
+                 "lockedVersion": "18.3.1",
+                 "updates": [
+                   {
+                     "bucket": "major",
+                     "newVersion": "19.1.0",
+                     "newValue": "^19.0.0",
+                     "releaseTimestamp": "2025-03-28T19:59:53.229Z",
+                     "newMajor": 19,
+                     "newMinor": 1,
+                     "newPatch": 0,
+                     "updateType": "major",
+                     "isRange": true,
+                     "branchName": "renovate/react-dom-19.x"
+                   }
+                 ],
+                 "packageName": "react-dom",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/facebook/react",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "sourceDirectory": "packages/react-dom",
+                 "homepage": "https://react.dev/",
+                 "currentVersion": "18.3.1",
+                 "currentVersionTimestamp": "2024-04-26T16:42:49.931Z",
+                 "isSingleVersion": false,
+                 "fixedVersion": "18.3.1"
+               },
+               {
+                 "depType": "dependencies",
+                 "depName": "react-router-dom",
+                 "currentValue": "^6.22.1",
+                 "datasource": "npm",
+                 "prettyDepType": "dependency",
+                 "lockedVersion": "6.30.0",
+                 "updates": [
+                   {
+                     "bucket": "non-major",
+                     "newVersion": "6.30.1",
+                     "newValue": "^6.22.1",
+                     "releaseTimestamp": "2025-05-20T20:25:46.162Z",
+                     "newMajor": 6,
+                     "newMinor": 30,
+                     "newPatch": 1,
+                     "updateType": "patch",
+                     "isRange": true,
+                     "isLockfileUpdate": true,
+                     "branchName": "renovate/react-router-dom-6.x-lockfile"
+                   },
+                   {
+                     "bucket": "major",
+                     "newVersion": "7.6.3",
+                     "newValue": "^7.0.0",
+                     "releaseTimestamp": "2025-06-27T17:20:28.947Z",
+                     "newMajor": 7,
+                     "newMinor": 6,
+                     "newPatch": 3,
+                     "updateType": "major",
+                     "isRange": true,
+                     "branchName": "renovate/react-router-dom-7.x"
+                   }
+                 ],
+                 "packageName": "react-router-dom",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/remix-run/react-router",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "sourceDirectory": "packages/react-router-dom",
+                 "currentVersion": "6.30.0",
+                 "currentVersionTimestamp": "2025-02-27T16:05:52.726Z",
+                 "isSingleVersion": true,
+                 "fixedVersion": "6.30.0"
+               },
+               {
+                 "depType": "devDependencies",
+                 "depName": "@types/react",
+                 "currentValue": "^18.2.55",
+                 "datasource": "npm",
+                 "prettyDepType": "devDependency",
+                 "lockedVersion": "18.3.20",
+                 "updates": [
+                   {
+                     "bucket": "non-major",
+                     "newVersion": "18.3.23",
+                     "newValue": "^18.2.55",
+                     "releaseTimestamp": "2025-05-27T08:03:03.805Z",
+                     "newMajor": 18,
+                     "newMinor": 3,
+                     "newPatch": 23,
+                     "updateType": "patch",
+                     "isRange": true,
+                     "isLockfileUpdate": true,
+                     "branchName": "renovate/react-18.x-lockfile"
+                   },
+                   {
+                     "bucket": "major",
+                     "newVersion": "19.1.8",
+                     "newValue": "^19.0.0",
+                     "releaseTimestamp": "2025-06-11T13:41:18.158Z",
+                     "newMajor": 19,
+                     "newMinor": 1,
+                     "newPatch": 8,
+                     "updateType": "major",
+                     "isRange": true,
+                     "branchName": "renovate/react-19.x"
+                   }
+                 ],
+                 "packageName": "@types/react",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "sourceDirectory": "types/react",
+                 "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react",
+                 "currentVersion": "18.3.20",
+                 "currentVersionTimestamp": "2025-03-24T08:02:40.787Z",
+                 "isSingleVersion": true,
+                 "fixedVersion": "18.3.20"
+               },
+               {
+                 "depType": "devDependencies",
+                 "depName": "@types/react-dom",
+                 "currentValue": "^18.2.19",
+                 "datasource": "npm",
+                 "prettyDepType": "devDependency",
+                 "lockedVersion": "18.3.6",
+                 "updates": [
+                   {
+                     "bucket": "non-major",
+                     "newVersion": "18.3.7",
+                     "newValue": "^18.2.19",
+                     "releaseTimestamp": "2025-04-30T10:37:39.536Z",
+                     "newMajor": 18,
+                     "newMinor": 3,
+                     "newPatch": 7,
+                     "updateType": "patch",
+                     "isRange": true,
+                     "isLockfileUpdate": true,
+                     "branchName": "renovate/react-dom-18.x-lockfile"
+                   },
+                   {
+                     "bucket": "major",
+                     "newVersion": "19.1.6",
+                     "newValue": "^19.0.0",
+                     "releaseTimestamp": "2025-06-04T12:44:28.702Z",
+                     "newMajor": 19,
+                     "newMinor": 1,
+                     "newPatch": 6,
+                     "updateType": "major",
+                     "isRange": true,
+                     "branchName": "renovate/react-dom-19.x"
+                   }
+                 ],
+                 "packageName": "@types/react-dom",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "sourceDirectory": "types/react-dom",
+                 "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-dom",
+                 "currentVersion": "18.3.6",
+                 "currentVersionTimestamp": "2025-04-02T09:02:26.649Z",
+                 "isSingleVersion": true,
+                 "fixedVersion": "18.3.6"
+               },
+               {
+                 "depType": "devDependencies",
+                 "depName": "@vitejs/plugin-react",
+                 "currentValue": "^4.2.1",
+                 "datasource": "npm",
+                 "prettyDepType": "devDependency",
+                 "lockedVersion": "4.4.0",
+                 "updates": [
+                   {
+                     "bucket": "non-major",
+                     "newVersion": "4.6.0",
+                     "newValue": "^4.2.1",
+                     "releaseTimestamp": "2025-06-23T03:29:16.147Z",
+                     "newMajor": 4,
+                     "newMinor": 6,
+                     "newPatch": 0,
+                     "updateType": "minor",
+                     "isRange": true,
+                     "isLockfileUpdate": true,
+                     "branchName": "renovate/vitejs-plugin-react-4.x-lockfile"
+                   }
+                 ],
+                 "packageName": "@vitejs/plugin-react",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/vitejs/vite-plugin-react",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "sourceDirectory": "packages/plugin-react",
+                 "homepage": "https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#readme",
+                 "currentVersion": "4.4.0",
+                 "currentVersionTimestamp": "2025-04-15T09:22:16.404Z",
+                 "isSingleVersion": true,
+                 "fixedVersion": "4.4.0"
+               },
+               {
+                 "depType": "devDependencies",
+                 "depName": "autoprefixer",
+                 "currentValue": "^10.4.21",
+                 "datasource": "npm",
+                 "prettyDepType": "devDependency",
+                 "lockedVersion": "10.4.21",
+                 "updates": [],
+                 "packageName": "autoprefixer",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/postcss/autoprefixer",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "currentVersion": "10.4.21",
+                 "currentVersionTimestamp": "2025-03-09T13:27:24.235Z",
+                 "fixedVersion": "10.4.21"
+               },
+               {
+                 "depType": "devDependencies",
+                 "depName": "postcss",
+                 "currentValue": "^8.5.3",
+                 "datasource": "npm",
+                 "prettyDepType": "devDependency",
+                 "lockedVersion": "8.5.3",
+                 "updates": [
+                   {
+                     "bucket": "non-major",
+                     "newVersion": "8.5.6",
+                     "newValue": "^8.5.3",
+                     "releaseTimestamp": "2025-06-16T13:58:02.262Z",
+                     "newMajor": 8,
+                     "newMinor": 5,
+                     "newPatch": 6,
+                     "updateType": "patch",
+                     "isRange": true,
+                     "isLockfileUpdate": true,
+                     "branchName": "renovate/postcss-8.x-lockfile"
+                   }
+                 ],
+                 "packageName": "postcss",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/postcss/postcss",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "homepage": "https://postcss.org/",
+                 "currentVersion": "8.5.3",
+                 "currentVersionTimestamp": "2025-02-19T13:45:44.840Z",
+                 "isSingleVersion": true,
+                 "fixedVersion": "8.5.3"
+               },
+               {
+                 "depType": "devDependencies",
+                 "depName": "tailwindcss",
+                 "currentValue": "^3.4.17",
+                 "datasource": "npm",
+                 "prettyDepType": "devDependency",
+                 "lockedVersion": "3.4.17",
+                 "updates": [
+                   {
+                     "bucket": "major",
+                     "newVersion": "4.1.11",
+                     "newValue": "^4.0.0",
+                     "releaseTimestamp": "2025-06-26T10:59:10.244Z",
+                     "newMajor": 4,
+                     "newMinor": 1,
+                     "newPatch": 11,
+                     "updateType": "major",
+                     "isRange": true,
+                     "branchName": "renovate/tailwindcss-4.x"
+                   }
+                 ],
+                 "packageName": "tailwindcss",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/tailwindlabs/tailwindcss",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "sourceDirectory": "packages/tailwindcss",
+                 "homepage": "https://tailwindcss.com",
+                 "currentVersion": "3.4.17",
+                 "currentVersionTimestamp": "2024-12-17T19:36:41.075Z",
+                 "isSingleVersion": false,
+                 "fixedVersion": "3.4.17"
+               },
+               {
+                 "depType": "devDependencies",
+                 "depName": "vite",
+                 "currentValue": "^5.1.0",
+                 "datasource": "npm",
+                 "prettyDepType": "devDependency",
+                 "lockedVersion": "5.4.18",
+                 "updates": [
+                   {
+                     "bucket": "non-major",
+                     "newVersion": "5.4.19",
+                     "newValue": "^5.1.0",
+                     "releaseTimestamp": "2025-04-30T05:57:48.896Z",
+                     "newMajor": 5,
+                     "newMinor": 4,
+                     "newPatch": 19,
+                     "updateType": "patch",
+                     "isRange": true,
+                     "isLockfileUpdate": true,
+                     "branchName": "renovate/vite-5.x-lockfile"
+                   },
+                   {
+                     "bucket": "major",
+                     "newVersion": "7.0.4",
+                     "newValue": "^7.0.0",
+                     "releaseTimestamp": "2025-07-10T09:47:04.770Z",
+                     "newMajor": 7,
+                     "newMinor": 0,
+                     "newPatch": 4,
+                     "updateType": "major",
+                     "isRange": true,
+                     "branchName": "renovate/vite-7.x"
+                   }
+                 ],
+                 "packageName": "vite",
+                 "versioning": "npm",
+                 "warnings": [],
+                 "sourceUrl": "https://github.com/vitejs/vite",
+                 "registryUrl": "https://registry.npmjs.org",
+                 "sourceDirectory": "packages/vite",
+                 "homepage": "https://vite.dev",
+                 "currentVersion": "5.4.18",
+                 "currentVersionTimestamp": "2025-04-10T06:47:16.885Z",
+                 "isSingleVersion": true,
+                 "fixedVersion": "5.4.18"
+               }
+             ],
+             "extractedConstraints": {"npm": ">=7"},
+             "packageFileVersion": "0.1.0",
+             "managerData": {
+               "packageJsonName": "gitpod-flix",
+               "hasPackageManager": false,
+               "npmLock": "frontend/package-lock.json",
+               "yarnZeroInstall": false
+             },
+             "skipInstalls": true,
+             "packageFile": "frontend/package.json",
+             "lockFiles": ["frontend/package-lock.json"]
+           }
+         ]
+       }
+DEBUG: detectSemanticCommits() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: semanticCommits: returning "enabled" from cache (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: processRepo() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Processing 23 branches: renovate/cors-2.x-lockfile, renovate/dotenv-16.x-lockfile, renovate/dotenv-17.x, renovate/express-4.x-lockfile, renovate/express-5.x, renovate/jest-30.x, renovate/node-20.x-lockfile, renovate/node-24.x, renovate/nodemon-3.x-lockfile, renovate/pg-8.x-lockfile, renovate/postcss-8.x-lockfile, renovate/postgres-17.x, renovate/react-18.x-lockfile, renovate/react-19.x, renovate/react-dom-18.x-lockfile, renovate/react-dom-19.x, renovate/react-router-dom-6.x-lockfile, renovate/react-router-dom-7.x, renovate/tailwindcss-4.x, renovate/ts-jest-29.x-lockfile, renovate/vite-5.x-lockfile, renovate/vite-7.x, renovate/vitejs-plugin-react-4.x-lockfile (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Calculating hourly PRs remaining (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: currentHourStart=2025-07-14T12:00:00.000+00:00 (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: PR hourly limit remaining: 0 (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Calculating prConcurrentLimit (10) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/cors-2.x-lockfile) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/cors-2.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/cors-2.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Found PR #38 (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/express-4.x-lockfile) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/express-4.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/express-4.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Found PR #39 (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/react-18.x-lockfile) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/react-18.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/react-18.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/react-dom-18.x-lockfile) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/react-dom-18.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/react-dom-18.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/nodemon-3.x-lockfile) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/nodemon-3.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/nodemon-3.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/postcss-8.x-lockfile) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/postcss-8.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/postcss-8.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/react-router-dom-6.x-lockfile) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/react-router-dom-6.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/react-router-dom-6.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/vite-5.x-lockfile) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/vite-5.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/vite-5.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/node-20.x-lockfile) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/node-20.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/node-20.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/vitejs-plugin-react-4.x-lockfile) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/vitejs-plugin-react-4.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/vitejs-plugin-react-4.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/dotenv-16.x-lockfile) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/dotenv-16.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/dotenv-16.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/pg-8.x-lockfile) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/pg-8.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/pg-8.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/ts-jest-29.x-lockfile) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/ts-jest-29.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/ts-jest-29.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/node-24.x) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/node-24.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/node-24.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/dotenv-17.x) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/dotenv-17.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/dotenv-17.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/express-5.x) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/express-5.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/express-5.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/jest-30.x) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/jest-30.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/jest-30.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/react-19.x) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/react-19.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/react-19.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/react-dom-19.x) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/react-dom-19.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/react-dom-19.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/react-router-dom-7.x) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/react-router-dom-7.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/react-router-dom-7.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/tailwindcss-4.x) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/tailwindcss-4.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/tailwindcss-4.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/vite-7.x) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/vite-7.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/vite-7.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getBranchPr(renovate/postgres-17.x) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/postgres-17.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: findPr(renovate/postgres-17.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: 0 PRs are currently open (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: PR concurrent limit remaining: 10 (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Calculated maximum PRs remaining this run: 0 (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: PullRequests limit = 0 (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Calculating hourly PRs remaining (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: currentHourStart=2025-07-14T12:00:00.000+00:00 (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: PR hourly limit remaining: 0 (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Calculating branchConcurrentLimit (10) (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: 0 already existing branches found:  (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Branch concurrent limit remaining: 10 (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Calculated maximum branches remaining this run: 0 (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Branches limit = 0 (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: getBranchPr(renovate/cors-2.x-lockfile) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: findPr(renovate/cors-2.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: findPr(renovate/cors-2.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: Found PR #38 (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: findPr(renovate/cors-2.x-lockfile, chore(deps): update dependency @types/cors to v2.8.19, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: Found PR #38 (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: Found closed PR with current title (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: Returning PR from cache (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: Closed PR already exists. Skipping branch. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+       "prTitle": "chore(deps): update dependency @types/cors to v2.8.19"
+DEBUG: Getting comments for #38 (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: http cache: saving https://api.github.com/repos/gitpod-samples/gitpodflix-demo/issues/38/comments?per_page=100 (etag=W/"dca8d2d6bfd9c5bc665de468b63ebb9f25c5108c2ce9fc1122f051bf64ac4707", lastModified=undefined) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: Found 1 comments (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: Ensuring comment "Renovate Ignore Notification" in #38 (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: Comment is already update-to-date (repository=gitpod-samples/gitpodflix-demo, branch=renovate/cors-2.x-lockfile)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: getBranchPr(renovate/express-4.x-lockfile) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: findPr(renovate/express-4.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: findPr(renovate/express-4.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: Found PR #39 (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: findPr(renovate/express-4.x-lockfile, chore(deps): update dependency @types/express to v4.17.23, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: Found PR #39 (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: Found closed PR with current title (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: Returning PR from cache (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: Closed PR already exists. Skipping branch. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+       "prTitle": "chore(deps): update dependency @types/express to v4.17.23"
+DEBUG: Getting comments for #39 (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: http cache: saving https://api.github.com/repos/gitpod-samples/gitpodflix-demo/issues/39/comments?per_page=100 (etag=W/"1794cc17cb7d11403fed63bd6a3e60afa4e63ed9e99192c8ad6e7366347e4f4e", lastModified=undefined) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: Found 1 comments (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: Ensuring comment "Renovate Ignore Notification" in #39 (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: Comment is already update-to-date (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-4.x-lockfile)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-18.x-lockfile)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-18.x-lockfile)
+DEBUG: getBranchPr(renovate/react-18.x-lockfile) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-18.x-lockfile)
+DEBUG: findPr(renovate/react-18.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-18.x-lockfile)
+DEBUG: findPr(renovate/react-18.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-18.x-lockfile)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-18.x-lockfile)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-18.x-lockfile)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-18.x-lockfile)
+DEBUG: findPr(renovate/react-18.x-lockfile, chore(deps): update dependency @types/react to v18.3.23, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-18.x-lockfile)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-18.x-lockfile)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-18.x-lockfile)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-18.x-lockfile)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-18.x-lockfile)
+DEBUG: getBranchPr(renovate/react-dom-18.x-lockfile) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-18.x-lockfile)
+DEBUG: findPr(renovate/react-dom-18.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-18.x-lockfile)
+DEBUG: findPr(renovate/react-dom-18.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-18.x-lockfile)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-18.x-lockfile)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-18.x-lockfile)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-18.x-lockfile)
+DEBUG: findPr(renovate/react-dom-18.x-lockfile, chore(deps): update dependency @types/react-dom to v18.3.7, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-18.x-lockfile)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-18.x-lockfile)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-18.x-lockfile)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/nodemon-3.x-lockfile)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/nodemon-3.x-lockfile)
+DEBUG: getBranchPr(renovate/nodemon-3.x-lockfile) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/nodemon-3.x-lockfile)
+DEBUG: findPr(renovate/nodemon-3.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/nodemon-3.x-lockfile)
+DEBUG: findPr(renovate/nodemon-3.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/nodemon-3.x-lockfile)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/nodemon-3.x-lockfile)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/nodemon-3.x-lockfile)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/nodemon-3.x-lockfile)
+DEBUG: findPr(renovate/nodemon-3.x-lockfile, chore(deps): update dependency nodemon to v3.1.10, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/nodemon-3.x-lockfile)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/nodemon-3.x-lockfile)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/nodemon-3.x-lockfile)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postcss-8.x-lockfile)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postcss-8.x-lockfile)
+DEBUG: getBranchPr(renovate/postcss-8.x-lockfile) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postcss-8.x-lockfile)
+DEBUG: findPr(renovate/postcss-8.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postcss-8.x-lockfile)
+DEBUG: findPr(renovate/postcss-8.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postcss-8.x-lockfile)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postcss-8.x-lockfile)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postcss-8.x-lockfile)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postcss-8.x-lockfile)
+DEBUG: findPr(renovate/postcss-8.x-lockfile, chore(deps): update dependency postcss to v8.5.6, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postcss-8.x-lockfile)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postcss-8.x-lockfile)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postcss-8.x-lockfile)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-6.x-lockfile)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-6.x-lockfile)
+DEBUG: getBranchPr(renovate/react-router-dom-6.x-lockfile) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-6.x-lockfile)
+DEBUG: findPr(renovate/react-router-dom-6.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-6.x-lockfile)
+DEBUG: findPr(renovate/react-router-dom-6.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-6.x-lockfile)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-6.x-lockfile)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-6.x-lockfile)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-6.x-lockfile)
+DEBUG: findPr(renovate/react-router-dom-6.x-lockfile, chore(deps): update dependency react-router-dom to v6.30.1, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-6.x-lockfile)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-6.x-lockfile)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-6.x-lockfile)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-5.x-lockfile)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-5.x-lockfile)
+DEBUG: getBranchPr(renovate/vite-5.x-lockfile) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-5.x-lockfile)
+DEBUG: findPr(renovate/vite-5.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-5.x-lockfile)
+DEBUG: findPr(renovate/vite-5.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-5.x-lockfile)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-5.x-lockfile)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-5.x-lockfile)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-5.x-lockfile)
+DEBUG: findPr(renovate/vite-5.x-lockfile, chore(deps): update dependency vite to v5.4.19, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-5.x-lockfile)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-5.x-lockfile)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-5.x-lockfile)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-20.x-lockfile)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-20.x-lockfile)
+DEBUG: getBranchPr(renovate/node-20.x-lockfile) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-20.x-lockfile)
+DEBUG: findPr(renovate/node-20.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-20.x-lockfile)
+DEBUG: findPr(renovate/node-20.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-20.x-lockfile)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-20.x-lockfile)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-20.x-lockfile)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-20.x-lockfile)
+DEBUG: findPr(renovate/node-20.x-lockfile, chore(deps): update dependency @types/node to v20.19.7, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-20.x-lockfile)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-20.x-lockfile)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-20.x-lockfile)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vitejs-plugin-react-4.x-lockfile)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vitejs-plugin-react-4.x-lockfile)
+DEBUG: getBranchPr(renovate/vitejs-plugin-react-4.x-lockfile) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vitejs-plugin-react-4.x-lockfile)
+DEBUG: findPr(renovate/vitejs-plugin-react-4.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vitejs-plugin-react-4.x-lockfile)
+DEBUG: findPr(renovate/vitejs-plugin-react-4.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vitejs-plugin-react-4.x-lockfile)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vitejs-plugin-react-4.x-lockfile)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vitejs-plugin-react-4.x-lockfile)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vitejs-plugin-react-4.x-lockfile)
+DEBUG: findPr(renovate/vitejs-plugin-react-4.x-lockfile, chore(deps): update dependency @vitejs/plugin-react to v4.6.0, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vitejs-plugin-react-4.x-lockfile)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vitejs-plugin-react-4.x-lockfile)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vitejs-plugin-react-4.x-lockfile)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-16.x-lockfile)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-16.x-lockfile)
+DEBUG: getBranchPr(renovate/dotenv-16.x-lockfile) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-16.x-lockfile)
+DEBUG: findPr(renovate/dotenv-16.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-16.x-lockfile)
+DEBUG: findPr(renovate/dotenv-16.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-16.x-lockfile)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-16.x-lockfile)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-16.x-lockfile)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-16.x-lockfile)
+DEBUG: findPr(renovate/dotenv-16.x-lockfile, chore(deps): update dependency dotenv to v16.6.1, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-16.x-lockfile)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-16.x-lockfile)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-16.x-lockfile)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/pg-8.x-lockfile)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/pg-8.x-lockfile)
+DEBUG: getBranchPr(renovate/pg-8.x-lockfile) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/pg-8.x-lockfile)
+DEBUG: findPr(renovate/pg-8.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/pg-8.x-lockfile)
+DEBUG: findPr(renovate/pg-8.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/pg-8.x-lockfile)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/pg-8.x-lockfile)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/pg-8.x-lockfile)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/pg-8.x-lockfile)
+DEBUG: findPr(renovate/pg-8.x-lockfile, chore(deps): update dependency pg to v8.16.3, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/pg-8.x-lockfile)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/pg-8.x-lockfile)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/pg-8.x-lockfile)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/ts-jest-29.x-lockfile)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/ts-jest-29.x-lockfile)
+DEBUG: getBranchPr(renovate/ts-jest-29.x-lockfile) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/ts-jest-29.x-lockfile)
+DEBUG: findPr(renovate/ts-jest-29.x-lockfile, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/ts-jest-29.x-lockfile)
+DEBUG: findPr(renovate/ts-jest-29.x-lockfile, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/ts-jest-29.x-lockfile)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/ts-jest-29.x-lockfile)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/ts-jest-29.x-lockfile)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/ts-jest-29.x-lockfile)
+DEBUG: findPr(renovate/ts-jest-29.x-lockfile, chore(deps): update dependency ts-jest to v29.4.0, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/ts-jest-29.x-lockfile)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/ts-jest-29.x-lockfile)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/ts-jest-29.x-lockfile)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-24.x)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-24.x)
+DEBUG: getBranchPr(renovate/node-24.x) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-24.x)
+DEBUG: findPr(renovate/node-24.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-24.x)
+DEBUG: findPr(renovate/node-24.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-24.x)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-24.x)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-24.x)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-24.x)
+DEBUG: findPr(renovate/node-24.x, chore(deps): update dependency @types/node to v24, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-24.x)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-24.x)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/node-24.x)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-17.x)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-17.x)
+DEBUG: getBranchPr(renovate/dotenv-17.x) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-17.x)
+DEBUG: findPr(renovate/dotenv-17.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-17.x)
+DEBUG: findPr(renovate/dotenv-17.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-17.x)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-17.x)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-17.x)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-17.x)
+DEBUG: findPr(renovate/dotenv-17.x, chore(deps): update dependency dotenv to v17, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-17.x)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-17.x)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/dotenv-17.x)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-5.x)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-5.x)
+DEBUG: getBranchPr(renovate/express-5.x) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-5.x)
+DEBUG: findPr(renovate/express-5.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-5.x)
+DEBUG: findPr(renovate/express-5.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-5.x)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-5.x)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-5.x)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-5.x)
+DEBUG: findPr(renovate/express-5.x, chore(deps): update dependency express to v5, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-5.x)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-5.x)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/express-5.x)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/jest-30.x)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/jest-30.x)
+DEBUG: getBranchPr(renovate/jest-30.x) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/jest-30.x)
+DEBUG: findPr(renovate/jest-30.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/jest-30.x)
+DEBUG: findPr(renovate/jest-30.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/jest-30.x)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/jest-30.x)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/jest-30.x)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/jest-30.x)
+DEBUG: findPr(renovate/jest-30.x, chore(deps): update dependency jest to v30, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/jest-30.x)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/jest-30.x)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/jest-30.x)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-19.x)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-19.x)
+DEBUG: getBranchPr(renovate/react-19.x) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-19.x)
+DEBUG: findPr(renovate/react-19.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-19.x)
+DEBUG: findPr(renovate/react-19.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-19.x)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-19.x)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-19.x)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-19.x)
+DEBUG: findPr(renovate/react-19.x, chore(deps): update dependency react to v19, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-19.x)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-19.x)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-19.x)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-19.x)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-19.x)
+DEBUG: getBranchPr(renovate/react-dom-19.x) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-19.x)
+DEBUG: findPr(renovate/react-dom-19.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-19.x)
+DEBUG: findPr(renovate/react-dom-19.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-19.x)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-19.x)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-19.x)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-19.x)
+DEBUG: findPr(renovate/react-dom-19.x, chore(deps): update dependency react-dom to v19, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-19.x)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-19.x)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-dom-19.x)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-7.x)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-7.x)
+DEBUG: getBranchPr(renovate/react-router-dom-7.x) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-7.x)
+DEBUG: findPr(renovate/react-router-dom-7.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-7.x)
+DEBUG: findPr(renovate/react-router-dom-7.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-7.x)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-7.x)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-7.x)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-7.x)
+DEBUG: findPr(renovate/react-router-dom-7.x, chore(deps): update dependency react-router-dom to v7, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-7.x)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-7.x)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/react-router-dom-7.x)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/tailwindcss-4.x)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/tailwindcss-4.x)
+DEBUG: getBranchPr(renovate/tailwindcss-4.x) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/tailwindcss-4.x)
+DEBUG: findPr(renovate/tailwindcss-4.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/tailwindcss-4.x)
+DEBUG: findPr(renovate/tailwindcss-4.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/tailwindcss-4.x)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/tailwindcss-4.x)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/tailwindcss-4.x)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/tailwindcss-4.x)
+DEBUG: findPr(renovate/tailwindcss-4.x, chore(deps): update dependency tailwindcss to v4, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/tailwindcss-4.x)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/tailwindcss-4.x)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/tailwindcss-4.x)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-7.x)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-7.x)
+DEBUG: getBranchPr(renovate/vite-7.x) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-7.x)
+DEBUG: findPr(renovate/vite-7.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-7.x)
+DEBUG: findPr(renovate/vite-7.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-7.x)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-7.x)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-7.x)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-7.x)
+DEBUG: findPr(renovate/vite-7.x, chore(deps): update dependency vite to v7, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-7.x)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-7.x)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/vite-7.x)
+DEBUG: syncBranchState() (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postgres-17.x)
+DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postgres-17.x)
+DEBUG: getBranchPr(renovate/postgres-17.x) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postgres-17.x)
+DEBUG: findPr(renovate/postgres-17.x, undefined, open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postgres-17.x)
+DEBUG: findPr(renovate/postgres-17.x, undefined, closed) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postgres-17.x)
+DEBUG: branchExists=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postgres-17.x)
+DEBUG: dependencyDashboardCheck=undefined (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postgres-17.x)
+DEBUG: Check for closed PR because recreating closed PRs is disabled. (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postgres-17.x)
+DEBUG: findPr(renovate/postgres-17.x, chore(deps): update postgres docker tag to v17, !open) (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postgres-17.x)
+DEBUG: prAlreadyExisted=false (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postgres-17.x)
+DEBUG: Reached branch limit - skipping branch creation (repository=gitpod-samples/gitpodflix-demo, branch=renovate/postgres-17.x)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: getPrCache() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: ensureDependencyDashboard() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Closing Dependency Dashboard (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: validateReconfigureBranch() (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: No reconfigure branch found (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Removing any stale branches (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: config.repoIsOnboarded=true (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: No renovate branches found (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: PackageFiles.clear() - Package files deleted (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Repo is activated (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Branch summary (repository=gitpod-samples/gitpodflix-demo)
+       "cacheModified": undefined,
+       "baseBranches": [{"branchName": "main", "sha": "6d5bf4aec475457958ae7b060abb92588888b325"}],
+       "branches": [],
+       "defaultBranch": "main",
+       "inactiveBranches": [
+         "renovate/cors-2.x-lockfile",
+         "renovate/express-4.x-lockfile",
+         "renovate/react-18.x-lockfile",
+         "renovate/react-dom-18.x-lockfile",
+         "renovate/nodemon-3.x-lockfile",
+         "renovate/postcss-8.x-lockfile",
+         "renovate/react-router-dom-6.x-lockfile",
+         "renovate/vite-5.x-lockfile",
+         "renovate/node-20.x-lockfile",
+         "renovate/vitejs-plugin-react-4.x-lockfile",
+         "renovate/dotenv-16.x-lockfile",
+         "renovate/pg-8.x-lockfile",
+         "renovate/ts-jest-29.x-lockfile",
+         "renovate/node-24.x",
+         "renovate/dotenv-17.x",
+         "renovate/express-5.x",
+         "renovate/jest-30.x",
+         "renovate/react-19.x",
+         "renovate/react-dom-19.x",
+         "renovate/react-router-dom-7.x",
+         "renovate/tailwindcss-4.x",
+         "renovate/vite-7.x",
+         "renovate/postgres-17.x"
+       ]
+DEBUG: branches info extended (repository=gitpod-samples/gitpodflix-demo)
+       "branchesInformation": [
+         {
+           "branchName": "renovate/cors-2.x-lockfile",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency @types/cors to v2.8.19",
+           "result": "already-existed",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "@types/cors",
+               "displayPending": "",
+               "fixedVersion": "2.8.17",
+               "currentVersion": "2.8.17",
+               "currentValue": "^2.8.17",
+               "newValue": "^2.8.17",
+               "newVersion": "2.8.19",
+               "packageFile": "backend/catalog/package.json",
+               "updateType": "patch",
+               "packageName": "@types/cors"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/express-4.x-lockfile",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency @types/express to v4.17.23",
+           "result": "already-existed",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "@types/express",
+               "displayPending": "",
+               "fixedVersion": "4.17.21",
+               "currentVersion": "4.17.21",
+               "currentValue": "^4.17.21",
+               "newValue": "^4.17.21",
+               "newVersion": "4.17.23",
+               "packageFile": "backend/catalog/package.json",
+               "updateType": "patch",
+               "packageName": "@types/express"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/react-18.x-lockfile",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency @types/react to v18.3.23",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "@types/react",
+               "displayPending": "",
+               "fixedVersion": "18.3.20",
+               "currentVersion": "18.3.20",
+               "currentValue": "^18.2.55",
+               "newValue": "^18.2.55",
+               "newVersion": "18.3.23",
+               "packageFile": "frontend/package.json",
+               "updateType": "patch",
+               "packageName": "@types/react"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/react-dom-18.x-lockfile",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency @types/react-dom to v18.3.7",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "@types/react-dom",
+               "displayPending": "",
+               "fixedVersion": "18.3.6",
+               "currentVersion": "18.3.6",
+               "currentValue": "^18.2.19",
+               "newValue": "^18.2.19",
+               "newVersion": "18.3.7",
+               "packageFile": "frontend/package.json",
+               "updateType": "patch",
+               "packageName": "@types/react-dom"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/nodemon-3.x-lockfile",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency nodemon to v3.1.10",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "nodemon",
+               "displayPending": "",
+               "fixedVersion": "3.1.9",
+               "currentVersion": "3.1.9",
+               "currentValue": "^3.0.2",
+               "newValue": "^3.0.2",
+               "newVersion": "3.1.10",
+               "packageFile": "backend/catalog/package.json",
+               "updateType": "patch",
+               "packageName": "nodemon"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/postcss-8.x-lockfile",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency postcss to v8.5.6",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "postcss",
+               "displayPending": "",
+               "fixedVersion": "8.5.3",
+               "currentVersion": "8.5.3",
+               "currentValue": "^8.5.3",
+               "newValue": "^8.5.3",
+               "newVersion": "8.5.6",
+               "packageFile": "frontend/package.json",
+               "updateType": "patch",
+               "packageName": "postcss"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/react-router-dom-6.x-lockfile",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency react-router-dom to v6.30.1",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "react-router-dom",
+               "displayPending": "",
+               "fixedVersion": "6.30.0",
+               "currentVersion": "6.30.0",
+               "currentValue": "^6.22.1",
+               "newValue": "^6.22.1",
+               "newVersion": "6.30.1",
+               "packageFile": "frontend/package.json",
+               "updateType": "patch",
+               "packageName": "react-router-dom"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/vite-5.x-lockfile",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency vite to v5.4.19",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "vite",
+               "displayPending": "",
+               "fixedVersion": "5.4.18",
+               "currentVersion": "5.4.18",
+               "currentValue": "^5.1.0",
+               "newValue": "^5.1.0",
+               "newVersion": "5.4.19",
+               "packageFile": "frontend/package.json",
+               "updateType": "patch",
+               "packageName": "vite"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/node-20.x-lockfile",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency @types/node to v20.19.7",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "@types/node",
+               "displayPending": "",
+               "fixedVersion": "20.17.30",
+               "currentVersion": "20.17.30",
+               "currentValue": "^20.10.5",
+               "newValue": "^20.10.5",
+               "newVersion": "20.19.7",
+               "packageFile": "backend/catalog/package.json",
+               "updateType": "minor",
+               "packageName": "@types/node"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/vitejs-plugin-react-4.x-lockfile",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency @vitejs/plugin-react to v4.6.0",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "@vitejs/plugin-react",
+               "displayPending": "",
+               "fixedVersion": "4.4.0",
+               "currentVersion": "4.4.0",
+               "currentValue": "^4.2.1",
+               "newValue": "^4.2.1",
+               "newVersion": "4.6.0",
+               "packageFile": "frontend/package.json",
+               "updateType": "minor",
+               "packageName": "@vitejs/plugin-react"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/dotenv-16.x-lockfile",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency dotenv to v16.6.1",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "dotenv",
+               "displayPending": "",
+               "fixedVersion": "16.5.0",
+               "currentVersion": "16.5.0",
+               "currentValue": "^16.3.1",
+               "newValue": "^16.3.1",
+               "newVersion": "16.6.1",
+               "packageFile": "backend/catalog/package.json",
+               "updateType": "minor",
+               "packageName": "dotenv"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/pg-8.x-lockfile",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency pg to v8.16.3",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "pg",
+               "displayPending": "",
+               "fixedVersion": "8.14.1",
+               "currentVersion": "8.14.1",
+               "currentValue": "^8.11.3",
+               "newValue": "^8.11.3",
+               "newVersion": "8.16.3",
+               "packageFile": "backend/catalog/package.json",
+               "updateType": "minor",
+               "packageName": "pg"
+             },
+             {
+               "datasource": "npm",
+               "depName": "@types/pg",
+               "displayPending": "",
+               "fixedVersion": "8.11.13",
+               "currentVersion": "8.11.13",
+               "currentValue": "^8.10.9",
+               "newValue": "^8.10.9",
+               "newVersion": "8.15.4",
+               "packageFile": "backend/catalog/package.json",
+               "updateType": "minor",
+               "packageName": "@types/pg"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/ts-jest-29.x-lockfile",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency ts-jest to v29.4.0",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "ts-jest",
+               "displayPending": "",
+               "fixedVersion": "29.3.2",
+               "currentVersion": "29.3.2",
+               "currentValue": "^29.1.1",
+               "newValue": "^29.1.1",
+               "newVersion": "29.4.0",
+               "packageFile": "backend/catalog/package.json",
+               "updateType": "minor",
+               "packageName": "ts-jest"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/node-24.x",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency @types/node to v24",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "@types/node",
+               "displayPending": "",
+               "fixedVersion": "20.17.30",
+               "currentVersion": "20.17.30",
+               "currentValue": "^20.10.5",
+               "newValue": "^24.0.0",
+               "newVersion": "24.0.13",
+               "packageFile": "backend/catalog/package.json",
+               "updateType": "major",
+               "packageName": "@types/node"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/dotenv-17.x",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency dotenv to v17",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "dotenv",
+               "displayPending": "",
+               "fixedVersion": "16.5.0",
+               "currentVersion": "16.5.0",
+               "currentValue": "^16.3.1",
+               "newValue": "^17.0.0",
+               "newVersion": "17.2.0",
+               "packageFile": "backend/catalog/package.json",
+               "updateType": "major",
+               "packageName": "dotenv"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/express-5.x",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency express to v5",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "express",
+               "displayPending": "",
+               "fixedVersion": "4.21.2",
+               "currentVersion": "4.21.2",
+               "currentValue": "^4.18.2",
+               "newValue": "^5.0.0",
+               "newVersion": "5.1.0",
+               "packageFile": "backend/catalog/package.json",
+               "updateType": "major",
+               "packageName": "express"
+             },
+             {
+               "datasource": "npm",
+               "depName": "@types/express",
+               "displayPending": "",
+               "fixedVersion": "4.17.21",
+               "currentVersion": "4.17.21",
+               "currentValue": "^4.17.21",
+               "newValue": "^5.0.0",
+               "newVersion": "5.0.3",
+               "packageFile": "backend/catalog/package.json",
+               "updateType": "major",
+               "packageName": "@types/express"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/jest-30.x",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency jest to v30",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "jest",
+               "displayPending": "",
+               "fixedVersion": "29.7.0",
+               "currentVersion": "29.7.0",
+               "currentValue": "^29.7.0",
+               "newValue": "^30.0.0",
+               "newVersion": "30.0.4",
+               "packageFile": "backend/catalog/package.json",
+               "updateType": "major",
+               "packageName": "jest"
+             },
+             {
+               "datasource": "npm",
+               "depName": "@types/jest",
+               "displayPending": "",
+               "fixedVersion": "29.5.14",
+               "currentVersion": "29.5.14",
+               "currentValue": "^29.5.11",
+               "newValue": "^30.0.0",
+               "newVersion": "30.0.0",
+               "packageFile": "backend/catalog/package.json",
+               "updateType": "major",
+               "packageName": "@types/jest"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/react-19.x",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency react to v19",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "react",
+               "displayPending": "",
+               "fixedVersion": "18.3.1",
+               "currentVersion": "18.3.1",
+               "currentValue": "^18.2.0",
+               "newValue": "^19.0.0",
+               "newVersion": "19.1.0",
+               "packageFile": "frontend/package.json",
+               "updateType": "major",
+               "packageName": "react"
+             },
+             {
+               "datasource": "npm",
+               "depName": "@types/react",
+               "displayPending": "",
+               "fixedVersion": "18.3.20",
+               "currentVersion": "18.3.20",
+               "currentValue": "^18.2.55",
+               "newValue": "^19.0.0",
+               "newVersion": "19.1.8",
+               "packageFile": "frontend/package.json",
+               "updateType": "major",
+               "packageName": "@types/react"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/react-dom-19.x",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency react-dom to v19",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "react-dom",
+               "displayPending": "",
+               "fixedVersion": "18.3.1",
+               "currentVersion": "18.3.1",
+               "currentValue": "^18.2.0",
+               "newValue": "^19.0.0",
+               "newVersion": "19.1.0",
+               "packageFile": "frontend/package.json",
+               "updateType": "major",
+               "packageName": "react-dom"
+             },
+             {
+               "datasource": "npm",
+               "depName": "@types/react-dom",
+               "displayPending": "",
+               "fixedVersion": "18.3.6",
+               "currentVersion": "18.3.6",
+               "currentValue": "^18.2.19",
+               "newValue": "^19.0.0",
+               "newVersion": "19.1.6",
+               "packageFile": "frontend/package.json",
+               "updateType": "major",
+               "packageName": "@types/react-dom"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/react-router-dom-7.x",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency react-router-dom to v7",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "react-router-dom",
+               "displayPending": "",
+               "fixedVersion": "6.30.0",
+               "currentVersion": "6.30.0",
+               "currentValue": "^6.22.1",
+               "newValue": "^7.0.0",
+               "newVersion": "7.6.3",
+               "packageFile": "frontend/package.json",
+               "updateType": "major",
+               "packageName": "react-router-dom"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/tailwindcss-4.x",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency tailwindcss to v4",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "tailwindcss",
+               "displayPending": "",
+               "fixedVersion": "3.4.17",
+               "currentVersion": "3.4.17",
+               "currentValue": "^3.4.17",
+               "newValue": "^4.0.0",
+               "newVersion": "4.1.11",
+               "packageFile": "frontend/package.json",
+               "updateType": "major",
+               "packageName": "tailwindcss"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/vite-7.x",
+           "prNo": null,
+           "prTitle": "chore(deps): update dependency vite to v7",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "npm",
+               "depName": "vite",
+               "displayPending": "",
+               "fixedVersion": "5.4.18",
+               "currentVersion": "5.4.18",
+               "currentValue": "^5.1.0",
+               "newValue": "^7.0.0",
+               "newVersion": "7.0.4",
+               "packageFile": "frontend/package.json",
+               "updateType": "major",
+               "packageName": "vite"
+             }
+           ]
+         },
+         {
+           "branchName": "renovate/postgres-17.x",
+           "prNo": null,
+           "prTitle": "chore(deps): update postgres docker tag to v17",
+           "result": "branch-limit-reached",
+           "upgrades": [
+             {
+               "datasource": "docker",
+               "depName": "postgres",
+               "displayPending": "",
+               "fixedVersion": "15",
+               "currentVersion": "15",
+               "currentValue": "15",
+               "newValue": "17",
+               "newVersion": "17",
+               "packageFile": "database/main/docker-compose.yml",
+               "updateType": "major",
+               "packageName": "postgres"
+             }
+           ]
+         }
+       ]
+DEBUG: Renovate repository PR statistics (repository=gitpod-samples/gitpodflix-demo)
+       "stats": {"total": 20, "open": 1, "closed": 10, "merged": 9}
+DEBUG: Repository result: done, status: activated, enabled: true, onboarded: true (repository=gitpod-samples/gitpodflix-demo)
+DEBUG: Repository timing splits (milliseconds) (repository=gitpod-samples/gitpodflix-demo)
+       "splits": {"init": 1960, "extract": 231, "lookup": 1662, "onboarding": 1, "update": 418},
+       "total": 4285
+DEBUG: Package cache statistics (repository=gitpod-samples/gitpodflix-demo)
+       "get": {"count": 35, "avgMs": 319, "medianMs": 345, "maxMs": 847, "totalMs": 11160},
+       "set": {"count": 0, "avgMs": 0, "medianMs": 0, "maxMs": 0, "totalMs": 0}
+DEBUG: HTTP statistics (repository=gitpod-samples/gitpodflix-demo)
+       "urls": {
+         "https://api.github.com/graphql": {"POST": {"200": 3}},
+         "https://api.github.com/repos/gitpod-samples/gitpodflix-demo/issues/38/comments": {
+           "GET": {"200": 1}
+         },
+         "https://api.github.com/repos/gitpod-samples/gitpodflix-demo/issues/39/comments": {
+           "GET": {"200": 1}
+         },
+         "https://api.github.com/repos/gitpod-samples/gitpodflix-demo/pulls": {
+           "GET": {"200": 1}
+         }
+       },
+       "hosts": {
+         "api.github.com": {
+           "count": 6,
+           "reqAvgMs": 236,
+           "reqMedianMs": 243,
+           "reqMaxMs": 295,
+           "queueAvgMs": 0,
+           "queueMedianMs": 0,
+           "queueMaxMs": 0
+         }
+       },
+       "requests": 6
+DEBUG: HTTP cache statistics (repository=gitpod-samples/gitpodflix-demo)
+       "https://api.github.com": {
+         "/repos/gitpod-samples/gitpodflix-demo/issues/38/comments": {
+           "hit": 0,
+           "miss": 1
+         },
+         "/repos/gitpod-samples/gitpodflix-demo/issues/39/comments": {
+           "hit": 0,
+           "miss": 1
+         },
+         "/repos/gitpod-samples/gitpodflix-demo/pulls": {"hit": 0, "miss": 1}
+       },
+       "https://registry.npmjs.org": {
+         "/@types%2Fcors": {"hit": 0, "miss": 0, "localHit": 1},
+         "/@types%2Fexpress": {"hit": 0, "miss": 0, "localHit": 1},
+         "/@types%2Fjest": {"hit": 0, "miss": 0, "localHit": 1},
+         "/@types%2Fnode": {"hit": 0, "miss": 0, "localHit": 1},
+         "/@types%2Fpg": {"hit": 0, "miss": 0, "localHit": 1},
+         "/@types%2Freact": {"hit": 0, "miss": 0, "localHit": 1},
+         "/@types%2Freact-dom": {"hit": 0, "miss": 0, "localHit": 1},
+         "/@vitejs%2Fplugin-react": {"hit": 0, "miss": 0, "localHit": 1},
+         "/autoprefixer": {"hit": 0, "miss": 0, "localHit": 1},
+         "/cors": {"hit": 0, "miss": 0, "localHit": 1},
+         "/dotenv": {"hit": 0, "miss": 0, "localHit": 1},
+         "/express": {"hit": 0, "miss": 0, "localHit": 1},
+         "/jest": {"hit": 0, "miss": 0, "localHit": 1},
+         "/nodemon": {"hit": 0, "miss": 0, "localHit": 1},
+         "/pg": {"hit": 0, "miss": 0, "localHit": 1},
+         "/postcss": {"hit": 0, "miss": 0, "localHit": 1},
+         "/react": {"hit": 0, "miss": 0, "localHit": 1},
+         "/react-dom": {"hit": 0, "miss": 0, "localHit": 1},
+         "/react-router-dom": {"hit": 0, "miss": 0, "localHit": 1},
+         "/tailwindcss": {"hit": 0, "miss": 0, "localHit": 1},
+         "/ts-jest": {"hit": 0, "miss": 0, "localHit": 1},
+         "/ts-node": {"hit": 0, "miss": 0, "localHit": 1},
+         "/typescript": {"hit": 0, "miss": 0, "localHit": 1},
+         "/vite": {"hit": 0, "miss": 0, "localHit": 1}
+       }
+DEBUG: Lookup statistics (repository=gitpod-samples/gitpodflix-demo)
+       "docker": {"count": 7, "avgMs": 340, "medianMs": 406, "maxMs": 420, "totalMs": 2377},
+       "npm": {"count": 24, "avgMs": 417, "medianMs": 420, "maxMs": 1023, "totalMs": 10013}
+DEBUG: dns cache (repository=gitpod-samples/gitpodflix-demo)
+       "hosts": []
+ INFO: Repository finished (repository=gitpod-samples/gitpodflix-demo)
+       "cloned": true,
+       "durationMs": 4285
+DEBUG: Checking file package cache for expired items
+DEBUG: Deleted 0 of 37 file cached entries in 25ms
