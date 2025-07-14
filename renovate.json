@@ -3,27 +3,9 @@
   "extends": [],
   "enabledManagers": ["npm"],
   "includePaths": ["backend/catalog/package.json"],
-  "packageRules": [
-    {
-      "matchPackageNames": ["jest"],
-      "enabled": true,
-      "recreateWhen": "always",
-      "allowedVersions": ">=30.0.0"
-    },
-    {
-      "matchPackageNames": ["@types/jest"],
-      "enabled": true,
-      "recreateWhen": "always",
-      "allowedVersions": ">=30.0.0"
-    },
-    {
-      "matchPackageNames": ["*"],
-      "excludePackageNames": ["jest", "@types/jest"],
-      "enabled": false
-    }
-  ],
+  "includeDeps": ["jest", "@types/jest"],
+  "recreateWhen": "always",
   "prConcurrentLimit": 0,
   "prHourlyLimit": 0,
-  "branchConcurrentLimit": 0,
-  "recreateWhen": "always"
+  "branchConcurrentLimit": 0
 }
