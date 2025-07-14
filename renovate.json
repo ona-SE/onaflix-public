@@ -5,9 +5,16 @@
   "includePaths": ["backend/catalog/package.json"],
   "packageRules": [
     {
-      "matchPackageNames": ["jest", "@types/jest"],
+      "matchPackageNames": ["jest"],
       "enabled": true,
-      "recreateWhen": "always"
+      "recreateWhen": "always",
+      "allowedVersions": ">=30.0.0"
+    },
+    {
+      "matchPackageNames": ["@types/jest"],
+      "enabled": true,
+      "recreateWhen": "always",
+      "allowedVersions": ">=30.0.0"
     },
     {
       "matchPackageNames": ["*"],
