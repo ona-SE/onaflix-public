@@ -9,7 +9,7 @@
     "build": "tsc",
     "test": "jest",
     "setup": "./scripts/setup.sh",
-    "renovate:jest": "echo 'Creating Jest v30 pull request...' && cd /workspaces/gitpodflix-demo && RENOVATE_TOKEN=$GH_CLI_TOKEN renovate --platform=github gitpod-samples/gitpodflix-demo"
+    "renovate:jest": "echo 'Creating Jest v30 pull request...' && cd /workspaces/gitpodflix-demo && RENOVATE_TOKEN=$GH_CLI_TOKEN renovate --platform=github --recreate-when=always gitpod-samples/gitpodflix-demo"
   },
   "dependencies": {
     "express": "^4.18.2",

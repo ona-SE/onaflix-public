@@ -6,10 +6,17 @@
   "packageRules": [
     {
       "matchPackageNames": ["jest", "@types/jest"],
-      "enabled": true
+      "enabled": true,
+      "recreateWhen": "always"
+    },
+    {
+      "matchPackageNames": ["*"],
+      "excludePackageNames": ["jest", "@types/jest"],
+      "enabled": false
     }
   ],
   "prConcurrentLimit": 0,
   "prHourlyLimit": 0,
-  "branchConcurrentLimit": 0
+  "branchConcurrentLimit": 0,
+  "recreateWhen": "always"
 }
