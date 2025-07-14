@@ -8,7 +8,8 @@
     "dev": "nodemon --exec ts-node src/index.ts",
     "build": "tsc",
     "test": "jest",
-    "setup": "./scripts/setup.sh"
+    "setup": "./scripts/setup.sh",
+    "renovate": "RENOVATE_TOKEN=$GH_CLI_TOKEN LOG_LEVEL=debug renovate --platform=github --dry-run=full gitpod-samples/gitpodflix-demo > renovate_debug.txt 2>&1 && echo 'Renovate scan complete! Check renovate_debug.txt for full output' && if [ \"$npm_config_filter\" ]; then echo 'Filtering results for:' $npm_config_filter && grep -i -A 20 -B 5 \"$npm_config_filter\" renovate_debug.txt; else echo 'Use --filter=<package> to filter results for specific dependency'; fi"
   },
   "dependencies": {
     "express": "^4.18.2",
