@@ -9,7 +9,9 @@ export default defineConfig({
     allowedHosts: [
       '.gitpod.dev',
       'localhost',
-      '127.0.0.1'
+      '127.0.0.1',
+      '.sales-emea.flex.doptig.cloud',
+      '.sales-us.flex.doptig.cloud'
     ]
   },
   css: {
