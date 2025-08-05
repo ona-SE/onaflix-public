@@ -4,14 +4,7 @@ set -e
 
 echo "🚀 Starting development environment setup..."
 
-# Install system dependencies
-echo "📦 Installing system dependencies..."
-sudo apt-get update && sudo apt-get install -y --no-install-recommends \
-    postgresql-client \
-    && sudo apt-get clean \
-    && sudo rm -rf /var/lib/apt/lists/*
-
-# Verify PostgreSQL client tools are installed
+# Verify PostgreSQL client tools are installed (already installed in Dockerfile)
 if ! command -v pg_isready &> /dev/null; then
     echo "❌ PostgreSQL client tools not properly installed"
     exit 1

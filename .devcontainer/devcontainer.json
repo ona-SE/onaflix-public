@@ -1,6 +1,12 @@
 {
   "name": "GitpodFlix Dev Environment",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:20-bullseye",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "..",
+    "options": [
+      "--build-arg", "BUILDKIT_INLINE_CACHE=1"
+    ]
+  },
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": true,
@@ -57,10 +63,10 @@
     }
   },
   "remoteUser": "node",
-  "updateContentCommand": "npm install -g nodemon && cd frontend && npm ci && cd ../backend/catalog && npm ci",
   "mounts": [
     "source=gitpodflix-node-modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
     "source=gitpodflix-frontend-node-modules,target=${containerWorkspaceFolder}/frontend/node_modules,type=volume",
-    "source=gitpodflix-catalog-node-modules,target=${containerWorkspaceFolder}/backend/catalog/node_modules,type=volume"
+    "source=gitpodflix-catalog-node-modules,target=${containerWorkspaceFolder}/backend/catalog/node_modules,type=volume",
+    "source=gitpodflix-npm-cache,target=/root/.npm,type=volume"
   ]
 }
