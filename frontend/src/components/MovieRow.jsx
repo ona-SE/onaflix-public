@@ -16,20 +16,20 @@ function MovieRow({ title, movies, showTitle = true, onMovieClick }) {
     <div className="w-full">
       {showTitle && <h2 className="text-2xl font-bold mb-4 px-4 md:px-8">{title}</h2>}
       <div className="relative">
-        <div className="grid grid-cols-4 gap-4 pb-4 px-4 md:px-8">
+        <div className="grid grid-cols-5 gap-3 pb-4 px-4 md:px-8">
           {movies.map((movie) => (
             <div 
               key={movie.id} 
               className="group cursor-pointer transform transition-all duration-300 hover:scale-105"
               onClick={() => handleMovieClick(movie)}
             >
-              <div className="relative overflow-hidden rounded-lg">
+              <div className="relative overflow-hidden rounded-lg aspect-[2/3]">
                 <img
                   src={movie.image_url}
                   alt={movie.title}
-                  className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
+                  className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-110"
                 />
-                
+
                 {/* Hover Overlay */}
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all duration-300 flex items-center justify-center">
                   <div className="transform scale-0 group-hover:scale-100 transition-transform duration-300">

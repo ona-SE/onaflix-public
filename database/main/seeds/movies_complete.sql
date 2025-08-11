@@ -369,4 +369,40 @@ INSERT INTO movies (
     'movie',
     ARRAY['avengers', 'marvel', 'superhero', 'finale'],
     ARRAY['modernBlockbusters']
+),
+
+-- Additional movies to fill out categories to 5 each
+(
+    'The Shawshank Redemption',
+    'Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.',
+    1994,
+    9.3,
+    'https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg',
+    'https://www.youtube.com/watch?v=6hB3S9bIaco',
+    '6hB3S9bIaco',
+    'https://www.youtube.com/watch?v=6hB3S9bIaco',
+    ARRAY['Drama'],
+    'Frank Darabont',
+    ARRAY['Tim Robbins', 'Morgan Freeman', 'Bob Gunton', 'William Sadler'],
+    142,
+    'movie',
+    ARRAY['prison', 'hope', 'friendship', 'redemption'],
+    ARRAY['trending']
+),
+(
+    'Nomadland',
+    'A woman in her sixties embarks on a journey through the western United States after losing everything in the Great Recession, living in a van and working seasonal jobs.',
+    2020,
+    7.3,
+    'https://m.media-amazon.com/images/M/MV5BNDIzNDU0YzEtYzE5Ni00ZjlkLTk5ZjgtNjM3NWE4YzA3Nzk3XkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_SX300.jpg',
+    'https://www.youtube.com/watch?v=6sxCFZ8_d84',
+    '6sxCFZ8_d84',
+    'https://www.youtube.com/watch?v=6sxCFZ8_d84',
+    ARRAY['Drama'],
+    'Chloé Zhao',
+    ARRAY['Frances McDormand', 'David Strathairn', 'Linda May', 'Charlene Swankie'],
+    107,
+    'movie',
+    ARRAY['nomad', 'recession', 'journey', 'survival'],
+    ARRAY['awardWinners']
 );

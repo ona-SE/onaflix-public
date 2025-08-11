@@ -29,23 +29,23 @@ function Home() {
         // Organize movies into categories using the new categories column
         const trending = allMovies.filter(movie => 
           movie.categories && movie.categories.includes('trending')
-        ).slice(0, 4);
+        ).slice(0, 5);
         
         const popular = allMovies.filter(movie => 
           movie.categories && movie.categories.includes('popular')
-        ).slice(0, 4);
+        ).slice(0, 5);
         
         const scifi = allMovies.filter(movie => 
           movie.categories && movie.categories.includes('scifi')
-        ).slice(0, 4);
+        ).slice(0, 5);
         
         const awardWinners = allMovies.filter(movie => 
           movie.categories && movie.categories.includes('awardWinners')
-        ).slice(0, 4);
+        ).slice(0, 5);
         
         const modernBlockbusters = allMovies.filter(movie => 
           movie.categories && movie.categories.includes('modernBlockbusters')
-        ).slice(0, 4);
+        ).slice(0, 5);
 
         setMovies({ trending, popular, scifi, awardWinners, modernBlockbusters });
       } catch (error) {
