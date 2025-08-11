@@ -131,7 +131,7 @@ tasks:
       - manual
       - postEnvironmentStart
     command: |
-      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f seeds/01_seed_trending.sql
+      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f seeds/movies_complete.sql
 ```
 
 This includes:

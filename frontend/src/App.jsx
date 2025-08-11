@@ -26,24 +26,25 @@ function Home() {
       try {
         const allMovies = await fetchMovies();
         
-        // Organize movies into categories
-        const trending = allMovies.filter(movie => movie.rating >= 8.5).slice(0, 4);
-        const popular = allMovies.filter(movie => movie.rating >= 8.0 && movie.rating < 8.5).slice(0, 4);
+        // Organize movies into categories using the new categories column
+        const trending = allMovies.filter(movie => 
+          movie.categories && movie.categories.includes('trending')
+        ).slice(0, 4);
+        
+        const popular = allMovies.filter(movie => 
+          movie.categories && movie.categories.includes('popular')
+        ).slice(0, 4);
+        
         const scifi = allMovies.filter(movie => 
-          movie.genres && movie.genres.some(genre => 
-            genre.toLowerCase().includes('sci-fi') || 
-            genre.toLowerCase().includes('science fiction')
-          )
+          movie.categories && movie.categories.includes('scifi')
         ).slice(0, 4);
         
-        // Award Winners - movies that won major awards (focusing on recent Oscar winners)
         const awardWinners = allMovies.filter(movie => 
-          ['Parasite', 'Green Book', 'Moonlight', 'The Shape of Water'].includes(movie.title)
+          movie.categories && movie.categories.includes('awardWinners')
         ).slice(0, 4);
         
-        // Modern Blockbusters - recent high-grossing films
         const modernBlockbusters = allMovies.filter(movie => 
-          ['Avatar: The Way of Water', 'Top Gun: Maverick', 'Spider-Man: No Way Home', 'Avengers: Endgame'].includes(movie.title)
+          movie.categories && movie.categories.includes('modernBlockbusters')
         ).slice(0, 4);
 
         setMovies({ trending, popular, scifi, awardWinners, modernBlockbusters });

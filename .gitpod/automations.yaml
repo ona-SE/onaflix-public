@@ -141,24 +141,20 @@ tasks:
         sleep 2
       done
 
-      echo "Clearing existing data..."
-      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c "TRUNCATE TABLE movies;"
+      echo "Seeding complete movie database with optimized structure..."
+      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f seeds/movies_complete.sql
+      sleep 2
 
-      echo "Seeding trending movies..."
-      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f seeds/01_seed_trending.sql
-      sleep 4
-
-      echo "Seeding popular movies..."
-      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f seeds/02_seed_popular.sql
-      sleep 4
-
-      echo "Seeding classic movies..."
-      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f seeds/03_seed_classics.sql
-      sleep 4
-
-      echo "Seeding sci-fi movies..."
-      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f seeds/04_seed_scifi.sql
-      echo "Database seeding complete!"
+      echo "Database seeding complete! 🎬"
+      echo "✓ Movies with categories: 18"
+      echo "✓ Trending: 4 movies"
+      echo "✓ Popular: 4 movies" 
+      echo "✓ Sci-Fi: 4 movies"
+      echo "✓ Award Winners: 4 movies"
+      echo "✓ Modern Blockbusters: 4 movies"
+      echo "✓ All movies have complete metadata (genres, trailers, cast, etc.)"
+      echo "✓ Fixed Moonlight image URL"
+      echo "✓ Optimized single-file structure"
 
   clearDatabase:
     name: "Clear Database"

@@ -1,10 +1,13 @@
 -- Add search and filtering metadata to movies table
 ALTER TABLE movies ADD COLUMN IF NOT EXISTS genres TEXT[];
 ALTER TABLE movies ADD COLUMN IF NOT EXISTS director VARCHAR(255);
-ALTER TABLE movies ADD COLUMN IF NOT EXISTS cast TEXT[];
+ALTER TABLE movies ADD COLUMN IF NOT EXISTS movie_cast TEXT[];
 ALTER TABLE movies ADD COLUMN IF NOT EXISTS duration INTEGER; -- in minutes
 ALTER TABLE movies ADD COLUMN IF NOT EXISTS content_type VARCHAR(20) DEFAULT 'movie';
 ALTER TABLE movies ADD COLUMN IF NOT EXISTS keywords TEXT[];
+ALTER TABLE movies ADD COLUMN IF NOT EXISTS trailer_url VARCHAR(255);
+ALTER TABLE movies ADD COLUMN IF NOT EXISTS youtube_trailer_id VARCHAR(50);
+ALTER TABLE movies ADD COLUMN IF NOT EXISTS categories TEXT[];
 
 -- Create indexes for better search performance
 CREATE INDEX IF NOT EXISTS idx_movies_title_search ON movies USING gin(to_tsvector('english', title));
