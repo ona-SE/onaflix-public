@@ -271,7 +271,7 @@ INSERT INTO movies (
     'A young African-American man grapples with his identity and sexuality while experiencing the everyday struggles of childhood, adolescence, and burgeoning adulthood.',
     2016,
     7.4,
-    'https://image.tmdb.org/t/p/w500/qJdpz2sxenu0rF4h6oDVZf3FCMS.jpg',
+    'https://m.media-amazon.com/images/M/MV5BNzQxNTIyODAxMV5BMl5BanBnXkFtZTgwNzQyMDA3OTE@._V1_SX300.jpg',
     'https://www.youtube.com/watch?v=9NJj12tJzqc',
     '9NJj12tJzqc',
     'https://www.youtube.com/watch?v=9NJj12tJzqc',
