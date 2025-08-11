@@ -11,7 +11,9 @@ function Home() {
   const [movies, setMovies] = useState({
     trending: [],
     popular: [],
-    scifi: []
+    scifi: [],
+    awardWinners: [],
+    modernBlockbusters: []
   });
   const [searchResults, setSearchResults] = useState([])
   const [isSearchActive, setIsSearchActive] = useState(false)
@@ -23,12 +25,28 @@ function Home() {
     const loadMovies = async () => {
       try {
         const allMovies = await fetchMovies();
-        // Organize movies into categories based on rating
-        const trending = allMovies.slice(0, 4);
-        const popular = allMovies.slice(4, 8);
-        const scifi = allMovies.slice(8, 12);
         
-        setMovies({ trending, popular, scifi });
+        // Organize movies into categories
+        const trending = allMovies.filter(movie => movie.rating >= 8.5).slice(0, 4);
+        const popular = allMovies.filter(movie => movie.rating >= 8.0 && movie.rating < 8.5).slice(0, 4);
+        const scifi = allMovies.filter(movie => 
+          movie.genres && movie.genres.some(genre => 
+            genre.toLowerCase().includes('sci-fi') || 
+            genre.toLowerCase().includes('science fiction')
+          )
+        ).slice(0, 4);
+        
+        // Award Winners - movies that won major awards (focusing on recent Oscar winners)
+        const awardWinners = allMovies.filter(movie => 
+          ['Parasite', 'Nomadland', 'Green Book', 'Moonlight', 'The Shape of Water'].includes(movie.title)
+        ).slice(0, 5);
+        
+        // Modern Blockbusters - recent high-grossing films
+        const modernBlockbusters = allMovies.filter(movie => 
+          ['Avatar: The Way of Water', 'Top Gun: Maverick', 'Black Panther: Wakanda Forever', 'Spider-Man: No Way Home', 'Avengers: Endgame'].includes(movie.title)
+        ).slice(0, 5);
+        
+        setMovies({ trending, popular, scifi, awardWinners, modernBlockbusters });
       } catch (error) {
         console.error('Error loading movies:', error);
       }
@@ -102,6 +120,16 @@ function Home() {
               movies={movies.scifi} 
               onMovieClick={handleMovieClick}
             />
+            <MovieRow 
+              title="Award Winners" 
+              movies={movies.awardWinners} 
+              onMovieClick={handleMovieClick}
+            />
+            <MovieRow 
+              title="Modern Blockbusters" 
+              movies={movies.modernBlockbusters} 
+              onMovieClick={handleMovieClick}
+            />
           </div>
         </>
       )}
@@ -120,6 +148,7 @@ function Home() {
 import VideoPlayerDebug from './components/VideoPlayerDebug'
 import QuickTest from './components/QuickTest'
 import AudioTest from './components/AudioTest'
+import CategoryTest from './components/CategoryTest'
 
 const router = createBrowserRouter([
   {
@@ -137,6 +166,10 @@ const router = createBrowserRouter([
   {
     path: "/audio",
     element: <AudioTest />,
+  },
+  {
+    path: "/categories",
+    element: <CategoryTest />,
   }
 ], {
   future: {
