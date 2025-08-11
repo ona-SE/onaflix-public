@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, createBrowserRouter, RouterProv
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import MovieRow from './components/MovieRow'
+import SearchResults from './components/SearchResults'
 import { fetchMovies } from './services/api'
 
 function Home() {
@@ -11,6 +12,9 @@ function Home() {
     popular: [],
     scifi: []
   });
+  const [searchResults, setSearchResults] = useState([])
+  const [isSearchActive, setIsSearchActive] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     const loadMovies = async () => {
@@ -30,15 +34,52 @@ function Home() {
     loadMovies();
   }, []);
 
+  const handleSearchResults = (results) => {
+    setSearchResults(results)
+    setIsSearchActive(results.length > 0)
+  }
+
+  const handleSearchToggle = (isActive) => {
+    setIsSearchActive(isActive)
+    if (!isActive) {
+      setSearchResults([])
+      setSearchQuery('')
+    }
+  }
+
+  const handleClearSearch = () => {
+    setSearchResults([])
+    setIsSearchActive(false)
+    setSearchQuery('')
+  }
+
   return (
     <div className="bg-black min-h-screen text-white">
-      <Navbar />
-      <Hero />
-      <div className="mt-8 space-y-8">
-        <MovieRow title="Trending Now" movies={movies.trending} />
-        <MovieRow title="Popular on Gitpod Flix" movies={movies.popular} />
-        <MovieRow title="Sci-Fi & Fantasy" movies={movies.scifi} />
-      </div>
+      <Navbar 
+        onSearchResults={handleSearchResults}
+        onSearchToggle={handleSearchToggle}
+        isSearchActive={isSearchActive}
+      />
+      
+      {isSearchActive && searchResults.length > 0 ? (
+        <div className="pt-32">
+          <SearchResults
+            results={searchResults}
+            query={searchQuery}
+            isLoading={false}
+            onClearSearch={handleClearSearch}
+          />
+        </div>
+      ) : (
+        <>
+          <Hero />
+          <div className="mt-8 space-y-8">
+            <MovieRow title="Trending Now" movies={movies.trending} />
+            <MovieRow title="Popular on Gitpod Flix" movies={movies.popular} />
+            <MovieRow title="Sci-Fi & Fantasy" movies={movies.scifi} />
+          </div>
+        </>
+      )}
     </div>
   )
 }

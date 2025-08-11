@@ -1,9 +1,9 @@
 import React from 'react'
 
-function MovieRow({ title, movies }) {
+function MovieRow({ title, movies, showTitle = true }) {
   return (
     <div className="w-full">
-      <h2 className="text-2xl font-bold mb-4 px-4 md:px-8">{title}</h2>
+      {showTitle && <h2 className="text-2xl font-bold mb-4 px-4 md:px-8">{title}</h2>}
       <div className="relative">
         <div className="grid grid-cols-4 gap-4 pb-4 px-4 md:px-8">
           {movies.map((movie) => (
