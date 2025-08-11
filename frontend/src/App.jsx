@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import MovieRow from './components/MovieRow'
 import SearchResults from './components/SearchResults'
+import MovieModal from './components/MovieModal'
 import { fetchMovies } from './services/api'
 
 function Home() {
@@ -15,6 +16,8 @@ function Home() {
   const [searchResults, setSearchResults] = useState([])
   const [isSearchActive, setIsSearchActive] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [selectedMovie, setSelectedMovie] = useState(null)
+  const [showMovieModal, setShowMovieModal] = useState(false)
 
   useEffect(() => {
     const loadMovies = async () => {
@@ -53,6 +56,16 @@ function Home() {
     setSearchQuery('')
   }
 
+  const handleMovieClick = (movie) => {
+    setSelectedMovie(movie)
+    setShowMovieModal(true)
+  }
+
+  const handleCloseModal = () => {
+    setShowMovieModal(false)
+    setSelectedMovie(null)
+  }
+
   return (
     <div className="bg-black min-h-screen text-white">
       <Navbar 
@@ -74,12 +87,31 @@ function Home() {
         <>
           <Hero />
           <div className="mt-8 space-y-8">
-            <MovieRow title="Trending Now" movies={movies.trending} />
-            <MovieRow title="Popular on Gitpod Flix" movies={movies.popular} />
-            <MovieRow title="Sci-Fi & Fantasy" movies={movies.scifi} />
+            <MovieRow 
+              title="Trending Now" 
+              movies={movies.trending} 
+              onMovieClick={handleMovieClick}
+            />
+            <MovieRow 
+              title="Popular on Gitpod Flix" 
+              movies={movies.popular} 
+              onMovieClick={handleMovieClick}
+            />
+            <MovieRow 
+              title="Sci-Fi & Fantasy" 
+              movies={movies.scifi} 
+              onMovieClick={handleMovieClick}
+            />
           </div>
         </>
       )}
+
+      {/* Movie Modal */}
+      <MovieModal 
+        movie={selectedMovie}
+        isOpen={showMovieModal}
+        onClose={handleCloseModal}
+      />
     </div>
   )
 }
