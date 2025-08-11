@@ -38,14 +38,14 @@ function Home() {
         
         // Award Winners - movies that won major awards (focusing on recent Oscar winners)
         const awardWinners = allMovies.filter(movie => 
-          ['Parasite', 'Nomadland', 'Green Book', 'Moonlight', 'The Shape of Water'].includes(movie.title)
-        ).slice(0, 5);
+          ['Parasite', 'Green Book', 'Moonlight', 'The Shape of Water'].includes(movie.title)
+        ).slice(0, 4);
         
         // Modern Blockbusters - recent high-grossing films
         const modernBlockbusters = allMovies.filter(movie => 
-          ['Avatar: The Way of Water', 'Top Gun: Maverick', 'Black Panther: Wakanda Forever', 'Spider-Man: No Way Home', 'Avengers: Endgame'].includes(movie.title)
-        ).slice(0, 5);
-        
+          ['Avatar: The Way of Water', 'Top Gun: Maverick', 'Spider-Man: No Way Home', 'Avengers: Endgame'].includes(movie.title)
+        ).slice(0, 4);
+
         setMovies({ trending, popular, scifi, awardWinners, modernBlockbusters });
       } catch (error) {
         console.error('Error loading movies:', error);

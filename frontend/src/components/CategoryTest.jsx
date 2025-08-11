@@ -23,13 +23,13 @@ function CategoryTest() {
         ).slice(0, 4)
         
         const awardWinners = movies.filter(movie => 
-          ['Parasite', 'Nomadland', 'Green Book', 'Moonlight', 'The Shape of Water'].includes(movie.title)
-        ).slice(0, 5)
+          ['Parasite', 'Green Book', 'Moonlight', 'The Shape of Water'].includes(movie.title)
+        ).slice(0, 4)
         
         const modernBlockbusters = movies.filter(movie => 
-          ['Avatar: The Way of Water', 'Top Gun: Maverick', 'Black Panther: Wakanda Forever', 'Spider-Man: No Way Home', 'Avengers: Endgame'].includes(movie.title)
-        ).slice(0, 5)
-        
+          ['Avatar: The Way of Water', 'Top Gun: Maverick', 'Spider-Man: No Way Home', 'Avengers: Endgame'].includes(movie.title)
+        ).slice(0, 4)
+
         setCategories({ trending, popular, scifi, awardWinners, modernBlockbusters })
       } catch (error) {
         console.error('Error loading movies:', error)
@@ -96,7 +96,7 @@ function CategoryTest() {
           {categories.awardWinners && categories.awardWinners.length > 0 && (
             <div>
               <h2 className="text-2xl font-bold mb-4 text-yellow-500">Award Winners (Oscar Best Picture)</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {categories.awardWinners.map(movie => (
                   <div key={movie.id} className="bg-gray-800 rounded-lg p-4">
                     <img src={movie.image_url} alt={movie.title} className="w-full h-48 object-cover rounded mb-2" />
@@ -119,7 +119,7 @@ function CategoryTest() {
           {categories.modernBlockbusters && categories.modernBlockbusters.length > 0 && (
             <div>
               <h2 className="text-2xl font-bold mb-4 text-purple-500">Modern Blockbusters (2019-2022)</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {categories.modernBlockbusters.map(movie => (
                   <div key={movie.id} className="bg-gray-800 rounded-lg p-4">
                     <img src={movie.image_url} alt={movie.title} className="w-full h-48 object-cover rounded mb-2" />
