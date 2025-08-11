@@ -1,6 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { isYouTubeUrl } from '../utils/youtubeUtils'
+import YouTubePlayer from './YouTubePlayer'
 
 function VideoPlayer({ movie, isOpen, onClose }) {
+  // Check if the video is a YouTube URL
+  const isYouTube = isYouTubeUrl(movie?.trailer_url || movie?.video_url)
+  
+  // If it's a YouTube video, use the YouTube player
+  if (isYouTube) {
+    return <YouTubePlayer movie={movie} isOpen={isOpen} onClose={onClose} />
+  }
+
+  // Otherwise, use the regular video player for MP4/other formats
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
