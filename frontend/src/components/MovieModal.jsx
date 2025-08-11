@@ -24,12 +24,30 @@ function MovieModal({ movie, isOpen, onClose }) {
     console.log('Liked:', movie.title)
   }
 
+  const handleBackdropClick = (e) => {
+    // Close modal if clicking on backdrop (not on modal content)
+    if (e.target === e.currentTarget) {
+      onClose()
+    }
+  }
+
+  const handleModalContentClick = (e) => {
+    // Prevent clicks inside modal content from bubbling up to backdrop
+    e.stopPropagation()
+  }
+
   return (
     <>
       {/* Movie Info Modal */}
       {!showVideoPlayer && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-900 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4"
+          onClick={handleBackdropClick}
+        >
+          <div 
+            className="bg-gray-900 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            onClick={handleModalContentClick}
+          >
             {/* Header with backdrop image */}
             <div className="relative h-96 bg-gradient-to-t from-gray-900 to-transparent">
               <img 
