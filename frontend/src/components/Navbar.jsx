@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import SearchBar from './SearchBar'
+import UserProfileDropdown from './UserProfileDropdown'
+import { mockUserProfile } from '../data/mockUser'
 
 function Navbar({ onSearchResults, onSearchToggle, isSearchActive }) {
   const [showSearch, setShowSearch] = useState(false)
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false)
 
   const handleSearchToggle = () => {
     const newSearchState = !showSearch
@@ -18,6 +21,14 @@ function Navbar({ onSearchResults, onSearchToggle, isSearchActive }) {
     setShowSearch(false)
     onSearchToggle?.(false)
     onSearchResults?.([])
+  }
+
+  const handleProfileClick = () => {
+    setShowProfileDropdown(!showProfileDropdown)
+  }
+
+  const handleProfileClose = () => {
+    setShowProfileDropdown(false)
   }
 
   return (
@@ -52,12 +63,22 @@ function Navbar({ onSearchResults, onSearchToggle, isSearchActive }) {
               </svg>
             </button>
             
-            <img 
-              src="/images/profile-avatar.jpg" 
-              alt="Profile" 
-              className="w-8 h-8 rounded-full cursor-pointer hover:ring-2 hover:ring-red-500 transition-all duration-200 object-cover"
-              title="Profile"
-            />
+            <div className="relative">
+              <img 
+                src="/images/profile-avatar.jpg" 
+                alt="Profile" 
+                onClick={handleProfileClick}
+                className={`w-8 h-8 rounded-full cursor-pointer hover:ring-2 hover:ring-red-500 transition-all duration-200 object-cover ${
+                  showProfileDropdown ? 'ring-2 ring-red-500' : ''
+                }`}
+                title="Profile"
+              />
+              <UserProfileDropdown 
+                isOpen={showProfileDropdown}
+                onClose={handleProfileClose}
+                userProfile={mockUserProfile}
+              />
+            </div>
           </div>
         </div>
       </div>
