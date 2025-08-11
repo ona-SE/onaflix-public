@@ -52,7 +52,12 @@ function Navbar({ onSearchResults, onSearchToggle, isSearchActive }) {
               </svg>
             </button>
             
-            <div className="w-8 h-8 rounded bg-gray-600 cursor-pointer hover:bg-gray-500 transition-colors" title="Profile"></div>
+            <img 
+              src="/images/profile-avatar.jpg" 
+              alt="Profile" 
+              className="w-8 h-8 rounded-full cursor-pointer hover:ring-2 hover:ring-red-500 transition-all duration-200 object-cover"
+              title="Profile"
+            />
           </div>
         </div>
       </div>
