@@ -6,12 +6,12 @@
  * @returns {string|null} - Video ID or null if invalid
  */
 export const extractYouTubeVideoId = (url) => {
-  if (!url) return null;
+  if (!url || typeof url !== 'string') return null;
   
   const patterns = [
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
-    /youtube\.com\/v\/([^&\n?#]+)/,
-    /youtube\.com\/watch\?.*v=([^&\n?#]+)/
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/i,
+    /youtube\.com\/v\/([^&\n?#]+)/i,
+    /youtube\.com\/watch\?.*v=([^&\n?#]+)/i
   ];
   
   for (const pattern of patterns) {
@@ -35,13 +35,16 @@ export const getYouTubeEmbedUrl = (videoId, options = {}) => {
   
   const defaultOptions = {
     autoplay: 1,
-    mute: 1,
-    controls: 0,
+    mute: 0, // Allow sound by default
+    controls: 1, // Show YouTube controls by default
     showinfo: 0,
     rel: 0,
     modestbranding: 1,
     playsinline: 1,
     enablejsapi: 1,
+    fs: 1, // Allow fullscreen
+    cc_load_policy: 1, // Show closed captions
+    iv_load_policy: 3, // Hide annotations
     origin: window.location.origin
   };
   
@@ -68,8 +71,9 @@ export const getYouTubeThumbnail = (videoId, quality = 'hqdefault') => {
  * @returns {boolean} - True if YouTube URL
  */
 export const isYouTubeUrl = (url) => {
-  if (!url) return false;
-  return /(?:youtube\.com|youtu\.be)/.test(url);
+  if (!url || typeof url !== 'string') return false;
+  const lowerUrl = url.toLowerCase();
+  return lowerUrl.includes('youtube.com') || lowerUrl.includes('youtu.be');
 };
 
 /**
@@ -95,13 +99,16 @@ export const createYouTubePlayerConfig = (videoId, playerOptions = {}) => {
     videoId,
     playerVars: {
       autoplay: 1,
-      mute: 1,
-      controls: 0,
+      mute: 0, // Enable sound by default
+      controls: 1, // Show YouTube controls
       showinfo: 0,
       rel: 0,
       modestbranding: 1,
       playsinline: 1,
       enablejsapi: 1,
+      fs: 1, // Allow fullscreen
+      cc_load_policy: 1, // Show captions
+      iv_load_policy: 3, // Hide annotations
       origin: window.location.origin,
       ...playerOptions
     }

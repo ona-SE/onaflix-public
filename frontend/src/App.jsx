@@ -116,10 +116,27 @@ function Home() {
   )
 }
 
+// Import test components
+import VideoPlayerDebug from './components/VideoPlayerDebug'
+import QuickTest from './components/QuickTest'
+import AudioTest from './components/AudioTest'
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "/debug",
+    element: <VideoPlayerDebug />,
+  },
+  {
+    path: "/test",
+    element: <QuickTest />,
+  },
+  {
+    path: "/audio",
+    element: <AudioTest />,
   }
 ], {
   future: {

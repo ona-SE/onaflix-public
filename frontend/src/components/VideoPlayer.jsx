@@ -4,13 +4,24 @@ import YouTubePlayer from './YouTubePlayer'
 
 function VideoPlayer({ movie, isOpen, onClose }) {
   // Check if the video is a YouTube URL
-  const isYouTube = isYouTubeUrl(movie?.trailer_url || movie?.video_url)
+  const trailerUrl = movie?.trailer_url || movie?.video_url
+  const isYouTube = isYouTubeUrl(trailerUrl)
+  
+  // Debug logging
+  console.log('VideoPlayer Debug:', {
+    movie: movie?.title,
+    trailerUrl,
+    isYouTube,
+    isOpen
+  })
   
   // If it's a YouTube video, use the YouTube player
   if (isYouTube) {
+    console.log('Using YouTubePlayer for:', movie?.title)
     return <YouTubePlayer movie={movie} isOpen={isOpen} onClose={onClose} />
   }
 
+  console.log('Using regular VideoPlayer for:', movie?.title)
   // Otherwise, use the regular video player for MP4/other formats
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
