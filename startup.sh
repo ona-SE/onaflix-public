@@ -66,7 +66,7 @@ check_port() {
 # Function to kill process on port
 kill_port() {
     local port=$1
-    local pid=$(lsof -ti:$port)
+    local pid=$(lsof -ti:$port 2>/dev/null | head -1)
     if [ ! -z "$pid" ]; then
         print_warning "Killing process on port $port (PID: $pid)"
         kill -9 $pid 2>/dev/null || true
