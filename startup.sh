@@ -101,7 +101,7 @@ fi
 
 # Wait for PostgreSQL container to be healthy
 print_status "Waiting for PostgreSQL container to be healthy..."
-if ! wait_for_service "PostgreSQL Container" "docker-compose ps postgres | grep -q 'healthy'" 90 5; then
+if ! wait_for_service "PostgreSQL Container" "docker-compose ps postgres | grep -q '(healthy)'" 90 5; then
     print_error "PostgreSQL container failed to become healthy"
     docker-compose logs
     exit 1
