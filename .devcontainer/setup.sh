@@ -10,6 +10,16 @@ if ! command -v pg_isready &> /dev/null; then
     exit 1
 fi
 
+# Install jq if not present (for health checks)
+if ! command -v jq &> /dev/null; then
+    echo "📦 Installing jq for JSON processing..."
+    sudo apt-get update && sudo apt-get install -y jq
+fi
+
+# Make scripts executable
+chmod +x startup.sh 2>/dev/null || true
+chmod +x health-check.sh 2>/dev/null || true
+
 echo "✅ Setup completed successfully!" 
 
 # GitHub CLI authentication (optional)
@@ -19,3 +29,7 @@ if [ -n "$GH_CLI_TOKEN" ]; then
 else
     echo "ℹ️  GH_CLI_TOKEN not set, skipping authentication"
 fi
+
+echo "🔧 Available commands:"
+echo "   ./startup.sh      - Start all services"
+echo "   ./health-check.sh - Check service health"
