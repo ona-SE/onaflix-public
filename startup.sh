@@ -56,7 +56,7 @@ wait_for_service() {
 # Function to check if port is in use
 check_port() {
     local port=$1
-    if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null 2>&1; then
+    if timeout 5 netstat -tlnp 2>/dev/null | grep -q ":$port "; then
         return 0
     else
         return 1
@@ -66,8 +66,8 @@ check_port() {
 # Function to kill process on port
 kill_port() {
     local port=$1
-    local pid=$(lsof -ti:$port 2>/dev/null | head -1)
-    if [ ! -z "$pid" ]; then
+    local pid=$(timeout 5 netstat -tlnp 2>/dev/null | grep ":$port " | awk '{print $7}' | cut -d'/' -f1 | head -1)
+    if [ ! -z "$pid" ] && [ "$pid" != "-" ]; then
         print_warning "Killing process on port $port (PID: $pid)"
         kill -9 $pid 2>/dev/null || true
         sleep 2
@@ -99,12 +99,32 @@ if ! docker-compose up -d; then
     exit 1
 fi
 
-# Wait for PostgreSQL to be ready
-if ! wait_for_service "PostgreSQL" "PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c 'SELECT 1'" 60 3; then
-    print_error "PostgreSQL failed to start"
+# Wait for PostgreSQL container to be healthy
+print_status "Waiting for PostgreSQL container to be healthy..."
+if ! wait_for_service "PostgreSQL Container" "docker-compose ps postgres | grep -q 'healthy'" 90 5; then
+    print_error "PostgreSQL container failed to become healthy"
     docker-compose logs
     exit 1
 fi
+
+# Wait for database connection and schema to be ready
+if ! wait_for_service "PostgreSQL Database" "PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c 'SELECT 1'" 30 2; then
+    print_error "PostgreSQL database connection failed"
+    docker-compose logs
+    exit 1
+fi
+
+# Verify database schema is ready (migrations have run)
+print_status "Verifying database schema..."
+if ! wait_for_service "Database Schema" "PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c 'SELECT 1 FROM information_schema.tables WHERE table_name = '\''movies'\'''" 30 2; then
+    print_error "Database schema not ready - migrations may not have completed"
+    docker-compose logs
+    exit 1
+fi
+
+# Additional buffer time to ensure database is fully stable
+print_status "Allowing database to stabilize..."
+sleep 5
 
 cd ../..
 
@@ -172,11 +192,29 @@ cd ..
 # Step 5: Seed the database
 print_status "Seeding database with sample data..."
 
+# Double-check database is ready before seeding
+if ! PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c "SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'movies'" >/dev/null 2>&1; then
+    print_error "Database schema not ready for seeding"
+    exit 1
+fi
+
 if [ -f "database/main/seeds/movies_complete.sql" ]; then
-    PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f database/main/seeds/movies_complete.sql >/dev/null 2>&1
-    print_success "Database seeded with sample movies"
+    print_status "Seeding database from SQL file..."
+    if PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f database/main/seeds/movies_complete.sql >/dev/null 2>&1; then
+        print_success "Database seeded with sample movies"
+    else
+        print_error "Failed to seed database from SQL file"
+        # Try API fallback
+        print_status "Attempting API seeding fallback..."
+        if curl -s -X POST http://localhost:3001/api/movies/seed >/dev/null 2>&1; then
+            print_success "Database seeded via API fallback"
+        else
+            print_warning "Could not seed database - continuing anyway"
+        fi
+    fi
 else
     # Fallback to API seeding
+    print_status "SQL seed file not found, using API seeding..."
     if curl -s -X POST http://localhost:3001/api/movies/seed >/dev/null 2>&1; then
         print_success "Database seeded via API"
     else
