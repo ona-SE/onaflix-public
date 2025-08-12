@@ -1,4 +1,71 @@
 services:
+  jira-mcp:
+    name: "Jira MCP Server"
+    description: "Model Context Protocol server for Jira integration"
+    triggeredBy:
+      - postDevcontainerStart
+      - postEnvironmentStart
+    commands:
+      start: |
+        echo "🔧 Setting up Jira MCP server..."
+        
+        # Create config directory
+        mkdir -p ~/.config/gitpod
+        
+        # Clone and build Jira MCP if not already present
+        if [ ! -d "/home/node/jira-mcp" ]; then
+          echo "📦 Cloning Jira MCP repository..."
+          cd /home/node
+          git clone https://github.com/MankowskiNick/jira-mcp.git
+          cd jira-mcp
+          echo "📦 Installing dependencies..."
+          npm install
+          echo "🔨 Building project..."
+          npm run build
+        else
+          echo "✓ Jira MCP already installed"
+        fi
+        
+        # Create MCP configuration file
+        echo "⚙️ Creating MCP configuration..."
+        cat > ~/.config/gitpod/mcp-config.json << EOF
+        {
+          "mcpServers": {
+            "jira-mcp": {
+              "command": "node",
+              "args": ["/home/node/jira-mcp/build/index.js"],
+              "env": {
+                "JIRA_HOST": "\${JIRA_HOST:-coakley.atlassian.net}",
+                "JIRA_USERNAME": "\${JIRA_USERNAME:-joe@gitpod.io}",
+                "JIRA_API_TOKEN": "\${JIRA_API_TOKEN:-your_api_token_here}",
+                "JIRA_PROJECT_KEY": "\${JIRA_PROJECT_KEY:-MBA}",
+                "AUTO_CREATE_TEST_TICKETS": "true",
+                "JIRA_ACCEPTANCE_CRITERIA_FIELD": "customfield_10429",
+                "JIRA_STORY_POINTS_FIELD": "customfield_10040",
+                "JIRA_EPIC_LINK_FIELD": "customfield_10014"
+              }
+            }
+          }
+        }
+        EOF
+
+        echo "✅ Jira MCP server setup complete!"
+        echo "📍 Configuration: ~/.config/gitpod/mcp-config.json"
+        echo "📍 Server location: /home/node/jira-mcp/"
+        echo "🎯 Project: MBA (coakley.atlassian.net)"
+        
+      ready: |
+        if [ -f "/home/node/jira-mcp/build/index.js" ] && [ -f "~/.config/gitpod/mcp-config.json" ]; then
+          echo "Jira MCP server is ready"
+          exit 0
+        else
+          echo "Jira MCP server not ready"
+          exit 1
+        fi
+        
+      stop: |
+        echo "Jira MCP server stopped (no persistent process)"
+
   postgres:
     name: "PostgreSQL Database"
     description: "PostgreSQL database for Gitpod Flix (Port: 5432)"
@@ -175,6 +242,72 @@ services:
         pkill -f "vite" || true
 
 tasks:
+  setupJiraMCP:
+    name: "Setup Jira MCP"
+    description: "Install and configure Jira MCP server for AI integration"
+    triggeredBy:
+      - manual
+      - postEnvironmentStart
+    command: |
+      echo "🚀 Setting up Jira MCP server..."
+      
+      # Create config directory
+      mkdir -p ~/.config/gitpod
+      
+      # Clone and build Jira MCP if not already present
+      if [ ! -d "/home/node/jira-mcp" ]; then
+        echo "📦 Cloning Jira MCP repository..."
+        cd /home/node
+        git clone https://github.com/MankowskiNick/jira-mcp.git
+        cd jira-mcp
+        echo "📦 Installing dependencies..."
+        npm install
+        echo "🔨 Building project..."
+        npm run build
+      else
+        echo "✓ Jira MCP already installed"
+      fi
+      
+      # Create MCP configuration file
+      echo "⚙️ Creating MCP configuration..."
+      cat > ~/.config/gitpod/mcp-config.json << EOF
+      {
+        "mcpServers": {
+          "jira-mcp": {
+            "command": "node",
+            "args": ["/home/node/jira-mcp/build/index.js"],
+            "env": {
+              "JIRA_HOST": "\${JIRA_HOST:-coakley.atlassian.net}",
+              "JIRA_USERNAME": "\${JIRA_USERNAME:-joe@gitpod.io}",
+              "JIRA_API_TOKEN": "\${JIRA_API_TOKEN:-your_api_token_here}",
+              "JIRA_PROJECT_KEY": "\${JIRA_PROJECT_KEY:-MBA}",
+              "AUTO_CREATE_TEST_TICKETS": "true",
+              "JIRA_ACCEPTANCE_CRITERIA_FIELD": "customfield_10429",
+              "JIRA_STORY_POINTS_FIELD": "customfield_10040",
+              "JIRA_EPIC_LINK_FIELD": "customfield_10014"
+            }
+          }
+        }
+      }
+      EOF
+      
+      # Test the MCP server if credentials are available
+      if [ -n "\$JIRA_API_TOKEN" ] && [ "\$JIRA_API_TOKEN" != "your_api_token_here" ]; then
+        echo "🧪 Testing MCP server..."
+        cd /home/node/jira-mcp
+
+      # Quick test to verify server works
+      if echo '{"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2024-11-05", "capabilities": {"roots": {"listChanged": true}}, "clientInfo": {"name": "test-client", "version": "1.0.0"}}}' | timeout 5 node build/index.js >/dev/null 2>&1; then
+        echo "✅ Jira MCP server setup complete and tested!"
+      else
+        echo "⚠️ Jira MCP server setup complete but test failed"
+      fi
+      
+      echo "📍 Configuration: ~/.config/gitpod/mcp-config.json"
+      echo "📍 Server location: /home/node/jira-mcp/"
+      echo "🎯 Project: MBA (coakley.atlassian.net)"
+      echo "🔧 Available tools: create-ticket, get-ticket, search-tickets, update-ticket, link-tickets, get-test-steps, add-test-steps"
+
   seedDatabase:
     name: "Seed Database"
     description: "Seed the database with sample movies in a dramatic sequence"
