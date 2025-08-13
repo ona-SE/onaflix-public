@@ -55,14 +55,14 @@ services:
         echo "🎯 Project: MBA (coakley.atlassian.net)"
         
       ready: |
-        if [ -f "/home/node/jira-mcp/build/index.js" ] && [ -f "~/.config/gitpod/mcp-config.json" ]; then
+        if [ -f "/home/node/jira-mcp/build/index.js" ] && [ -f "$HOME/.config/gitpod/mcp-config.json" ]; then
           echo "Jira MCP server is ready"
           exit 0
         else
           echo "Jira MCP server not ready"
           exit 1
         fi
-        
+
       stop: |
         echo "Jira MCP server stopped (no persistent process)"
 
@@ -296,11 +296,12 @@ tasks:
         echo "🧪 Testing MCP server..."
         cd /home/node/jira-mcp
 
-      # Quick test to verify server works
-      if echo '{"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2024-11-05", "capabilities": {"roots": {"listChanged": true}}, "clientInfo": {"name": "test-client", "version": "1.0.0"}}}' | timeout 5 node build/index.js >/dev/null 2>&1; then
-        echo "✅ Jira MCP server setup complete and tested!"
-      else
-        echo "⚠️ Jira MCP server setup complete but test failed"
+        # Quick test to verify server works
+        if echo '{"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2024-11-05", "capabilities": {"roots": {"listChanged": true}}, "clientInfo": {"name": "test-client", "version": "1.0.0"}}}' | timeout 5 node build/index.js >/dev/null 2>&1; then
+          echo "✅ Jira MCP server setup complete and tested!"
+        else
+          echo "⚠️ Jira MCP server setup complete but test failed"
+        fi
       fi
       
       echo "📍 Configuration: ~/.config/gitpod/mcp-config.json"
