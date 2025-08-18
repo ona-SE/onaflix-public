@@ -7,27 +7,27 @@ services:
       - postEnvironmentStart
     commands:
       start: |
-        echo "🔧 Setting up Jira MCP server..."
-        
+        echo "Setting up Jira MCP server..."
+
         # Create config directory
         mkdir -p ~/.config/gitpod
         
         # Clone and build Jira MCP if not already present
         if [ ! -d "/home/node/jira-mcp" ]; then
-          echo "📦 Cloning Jira MCP repository..."
+          echo "Cloning Jira MCP repository..."
           cd /home/node
           git clone https://github.com/MankowskiNick/jira-mcp.git
           cd jira-mcp
-          echo "📦 Installing dependencies..."
+          echo "Installing dependencies..."
           npm install
-          echo "🔨 Building project..."
+          echo "Building project..."
           npm run build
         else
-          echo "✓ Jira MCP already installed"
+          echo "Jira MCP already installed"
         fi
         
         # Create MCP configuration file
-        echo "⚙️ Creating MCP configuration..."
+        echo "Creating MCP configuration..."
         cat > ~/.config/gitpod/mcp-config.json << EOF
         {
           "mcpServers": {
@@ -49,11 +49,64 @@ services:
         }
         EOF
 
-        echo "✅ Jira MCP server setup complete!"
-        echo "📍 Configuration: ~/.config/gitpod/mcp-config.json"
-        echo "📍 Server location: /home/node/jira-mcp/"
-        echo "🎯 Project: MBA (coakley.atlassian.net)"
+        # Configure generic MCP client connection
+        echo "Configuring MCP client connection..."
         
+        # Create generic MCP client config
+        MCP_CLIENT_CONFIG="$HOME/.config/mcp/client-config.json"
+        mkdir -p "$HOME/.config/mcp"
+        cat > "$MCP_CLIENT_CONFIG" << EOF
+        {
+          "mcpServers": {
+            "jira-mcp": {
+              "command": "node",
+              "args": ["/home/node/jira-mcp/build/index.js"],
+              "env": {
+                "JIRA_HOST": "\${JIRA_HOST:-coakley.atlassian.net}",
+                "JIRA_USERNAME": "\${JIRA_USERNAME:-joe@gitpod.io}",
+                "JIRA_API_TOKEN": "\${JIRA_API_TOKEN:-your_api_token_here}",
+                "JIRA_PROJECT_KEY": "\${JIRA_PROJECT_KEY:-MBA}",
+                "AUTO_CREATE_TEST_TICKETS": "true",
+                "JIRA_ACCEPTANCE_CRITERIA_FIELD": "customfield_10429",
+                "JIRA_STORY_POINTS_FIELD": "customfield_10040",
+                "JIRA_EPIC_LINK_FIELD": "customfield_10014"
+              }
+            }
+          }
+        }
+        EOF
+        
+        # Test MCP server connection if credentials are available
+        if [ -n "\$JIRA_API_TOKEN" ] && [ "\$JIRA_API_TOKEN" != "your_api_token_here" ]; then
+          echo "Testing MCP server connection..."
+          cd /home/node/jira-mcp
+          
+          # Test server initialization
+          if echo '{"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2024-11-05", "capabilities": {"roots": {"listChanged": true}}, "clientInfo": {"name": "test-client", "version": "1.0.0"}}}' | timeout 10 node build/index.js >/dev/null 2>&1; then
+            echo "MCP server connection test successful"
+          else
+            echo "MCP server connection test failed - check credentials"
+          fi
+        fi
+
+        # Create a simple verification script
+        echo '#!/bin/bash' > /tmp/verify-mcp-connection.sh
+        echo 'echo "Verifying MCP configuration..."' >> /tmp/verify-mcp-connection.sh
+        echo 'echo "Server config: $([ -f ~/.config/gitpod/mcp-config.json ] && echo \"Found\" || echo \"Missing\")"' >> /tmp/verify-mcp-connection.sh
+        echo 'echo "Generic client config: $([ -f ~/.config/mcp/client-config.json ] && echo \"Found\" || echo \"Missing\")"' >> /tmp/verify-mcp-connection.sh
+        echo 'echo "MCP server binary: $([ -f /home/node/jira-mcp/build/index.js ] && echo \"Found\" || echo \"Missing\")"' >> /tmp/verify-mcp-connection.sh
+        chmod +x /tmp/verify-mcp-connection.sh
+
+        echo "Jira MCP server and client setup complete"
+        echo "Server config: ~/.config/gitpod/mcp-config.json"
+        echo "Generic client config: ~/.config/mcp/client-config.json"
+        echo "Server location: /home/node/jira-mcp/"
+        echo "Project: MBA (coakley.atlassian.net)"
+        echo "Available tools: create-ticket, get-ticket, search-tickets, update-ticket, link-tickets, get-test-steps, add-test-steps"
+        echo ""
+        echo "Run '/tmp/verify-mcp-connection.sh' to verify the setup"
+        echo "AI assistants may need to restart to pick up the new MCP configuration"
+
       ready: |
         if [ -f "/home/node/jira-mcp/build/index.js" ] && [ -f "$HOME/.config/gitpod/mcp-config.json" ]; then
           echo "Jira MCP server is ready"
@@ -161,11 +214,11 @@ services:
         echo "Waiting for PostgreSQL to be ready..."
         for i in {1..60}; do
           if PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c "SELECT 1" >/dev/null 2>&1; then
-            echo "✓ PostgreSQL is ready"
+            echo "PostgreSQL is ready"
             break
           fi
           if [ $i -eq 60 ]; then
-            echo "✗ Timeout waiting for PostgreSQL"
+            echo "Timeout waiting for PostgreSQL"
             exit 1
           fi
           echo "Waiting for PostgreSQL... attempt $i/60"
@@ -213,11 +266,11 @@ services:
         echo "Waiting for backend API to be ready..."
         for i in {1..60}; do
           if curl -s http://localhost:3001/health >/dev/null 2>&1; then
-            echo "✓ Backend API is ready"
+            echo "Backend API is ready"
             break
           fi
           if [ $i -eq 60 ]; then
-            echo "✗ Timeout waiting for backend API"
+            echo "Timeout waiting for backend API"
             exit 1
           fi
           echo "Waiting for backend... attempt $i/60"
@@ -249,27 +302,27 @@ tasks:
       - manual
       - postEnvironmentStart
     command: |
-      echo "🚀 Setting up Jira MCP server..."
-      
+      echo "Setting up Jira MCP server..."
+
       # Create config directory
       mkdir -p ~/.config/gitpod
       
       # Clone and build Jira MCP if not already present
       if [ ! -d "/home/node/jira-mcp" ]; then
-        echo "📦 Cloning Jira MCP repository..."
+        echo "Cloning Jira MCP repository..."
         cd /home/node
         git clone https://github.com/MankowskiNick/jira-mcp.git
         cd jira-mcp
-        echo "📦 Installing dependencies..."
+        echo "Installing dependencies..."
         npm install
-        echo "🔨 Building project..."
+        echo "Building project..."
         npm run build
       else
-        echo "✓ Jira MCP already installed"
+        echo "Jira MCP already installed"
       fi
       
       # Create MCP configuration file
-      echo "⚙️ Creating MCP configuration..."
+      echo "Creating MCP configuration..."
       cat > ~/.config/gitpod/mcp-config.json << EOF
       {
         "mcpServers": {
@@ -291,23 +344,63 @@ tasks:
       }
       EOF
       
+      # Configure generic MCP client connection
+      echo "Configuring MCP client connection..."
+      
+      # Create generic MCP client config
+      MCP_CLIENT_CONFIG="$HOME/.config/mcp/client-config.json"
+      mkdir -p "$HOME/.config/mcp"
+      cat > "$MCP_CLIENT_CONFIG" << EOF
+      {
+        "mcpServers": {
+          "jira-mcp": {
+            "command": "node",
+            "args": ["/home/node/jira-mcp/build/index.js"],
+            "env": {
+              "JIRA_HOST": "\${JIRA_HOST:-coakley.atlassian.net}",
+              "JIRA_USERNAME": "\${JIRA_USERNAME:-joe@gitpod.io}",
+              "JIRA_API_TOKEN": "\${JIRA_API_TOKEN:-your_api_token_here}",
+              "JIRA_PROJECT_KEY": "\${JIRA_PROJECT_KEY:-MBA}",
+              "AUTO_CREATE_TEST_TICKETS": "true",
+              "JIRA_ACCEPTANCE_CRITERIA_FIELD": "customfield_10429",
+              "JIRA_STORY_POINTS_FIELD": "customfield_10040",
+              "JIRA_EPIC_LINK_FIELD": "customfield_10014"
+            }
+          }
+        }
+      }
+      EOF
+
       # Test the MCP server if credentials are available
       if [ -n "\$JIRA_API_TOKEN" ] && [ "\$JIRA_API_TOKEN" != "your_api_token_here" ]; then
-        echo "🧪 Testing MCP server..."
+        echo "Testing MCP server connection..."
         cd /home/node/jira-mcp
 
-        # Quick test to verify server works
-        if echo '{"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2024-11-05", "capabilities": {"roots": {"listChanged": true}}, "clientInfo": {"name": "test-client", "version": "1.0.0"}}}' | timeout 5 node build/index.js >/dev/null 2>&1; then
-          echo "✅ Jira MCP server setup complete and tested!"
+        # Test server initialization
+        if echo '{"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2024-11-05", "capabilities": {"roots": {"listChanged": true}}, "clientInfo": {"name": "test-client", "version": "1.0.0"}}}' | timeout 10 node build/index.js >/dev/null 2>&1; then
+          echo "MCP server connection test successful"
         else
-          echo "⚠️ Jira MCP server setup complete but test failed"
+          echo "MCP server connection test failed - check credentials"
         fi
       fi
       
-      echo "📍 Configuration: ~/.config/gitpod/mcp-config.json"
-      echo "📍 Server location: /home/node/jira-mcp/"
-      echo "🎯 Project: MBA (coakley.atlassian.net)"
-      echo "🔧 Available tools: create-ticket, get-ticket, search-tickets, update-ticket, link-tickets, get-test-steps, add-test-steps"
+      # Create a simple verification script
+      echo '#!/bin/bash' > /tmp/verify-mcp-connection.sh
+      echo 'echo "Verifying MCP configuration..."' >> /tmp/verify-mcp-connection.sh
+      echo 'echo "Server config: $([ -f ~/.config/gitpod/mcp-config.json ] && echo \"Found\" || echo \"Missing\")"' >> /tmp/verify-mcp-connection.sh
+      echo 'echo "Generic client config: $([ -f ~/.config/mcp/client-config.json ] && echo \"Found\" || echo \"Missing\")"' >> /tmp/verify-mcp-connection.sh
+      echo 'echo "MCP server binary: $([ -f /home/node/jira-mcp/build/index.js ] && echo \"Found\" || echo \"Missing\")"' >> /tmp/verify-mcp-connection.sh
+      chmod +x /tmp/verify-mcp-connection.sh
+
+      echo "Jira MCP server and client setup complete"
+      echo "Server config: ~/.config/gitpod/mcp-config.json"
+      echo "Generic client config: ~/.config/mcp/client-config.json"
+      echo "Server location: /home/node/jira-mcp/"
+      echo "Project: MBA (coakley.atlassian.net)"
+      echo "Available tools: create-ticket, get-ticket, search-tickets, update-ticket, link-tickets, get-test-steps, add-test-steps"
+      echo ""
+      echo "Run '/tmp/verify-mcp-connection.sh' to verify the setup"
+      echo "AI assistants may need to restart to pick up the new MCP configuration"
 
   seedDatabase:
     name: "Seed Database"
@@ -322,11 +415,11 @@ tasks:
       echo "Waiting for PostgreSQL to be ready..."
       for i in {1..30}; do
         if PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c "SELECT 1" >/dev/null 2>&1; then
-          echo "✓ PostgreSQL is ready"
+          echo "PostgreSQL is ready"
           break
         fi
         if [ $i -eq 30 ]; then
-          echo "✗ Timeout waiting for PostgreSQL"
+          echo "Timeout waiting for PostgreSQL"
           exit 1
         fi
         echo "Waiting for PostgreSQL... attempt $i/30"
@@ -337,16 +430,16 @@ tasks:
       PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f seeds/movies_complete.sql
       sleep 2
 
-      echo "Database seeding complete! 🎬"
-      echo "✓ Movies with categories: 18"
-      echo "✓ Trending: 4 movies"
-      echo "✓ Popular: 4 movies" 
-      echo "✓ Sci-Fi: 4 movies"
-      echo "✓ Award Winners: 4 movies"
-      echo "✓ Modern Blockbusters: 4 movies"
-      echo "✓ All movies have complete metadata (genres, trailers, cast, etc.)"
-      echo "✓ Fixed Moonlight image URL"
-      echo "✓ Optimized single-file structure"
+      echo "Database seeding complete"
+      echo "Movies with categories: 18"
+      echo "Trending: 4 movies"
+      echo "Popular: 4 movies" 
+      echo "Sci-Fi: 4 movies"
+      echo "Award Winners: 4 movies"
+      echo "Modern Blockbusters: 4 movies"
+      echo "All movies have complete metadata (genres, trailers, cast, etc.)"
+      echo "Fixed Moonlight image URL"
+      echo "Optimized single-file structure"
 
   clearDatabase:
     name: "Clear Database"
