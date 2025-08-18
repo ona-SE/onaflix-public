@@ -8,9 +8,6 @@ services:
     commands:
       start: |
         echo "Setting up Jira MCP server..."
-
-        # Create config directory
-        mkdir -p ~/.config/gitpod
         
         # Clone and build Jira MCP if not already present
         if [ ! -d "/home/node/jira-mcp" ]; then
@@ -26,56 +23,6 @@ services:
           echo "Jira MCP already installed"
         fi
         
-        # Create MCP configuration file
-        echo "Creating MCP configuration..."
-        cat > ~/.config/gitpod/mcp-config.json << EOF
-        {
-          "mcpServers": {
-            "jira-mcp": {
-              "command": "node",
-              "args": ["/home/node/jira-mcp/build/index.js"],
-              "env": {
-                "JIRA_HOST": "\${JIRA_HOST:-coakley.atlassian.net}",
-                "JIRA_USERNAME": "\${JIRA_USERNAME:-joe@gitpod.io}",
-                "JIRA_API_TOKEN": "\${JIRA_API_TOKEN:-your_api_token_here}",
-                "JIRA_PROJECT_KEY": "\${JIRA_PROJECT_KEY:-MBA}",
-                "AUTO_CREATE_TEST_TICKETS": "true",
-                "JIRA_ACCEPTANCE_CRITERIA_FIELD": "customfield_10429",
-                "JIRA_STORY_POINTS_FIELD": "customfield_10040",
-                "JIRA_EPIC_LINK_FIELD": "customfield_10014"
-              }
-            }
-          }
-        }
-        EOF
-
-        # Configure generic MCP client connection
-        echo "Configuring MCP client connection..."
-        
-        # Create generic MCP client config
-        MCP_CLIENT_CONFIG="$HOME/.config/mcp/client-config.json"
-        mkdir -p "$HOME/.config/mcp"
-        cat > "$MCP_CLIENT_CONFIG" << EOF
-        {
-          "mcpServers": {
-            "jira-mcp": {
-              "command": "node",
-              "args": ["/home/node/jira-mcp/build/index.js"],
-              "env": {
-                "JIRA_HOST": "\${JIRA_HOST:-coakley.atlassian.net}",
-                "JIRA_USERNAME": "\${JIRA_USERNAME:-joe@gitpod.io}",
-                "JIRA_API_TOKEN": "\${JIRA_API_TOKEN:-your_api_token_here}",
-                "JIRA_PROJECT_KEY": "\${JIRA_PROJECT_KEY:-MBA}",
-                "AUTO_CREATE_TEST_TICKETS": "true",
-                "JIRA_ACCEPTANCE_CRITERIA_FIELD": "customfield_10429",
-                "JIRA_STORY_POINTS_FIELD": "customfield_10040",
-                "JIRA_EPIC_LINK_FIELD": "customfield_10014"
-              }
-            }
-          }
-        }
-        EOF
-        
         # Test MCP server connection if credentials are available
         if [ -n "\$JIRA_API_TOKEN" ] && [ "\$JIRA_API_TOKEN" != "your_api_token_here" ]; then
           echo "Testing MCP server connection..."
@@ -89,26 +36,14 @@ services:
           fi
         fi
 
-        # Create a simple verification script
-        echo '#!/bin/bash' > /tmp/verify-mcp-connection.sh
-        echo 'echo "Verifying MCP configuration..."' >> /tmp/verify-mcp-connection.sh
-        echo 'echo "Server config: $([ -f ~/.config/gitpod/mcp-config.json ] && echo \"Found\" || echo \"Missing\")"' >> /tmp/verify-mcp-connection.sh
-        echo 'echo "Generic client config: $([ -f ~/.config/mcp/client-config.json ] && echo \"Found\" || echo \"Missing\")"' >> /tmp/verify-mcp-connection.sh
-        echo 'echo "MCP server binary: $([ -f /home/node/jira-mcp/build/index.js ] && echo \"Found\" || echo \"Missing\")"' >> /tmp/verify-mcp-connection.sh
-        chmod +x /tmp/verify-mcp-connection.sh
-
-        echo "Jira MCP server and client setup complete"
-        echo "Server config: ~/.config/gitpod/mcp-config.json"
-        echo "Generic client config: ~/.config/mcp/client-config.json"
+        echo "Jira MCP server setup complete"
         echo "Server location: /home/node/jira-mcp/"
+        echo "Configuration: Uses standardized MCP config files (.mcp/config.json, mcp.json, .mcp.yaml)"
         echo "Project: MBA (coakley.atlassian.net)"
         echo "Available tools: create-ticket, get-ticket, search-tickets, update-ticket, link-tickets, get-test-steps, add-test-steps"
-        echo ""
-        echo "Run '/tmp/verify-mcp-connection.sh' to verify the setup"
-        echo "AI assistants may need to restart to pick up the new MCP configuration"
 
       ready: |
-        if [ -f "/home/node/jira-mcp/build/index.js" ] && [ -f "$HOME/.config/gitpod/mcp-config.json" ]; then
+        if [ -f "/home/node/jira-mcp/build/index.js" ]; then
           echo "Jira MCP server is ready"
           exit 0
         else
