@@ -1,58 +1,4 @@
 services:
-  jira-mcp:
-    name: "Jira MCP Server"
-    description: "Model Context Protocol server for Jira integration"
-    triggeredBy:
-      - postDevcontainerStart
-      - postEnvironmentStart
-    commands:
-      start: |
-        echo "Setting up Jira MCP server..."
-        
-        # Clone and build Jira MCP if not already present
-        if [ ! -d "/home/node/jira-mcp" ]; then
-          echo "Cloning Jira MCP repository..."
-          cd /home/node
-          git clone https://github.com/MankowskiNick/jira-mcp.git
-          cd jira-mcp
-          echo "Installing dependencies..."
-          npm install
-          echo "Building project..."
-          npm run build
-        else
-          echo "Jira MCP already installed"
-        fi
-        
-        # Test MCP server connection if credentials are available
-        if [ -n "\$JIRA_API_TOKEN" ] && [ "\$JIRA_API_TOKEN" != "your_api_token_here" ]; then
-          echo "Testing MCP server connection..."
-          cd /home/node/jira-mcp
-          
-          # Test server initialization
-          if echo '{"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2024-11-05", "capabilities": {"roots": {"listChanged": true}}, "clientInfo": {"name": "test-client", "version": "1.0.0"}}}' | timeout 10 node build/index.js >/dev/null 2>&1; then
-            echo "MCP server connection test successful"
-          else
-            echo "MCP server connection test failed - check credentials"
-          fi
-        fi
-
-        echo "Jira MCP server setup complete"
-        echo "Server location: /home/node/jira-mcp/"
-        echo "Configuration: Uses standardized MCP config files (.mcp/config.json, mcp.json, .mcp.yaml)"
-        echo "Project: MBA (coakley.atlassian.net)"
-        echo "Available tools: create-ticket, get-ticket, search-tickets, update-ticket, link-tickets, get-test-steps, add-test-steps"
-
-      ready: |
-        if [ -f "/home/node/jira-mcp/build/index.js" ]; then
-          echo "Jira MCP server is ready"
-          exit 0
-        else
-          echo "Jira MCP server not ready"
-          exit 1
-        fi
-
-      stop: |
-        echo "Jira MCP server stopped (no persistent process)"
 
   postgres:
     name: "PostgreSQL Database"
@@ -230,50 +176,31 @@ services:
         pkill -f "vite" || true
 
 tasks:
-  setupJiraMCP:
-    name: "Setup Jira MCP"
-    description: "Install and configure Jira MCP server for AI integration"
+  setupAtlassianMCP:
+    name: "Setup Official Atlassian MCP"
+    description: "Configure Official Atlassian MCP server for Jira, Compass, and Confluence integration"
     triggeredBy:
       - manual
       - postEnvironmentStart
     command: |
-      echo "Setting up Jira MCP server..."
+      echo "Setting up Official Atlassian MCP server..."
 
       # Create config directory
       mkdir -p ~/.config/gitpod
       
-      # Clone and build Jira MCP if not already present
-      if [ ! -d "/home/node/jira-mcp" ]; then
-        echo "Cloning Jira MCP repository..."
-        cd /home/node
-        git clone https://github.com/MankowskiNick/jira-mcp.git
-        cd jira-mcp
-        echo "Installing dependencies..."
-        npm install
-        echo "Building project..."
-        npm run build
-      else
-        echo "Jira MCP already installed"
-      fi
-      
-      # Create MCP configuration file
-      echo "Creating MCP configuration..."
+      # Create MCP configuration file for Official Atlassian MCP
+      echo "Creating Official Atlassian MCP configuration..."
       cat > ~/.config/gitpod/mcp-config.json << EOF
       {
         "mcpServers": {
-          "jira-mcp": {
-            "command": "node",
-            "args": ["/home/node/jira-mcp/build/index.js"],
-            "env": {
-              "JIRA_HOST": "\${JIRA_HOST:-coakley.atlassian.net}",
-              "JIRA_USERNAME": "\${JIRA_USERNAME:-joe@gitpod.io}",
-              "JIRA_API_TOKEN": "\${JIRA_API_TOKEN:-your_api_token_here}",
-              "JIRA_PROJECT_KEY": "\${JIRA_PROJECT_KEY:-MBA}",
-              "AUTO_CREATE_TEST_TICKETS": "true",
-              "JIRA_ACCEPTANCE_CRITERIA_FIELD": "customfield_10429",
-              "JIRA_STORY_POINTS_FIELD": "customfield_10040",
-              "JIRA_EPIC_LINK_FIELD": "customfield_10014"
-            }
+          "atlassian-mcp": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "mcp-remote",
+              "https://mcp.atlassian.com/v1/sse"
+            ],
+            "env": {}
           }
         }
       }
@@ -288,53 +215,45 @@ tasks:
       cat > "$MCP_CLIENT_CONFIG" << EOF
       {
         "mcpServers": {
-          "jira-mcp": {
-            "command": "node",
-            "args": ["/home/node/jira-mcp/build/index.js"],
-            "env": {
-              "JIRA_HOST": "\${JIRA_HOST:-coakley.atlassian.net}",
-              "JIRA_USERNAME": "\${JIRA_USERNAME:-joe@gitpod.io}",
-              "JIRA_API_TOKEN": "\${JIRA_API_TOKEN:-your_api_token_here}",
-              "JIRA_PROJECT_KEY": "\${JIRA_PROJECT_KEY:-MBA}",
-              "AUTO_CREATE_TEST_TICKETS": "true",
-              "JIRA_ACCEPTANCE_CRITERIA_FIELD": "customfield_10429",
-              "JIRA_STORY_POINTS_FIELD": "customfield_10040",
-              "JIRA_EPIC_LINK_FIELD": "customfield_10014"
-            }
+          "atlassian-mcp": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "mcp-remote",
+              "https://mcp.atlassian.com/v1/sse"
+            ],
+            "env": {}
           }
         }
       }
       EOF
 
-      # Test the MCP server if credentials are available
-      if [ -n "\$JIRA_API_TOKEN" ] && [ "\$JIRA_API_TOKEN" != "your_api_token_here" ]; then
-        echo "Testing MCP server connection..."
-        cd /home/node/jira-mcp
-
-        # Test server initialization
-        if echo '{"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2024-11-05", "capabilities": {"roots": {"listChanged": true}}, "clientInfo": {"name": "test-client", "version": "1.0.0"}}}' | timeout 10 node build/index.js >/dev/null 2>&1; then
-          echo "MCP server connection test successful"
-        else
-          echo "MCP server connection test failed - check credentials"
-        fi
+      # Test mcp-remote availability
+      echo "Testing mcp-remote availability..."
+      if npx -y mcp-remote --version >/dev/null 2>&1; then
+        echo "mcp-remote is available"
+      else
+        echo "mcp-remote installation may be needed on first use"
       fi
       
       # Create a simple verification script
       echo '#!/bin/bash' > /tmp/verify-mcp-connection.sh
-      echo 'echo "Verifying MCP configuration..."' >> /tmp/verify-mcp-connection.sh
+      echo 'echo "Verifying Official Atlassian MCP configuration..."' >> /tmp/verify-mcp-connection.sh
       echo 'echo "Server config: $([ -f ~/.config/gitpod/mcp-config.json ] && echo \"Found\" || echo \"Missing\")"' >> /tmp/verify-mcp-connection.sh
       echo 'echo "Generic client config: $([ -f ~/.config/mcp/client-config.json ] && echo \"Found\" || echo \"Missing\")"' >> /tmp/verify-mcp-connection.sh
-      echo 'echo "MCP server binary: $([ -f /home/node/jira-mcp/build/index.js ] && echo \"Found\" || echo \"Missing\")"' >> /tmp/verify-mcp-connection.sh
+      echo 'echo "mcp-remote available: $(npx -y mcp-remote --version >/dev/null 2>&1 && echo \"Yes\" || echo \"No\")"' >> /tmp/verify-mcp-connection.sh
       chmod +x /tmp/verify-mcp-connection.sh
 
-      echo "Jira MCP server and client setup complete"
+      echo "Official Atlassian MCP server setup complete"
       echo "Server config: ~/.config/gitpod/mcp-config.json"
       echo "Generic client config: ~/.config/mcp/client-config.json"
-      echo "Server location: /home/node/jira-mcp/"
-      echo "Project: MBA (coakley.atlassian.net)"
-      echo "Available tools: create-ticket, get-ticket, search-tickets, update-ticket, link-tickets, get-test-steps, add-test-steps"
+      echo "Server endpoint: https://mcp.atlassian.com/v1/sse"
+      echo "Authentication: OAuth 2.1 flow (browser-based)"
+      echo "Supported services: Jira, Compass, and Confluence"
+      echo "Available tools: Dynamic based on user permissions"
       echo ""
       echo "Run '/tmp/verify-mcp-connection.sh' to verify the setup"
+      echo "When connecting, you'll be prompted to authenticate via browser"
       echo "AI assistants may need to restart to pick up the new MCP configuration"
 
   seedDatabase:

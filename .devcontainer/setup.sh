@@ -48,7 +48,8 @@ cat > ~/.config/gitpod/mcp-config.json << EOF
     "atlassian-mcp": {
       "command": "npx",
       "args": [
-        "@modelcontextprotocol/server-fetch",
+        "-y",
+        "mcp-remote",
         "https://mcp.atlassian.com/v1/sse"
       ],
       "env": {}
