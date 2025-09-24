@@ -1,5 +1,4 @@
 services:
-
   postgres:
     name: "PostgreSQL Database"
     description: "PostgreSQL database for Gitpod Flix (Port: 5432)"
