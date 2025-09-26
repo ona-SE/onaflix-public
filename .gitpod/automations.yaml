@@ -62,6 +62,8 @@ services:
     triggeredBy:
       - postDevcontainerStart
       - postEnvironmentStart
+    dependsOn:
+      - postgres
     commands:
       start: |
         cd /workspaces/gitpodflix-demo/backend/catalog
@@ -98,7 +100,9 @@ services:
             break
           fi
           if [ $i -eq 60 ]; then
-            echo "Timeout waiting for PostgreSQL"
+            echo "Timeout waiting for PostgreSQL. Checking service status..."
+            gitpod automations service status postgres || true
+            gitpod automations service logs postgres || true
             exit 1
           fi
           echo "Waiting for PostgreSQL... attempt $i/60"
@@ -127,6 +131,8 @@ services:
     triggeredBy:
       - postDevcontainerStart
       - postEnvironmentStart
+    dependsOn:
+      - catalog
     commands:
       start: |
         cd /workspaces/gitpodflix-demo/frontend
@@ -150,7 +156,9 @@ services:
             break
           fi
           if [ $i -eq 60 ]; then
-            echo "Timeout waiting for backend API"
+            echo "Timeout waiting for backend API. Checking service status..."
+            gitpod automations service status catalog || true
+            gitpod automations service logs catalog || true
             exit 1
           fi
           echo "Waiting for backend... attempt $i/60"
@@ -182,6 +190,8 @@ tasks:
     triggeredBy:
       - manual
       - postEnvironmentStart
+    dependsOn:
+      - postgres
     command: |
       cd /workspaces/gitpodflix-demo/database/main
 
@@ -193,7 +203,9 @@ tasks:
           break
         fi
         if [ $i -eq 30 ]; then
-          echo "Timeout waiting for PostgreSQL"
+          echo "Timeout waiting for PostgreSQL. Checking service status..."
+          gitpod automations service status postgres || true
+          gitpod automations service logs postgres || true
           exit 1
         fi
         echo "Waiting for PostgreSQL... attempt $i/30"
@@ -230,11 +242,96 @@ tasks:
     triggeredBy:
       - postEnvironmentStart
       - manual
+    dependsOn:
+      - gitpod-flix
     command: |
+      # Wait for services to be ready before opening ports
+      echo "Waiting for services to be ready before opening ports..."
+      
+      # Wait for frontend to be ready
+      for i in {1..30}; do
+        if gitpod automations service status gitpod-flix | grep -q "ready"; then
+          echo "Frontend service is ready"
+          break
+        fi
+        if [ $i -eq 30 ]; then
+          echo "Warning: Frontend service not ready, opening ports anyway"
+          break
+        fi
+        echo "Waiting for frontend service... attempt $i/30"
+        sleep 2
+      done
+      
       echo "Opening demo ports..."
       gitpod environment port open 3000 --name "Gitpod Flix"
       gitpod environment port open 3001 --name "Catalog Service"
       echo "Demo ports opened successfully!"
+
+  checkSystemStatus:
+    name: "Check System Status"
+    description: "Check the status of all services and provide troubleshooting info"
+    triggeredBy:
+      - manual
+    command: |
+      echo "=== GitpodFlix System Status Check ==="
+      echo ""
+      
+      echo "1. Service Status:"
+      echo "  PostgreSQL Database:"
+      gitpod automations service status postgres || echo "    ❌ Not running"
+      echo "  Catalog Service:"
+      gitpod automations service status catalog || echo "    ❌ Not running"
+      echo "  Frontend Service:"
+      gitpod automations service status gitpod-flix || echo "    ❌ Not running"
+      echo ""
+      
+      echo "2. Port Status:"
+      echo "  Port 5432 (PostgreSQL):"
+      if lsof -Pi :5432 -sTCP:LISTEN > /dev/null 2>&1; then
+        echo "    ✅ Active"
+      else
+        echo "    ❌ Not listening"
+      fi
+      echo "  Port 3001 (Catalog API):"
+      if lsof -Pi :3001 -sTCP:LISTEN > /dev/null 2>&1; then
+        echo "    ✅ Active"
+      else
+        echo "    ❌ Not listening"
+      fi
+      echo "  Port 3000 (Frontend):"
+      if lsof -Pi :3000 -sTCP:LISTEN > /dev/null 2>&1; then
+        echo "    ✅ Active"
+      else
+        echo "    ❌ Not listening"
+      fi
+      echo ""
+      
+      echo "3. Health Checks:"
+      echo "  Database Connection:"
+      if PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c "SELECT 1" > /dev/null 2>&1; then
+        echo "    ✅ Connected"
+      else
+        echo "    ❌ Cannot connect"
+      fi
+      echo "  Catalog API Health:"
+      if curl -s http://localhost:3001/health > /dev/null 2>&1; then
+        echo "    ✅ Healthy"
+      else
+        echo "    ❌ Not responding"
+      fi
+      echo "  Frontend Health:"
+      if curl -s http://localhost:3000 > /dev/null 2>&1; then
+        echo "    ✅ Healthy"
+      else
+        echo "    ❌ Not responding"
+      fi
+      echo ""
+      
+      echo "4. Troubleshooting Commands:"
+      echo "  Restart all services: gitpod automations service restart postgres catalog gitpod-flix"
+      echo "  View service logs: gitpod automations service logs <service-name>"
+      echo "  Seed database: gitpod automations task start seedDatabase"
+      echo "  Open ports: gitpod automations task start openDemoPorts"
 
   RMRF:
     name: "rm -rf demo"
