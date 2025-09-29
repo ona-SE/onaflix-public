@@ -2,7 +2,7 @@
 
 set -e
 
-echo "🚀 Starting GitpodFlix Environment..."
+echo "🚀 Starting OnaFlix Environment..."
 
 # Colors for output
 RED='\033[0;31m'
@@ -249,7 +249,7 @@ fi
 
 # Step 7: Display summary
 echo ""
-echo "🎬 GitpodFlix Environment Ready!"
+echo "🎬 OnaFlix Environment Ready!"
 echo "================================"
 echo "Frontend:     http://localhost:3000"
 echo "Backend API:  http://localhost:3001"

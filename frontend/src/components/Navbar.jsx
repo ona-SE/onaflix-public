@@ -36,7 +36,7 @@ function Navbar({ onSearchResults, onSearchToggle, isSearchActive }) {
       <div className="p-4">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div className="flex items-center space-x-8">
-            <h1 className="text-red-600 text-2xl font-bold">GITPOD FLIX</h1>
+            <h1 className="text-red-600 text-2xl font-bold">ONA FLIX</h1>
             <div className="hidden md:flex space-x-4">
               <a href="#" className="text-white hover:text-gray-300 transition-colors">Home</a>
               <a href="#" className="text-white hover:text-gray-300 transition-colors">TV Shows</a>

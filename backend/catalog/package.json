@@ -1,7 +1,7 @@
 {
   "name": "catalog-service",
   "version": "1.0.0",
-  "description": "Catalog service for Gitpod Flix",
+  "description": "Catalog service for Ona Flix",
   "main": "src/index.ts",
   "scripts": {
     "start": "ts-node src/index.ts",

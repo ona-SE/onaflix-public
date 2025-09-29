@@ -1,7 +1,7 @@
 // Mock user data for demonstration
 export const mockUserProfile = {
   name: "Alex Johnson",
-  email: "alex.johnson@gitpodflix.com",
+  email: "alex.johnson@onaflix.com",
   plan: "Premium",
   watchedMovies: 127,
   watchlistCount: 23,

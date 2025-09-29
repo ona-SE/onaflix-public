@@ -112,7 +112,7 @@ function Home() {
               onMovieClick={handleMovieClick}
             />
             <MovieRow 
-              title="Popular on Gitpod Flix" 
+              title="Popular on Ona Flix" 
               movies={movies.popular} 
               onMovieClick={handleMovieClick}
             />

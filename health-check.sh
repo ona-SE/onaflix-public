@@ -23,7 +23,7 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-echo "🔍 GitpodFlix Health Check"
+echo "🔍 OnaFlix Health Check"
 echo "=========================="
 
 # Check PostgreSQL

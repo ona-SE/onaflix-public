@@ -222,7 +222,7 @@ class SearchService {
   // Search history management (localStorage-based)
   getSearchHistory() {
     try {
-      const history = localStorage.getItem('gitpodflix_search_history')
+      const history = localStorage.getItem('onaflix_search_history')
       return history ? JSON.parse(history) : []
     } catch (error) {
       console.error('Error reading search history:', error)
@@ -238,7 +238,7 @@ class SearchService {
       const filteredHistory = history.filter(item => item !== query)
       const newHistory = [query, ...filteredHistory].slice(0, 10) // Keep last 10 searches
       
-      localStorage.setItem('gitpodflix_search_history', JSON.stringify(newHistory))
+      localStorage.setItem('onaflix_search_history', JSON.stringify(newHistory))
     } catch (error) {
       console.error('Error saving search history:', error)
     }
@@ -246,7 +246,7 @@ class SearchService {
 
   clearSearchHistory() {
     try {
-      localStorage.removeItem('gitpodflix_search_history')
+      localStorage.removeItem('onaflix_search_history')
     } catch (error) {
       console.error('Error clearing search history:', error)
     }
