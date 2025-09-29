@@ -7,7 +7,7 @@ services:
       - postEnvironmentStart
     commands:
       start: |
-        cd /workspaces/gitpodflix-demo/database/main
+        cd /workspaces/ona-flix/database/main
         
         # Clean up any existing containers that might conflict
         echo "Cleaning up any existing PostgreSQL containers..."
@@ -52,7 +52,7 @@ services:
         fi
 
       stop: |
-        cd /workspaces/gitpodflix-demo/database/main
+        cd /workspaces/ona-flix/database/main
         echo "Stopping PostgreSQL with docker-compose..."
         docker-compose down
 
@@ -64,7 +64,7 @@ services:
       - postEnvironmentStart
     commands:
       start: |
-        cd /workspaces/gitpodflix-demo/backend/catalog
+        cd /workspaces/ona-flix/backend/catalog
         
         # Kill any existing process on port 3001
         if lsof -Pi :3001 -sTCP:LISTEN -t >/dev/null 2>&1; then
@@ -131,7 +131,7 @@ services:
       - postEnvironmentStart
     commands:
       start: |
-        cd /workspaces/gitpodflix-demo/frontend
+        cd /workspaces/ona-flix/frontend
 
         # Kill any existing process on port 3000
         if lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null 2>&1; then
@@ -187,7 +187,7 @@ tasks:
       - manual
       - postEnvironmentStart
     command: |
-      cd /workspaces/gitpodflix-demo/database/main
+      cd /workspaces/ona-flix/database/main
 
       # Wait for PostgreSQL to be ready
       echo "Waiting for PostgreSQL to be ready..."
@@ -227,7 +227,7 @@ tasks:
     triggeredBy:
       - manual
     command: |
-      cd /workspaces/gitpodflix-demo/database/main
+      cd /workspaces/ona-flix/database/main
       PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c "TRUNCATE TABLE movies;"
 
   openDemoPorts:
