@@ -1,4 +1,4 @@
-# GitpodFlix 🎬
+# OnaFlix 🎬
 
 A modern streaming platform demo built for Gitpod environments, showcasing a full-stack application with React frontend, Node.js backend, and PostgreSQL database.
 
@@ -127,7 +127,7 @@ Check if all services are running:
 
 Expected output:
 ```
-🔍 GitpodFlix Health Check
+🔍 OnaFlix Health Check
 ==========================
 [SUCCESS] PostgreSQL: ✅ Connected (18 movies in database)
 [SUCCESS] Backend API: ✅ http://localhost:3001 (Status: OK)
@@ -271,13 +271,13 @@ This project is a demonstration application for Gitpod environments.
     * And a link for your first GitHub issue
 3. **Go to the projects catalog**
     * Find it at: [app.gitpod.io/projects](https://app.gitpod.io/projects)
-    * Here is every project in GitpodFlix that you have access to
-5. **Open up GitpodFlix**
-    * Search "GitpodFlix" in the list and click **'Create environment'**
+    * Here is every project in OnaFlix that you have access to
+5. **Open up OnaFlix**
+    * Search "OnaFlix" in the list and click **'Create environment'**
 
 And bingo! Now have your first environment up and running—that was easy.
 
-![GitpodFlix in the projects catalog](./images/gitpodflix-loading.png)
+![OnaFlix in the projects catalog](./images/gitpodflix-loading.png)
 
 See above you now have:
 
@@ -327,7 +327,7 @@ Here's a simplified version of how that looks:
 
 ```json
 {
-  "name": "GitpodFlix Dev Environment",
+  "name": "OnaFlix Dev Environment",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
   "features": {
     "ghcr.io/devcontainers/features/node:1": {},
@@ -365,12 +365,12 @@ Here's a simplified version of how that looks:
 ```yaml
 services:
   catalog:
-    name: "GitpodFlix Web Server"
+    name: "OnaFlix Web Server"
     triggeredBy:
       - postEnvironmentStart
     commands:
       start: |
-        cd /workspaces/gitpodflix-demo/frontend
+        cd /workspaces/ona-flix/frontend
         PORT=3001 npx nodemon src/index.ts
 
 tasks:
@@ -381,7 +381,7 @@ tasks:
       - manual
       - postEnvironmentStart
     command: |
-      PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f seeds/movies_complete.sql
+      PGPASSWORD=gitpod psql -h localhost -U gitpod -d onaflix -f seeds/movies_complete.sql
 ```
 
 This includes:

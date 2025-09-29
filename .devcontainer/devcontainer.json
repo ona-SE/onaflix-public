@@ -1,5 +1,5 @@
 {
-  "name": "GitpodFlix Dev Environment",
+  "name": "OnaFlix Dev Environment",
   "build": {
     "dockerfile": "Dockerfile",
     "context": "..",
@@ -53,7 +53,7 @@
   },
   "portsAttributes": {
     "3000": {
-      "label": "Gitpod Flix",
+      "label": "Ona Flix",
       "onAutoForward": "openPreview"
     },
     "3001": {
@@ -65,9 +65,9 @@
   },
   "remoteUser": "node",
   "mounts": [
-    "source=gitpodflix-node-modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
-    "source=gitpodflix-frontend-node-modules,target=${containerWorkspaceFolder}/frontend/node_modules,type=volume",
-    "source=gitpodflix-catalog-node-modules,target=${containerWorkspaceFolder}/backend/catalog/node_modules,type=volume",
-    "source=gitpodflix-npm-cache,target=/root/.npm,type=volume"
+    "source=onaflix-node-modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
+    "source=onaflix-frontend-node-modules,target=${containerWorkspaceFolder}/frontend/node_modules,type=volume",
+    "source=onaflix-catalog-node-modules,target=${containerWorkspaceFolder}/backend/catalog/node_modules,type=volume",
+    "source=onaflix-npm-cache,target=/root/.npm,type=volume"
   ]
 }
