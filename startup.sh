@@ -94,23 +94,56 @@ print_success "Cleanup completed"
 print_status "Starting PostgreSQL database..."
 
 cd database/main
-if ! docker-compose up -d; then
-    print_error "Failed to start PostgreSQL with docker-compose"
-    exit 1
-fi
 
-# Wait for PostgreSQL container to be healthy
+# Ensure clean start - remove any stale containers
+docker-compose down --remove-orphans 2>/dev/null || true
+sleep 2
+
+# Start PostgreSQL with retry logic
+for attempt in 1 2 3; do
+    print_status "Starting PostgreSQL (attempt $attempt/3)..."
+    if docker-compose up -d; then
+        break
+    else
+        print_warning "Failed to start PostgreSQL on attempt $attempt"
+        if [ $attempt -eq 3 ]; then
+            print_error "Failed to start PostgreSQL after 3 attempts"
+            exit 1
+        fi
+        sleep 5
+    fi
+done
+
+# Wait for PostgreSQL container to be healthy with extended timeout
 print_status "Waiting for PostgreSQL container to be healthy..."
-if ! wait_for_service "PostgreSQL Container" "docker-compose ps postgres | grep -q '(healthy)'" 90 5; then
+if ! wait_for_service "PostgreSQL Container" "docker-compose ps | grep postgres | grep -q 'healthy'" 180 3; then
     print_error "PostgreSQL container failed to become healthy"
-    docker-compose logs
+    print_status "Container status:"
+    docker-compose ps
+    print_status "Container logs:"
+    docker-compose logs postgres
+    print_status "System resources:"
+    docker system df
     exit 1
 fi
 
-# Wait for database connection and schema to be ready
-if ! wait_for_service "PostgreSQL Database" "PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c 'SELECT 1'" 30 2; then
+# Wait for database connection to be ready with multiple verification steps
+print_status "Waiting for PostgreSQL database connection..."
+if ! wait_for_service "PostgreSQL Database Connection" "PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c 'SELECT 1'" 90 2; then
     print_error "PostgreSQL database connection failed"
-    docker-compose logs
+    print_status "Container status:"
+    docker-compose ps
+    print_status "Container logs:"
+    docker-compose logs postgres
+    print_status "Network connectivity test:"
+    nc -zv localhost 5432 || true
+    exit 1
+fi
+
+# Additional stability check - verify we can perform basic operations
+print_status "Verifying database operations..."
+if ! wait_for_service "Database Operations" "PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c 'SELECT COUNT(*) FROM information_schema.tables'" 30 2; then
+    print_error "Database operations verification failed"
     exit 1
 fi
 
@@ -192,35 +225,81 @@ cd ..
 # Step 5: Seed the database
 print_status "Seeding database with sample data..."
 
-# Double-check database is ready before seeding
-if ! PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c "SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'movies'" >/dev/null 2>&1; then
+# Verify database schema is ready for seeding
+print_status "Verifying database schema for seeding..."
+if ! wait_for_service "Database Schema Ready" "PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c \"SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'movies'\" | grep -q '1'" 30 2; then
     print_error "Database schema not ready for seeding"
     exit 1
 fi
 
-if [ -f "database/main/seeds/movies_complete.sql" ]; then
-    print_status "Seeding database from SQL file..."
-    if PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f database/main/seeds/movies_complete.sql >/dev/null 2>&1; then
-        print_success "Database seeded with sample movies"
+# Check if database is already seeded
+MOVIE_COUNT=$(PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -t -c "SELECT COUNT(*) FROM movies" 2>/dev/null | xargs || echo "0")
+if [ "$MOVIE_COUNT" -gt 0 ]; then
+    print_success "Database already contains $MOVIE_COUNT movies - skipping seeding"
+else
+    print_status "Database is empty, proceeding with seeding..."
+    
+    # Primary seeding method: SQL file
+    if [ -f "database/main/seeds/movies_complete.sql" ]; then
+        print_status "Seeding database from SQL file..."
+        
+        # Retry seeding with better error handling
+        for seed_attempt in 1 2 3; do
+            if PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -f database/main/seeds/movies_complete.sql 2>/tmp/seed_error.log; then
+                # Verify seeding was successful
+                NEW_MOVIE_COUNT=$(PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -t -c "SELECT COUNT(*) FROM movies" | xargs)
+                if [ "$NEW_MOVIE_COUNT" -gt 0 ]; then
+                    print_success "Database seeded with $NEW_MOVIE_COUNT movies from SQL file"
+                    break
+                else
+                    print_warning "Seeding appeared successful but no movies found (attempt $seed_attempt/3)"
+                fi
+            else
+                print_warning "SQL seeding failed on attempt $seed_attempt/3"
+                if [ -f /tmp/seed_error.log ]; then
+                    print_status "Seeding error details:"
+                    cat /tmp/seed_error.log
+                fi
+            fi
+            
+            if [ $seed_attempt -eq 3 ]; then
+                print_error "SQL seeding failed after 3 attempts, trying API fallback..."
+                
+                # API fallback seeding
+                print_status "Attempting API seeding fallback..."
+                if curl -s -X POST http://localhost:3001/api/movies/seed 2>/dev/null; then
+                    sleep 2  # Give API time to complete seeding
+                    FINAL_COUNT=$(PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -t -c "SELECT COUNT(*) FROM movies" | xargs)
+                    if [ "$FINAL_COUNT" -gt 0 ]; then
+                        print_success "Database seeded with $FINAL_COUNT movies via API fallback"
+                    else
+                        print_warning "API seeding completed but no movies found"
+                    fi
+                else
+                    print_warning "API seeding also failed - database will be empty"
+                fi
+            else
+                sleep 2  # Brief pause before retry
+            fi
+        done
     else
-        print_error "Failed to seed database from SQL file"
-        # Try API fallback
-        print_status "Attempting API seeding fallback..."
-        if curl -s -X POST http://localhost:3001/api/movies/seed >/dev/null 2>&1; then
-            print_success "Database seeded via API fallback"
+        print_status "SQL seed file not found, using API seeding..."
+        if curl -s -X POST http://localhost:3001/api/movies/seed 2>/dev/null; then
+            sleep 2
+            API_COUNT=$(PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -t -c "SELECT COUNT(*) FROM movies" | xargs)
+            if [ "$API_COUNT" -gt 0 ]; then
+                print_success "Database seeded with $API_COUNT movies via API"
+            else
+                print_warning "API seeding completed but no movies found"
+            fi
         else
-            print_warning "Could not seed database - continuing anyway"
+            print_warning "API seeding failed - database will be empty"
         fi
     fi
-else
-    # Fallback to API seeding
-    print_status "SQL seed file not found, using API seeding..."
-    if curl -s -X POST http://localhost:3001/api/movies/seed >/dev/null 2>&1; then
-        print_success "Database seeded via API"
-    else
-        print_warning "Could not seed database - continuing anyway"
-    fi
 fi
+
+# Clean up temporary files
+rm -f /tmp/seed_error.log 2>/dev/null || true
 
 # Step 6: Final health checks
 print_status "Performing final health checks..."
