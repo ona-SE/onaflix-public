@@ -1,7 +1,7 @@
 services:
   postgres:
     name: "PostgreSQL Database"
-    description: "PostgreSQL database for Gitpod Flix (Port: 5432)"
+    description: "PostgreSQL database for Ona Flix (Port: 5432)"
     triggeredBy:
       - postDevcontainerStart
       - postEnvironmentStart
@@ -124,7 +124,7 @@ services:
         pkill -f "node.*catalog" || true
 
   gitpod-flix:
-    name: "Gitpod Flix"
+    name: "Ona Flix"
     description: "Streaming platform frontend (Port: 3000)"
     triggeredBy:
       - postDevcontainerStart
@@ -182,7 +182,7 @@ tasks:
 
   seedDatabase:
     name: "Seed Database"
-    description: "Seed the database with sample movies in a dramatic sequence"
+    description: "Seed the database with sample movies"
     triggeredBy:
       - manual
       - postEnvironmentStart
@@ -255,7 +255,7 @@ tasks:
       done
       
       echo "Opening demo ports..."
-      gitpod environment port open 3000 --name "Gitpod Flix"
+      gitpod environment port open 3000 --name "Ona Flix"
       gitpod environment port open 3001 --name "Catalog Service"
       echo "Demo ports opened successfully!"
 
@@ -265,7 +265,7 @@ tasks:
     triggeredBy:
       - manual
     command: |
-      echo "=== GitpodFlix System Status Check ==="
+      echo "=== OnaFlix System Status Check ==="
       echo ""
       
       echo "1. Service Status:"
@@ -327,7 +327,7 @@ tasks:
 
   RMRF:
     name: "rm -rf demo"
-    description: "⚠️ Destructive task to show the sandboxing of Gitpod environments"
+    description: "⚠️ Destructive task to show the sandboxing of Ona environments"
     triggeredBy:
       - manual
     command: |
