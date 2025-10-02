@@ -24,6 +24,20 @@ services:
       - /tmp
       - /var/run/postgresql
 
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+    security_opt:
+      - no-new-privileges:true
+
 volumes:
   postgres_data:
     driver: local
