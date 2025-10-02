@@ -24,7 +24,23 @@ services:
         fi
         
         echo "Starting PostgreSQL with docker-compose..."
-        docker-compose up
+        docker-compose up -d
+        
+        # Wait for container to be healthy
+        echo "Waiting for PostgreSQL to be healthy..."
+        for i in {1..30}; do
+          if docker-compose ps | grep -q "healthy"; then
+            echo "PostgreSQL container is healthy"
+            break
+          fi
+          if [ $i -eq 30 ]; then
+            echo "Timeout waiting for PostgreSQL to be healthy"
+            docker-compose logs
+            exit 1
+          fi
+          echo "Waiting... attempt $i/30"
+          sleep 2
+        done
 
       ready: |
         if PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c "SELECT 1" >/dev/null 2>&1; then
