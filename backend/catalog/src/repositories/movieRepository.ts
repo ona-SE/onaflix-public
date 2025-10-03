@@ -1,6 +1,7 @@
 import { Pool, QueryResult } from 'pg';
 import { Movie, MovieSearchFilters, Suggestion } from '../types/movie.types';
 import { logger } from '../config/logger';
+import { buildSearchFilters } from '../utils/queryBuilder';
 
 export class MovieRepository {
   constructor(private pool: Pool) {}
@@ -122,136 +123,53 @@ export class MovieRepository {
   }
 
   private buildSearchQuery(filters: MovieSearchFilters): { query: string; params: any[] } {
-    let query = 'SELECT * FROM movies WHERE 1=1';
-    const params: any[] = [];
-    let paramIndex = 1;
+    // Convert MovieSearchFilters to format expected by buildSearchFilters
+    const searchFilters = {
+      q: filters.q,
+      genres: filters.genres?.join(','),
+      yearMin: filters.yearMin?.toString(),
+      yearMax: filters.yearMax?.toString(),
+      ratingMin: filters.ratingMin?.toString(),
+      ratingMax: filters.ratingMax?.toString(),
+      durationMin: filters.durationMin?.toString(),
+      durationMax: filters.durationMax?.toString(),
+    };
 
-    if (filters.q && filters.q.trim()) {
-      query += ` AND (
-        to_tsvector('english', title || ' ' || COALESCE(description, '') || ' ' || COALESCE(director, '')) 
-        @@ plainto_tsquery('english', $${paramIndex})
-        OR title ILIKE $${paramIndex + 1}
-        OR description ILIKE $${paramIndex + 1}
-        OR director ILIKE $${paramIndex + 1}
-      )`;
-      params.push(filters.q.trim(), `%${filters.q.trim()}%`);
-      paramIndex += 2;
+    const { whereClause, params, paramIndex } = buildSearchFilters(searchFilters);
+    
+    let query = `SELECT * FROM movies WHERE 1=1${whereClause}`;
+    
+    // Add ordering and pagination
+    if (filters.q?.trim()) {
+      query += ` ORDER BY 
+        ts_rank(to_tsvector('english', title || ' ' || COALESCE(description, '')), plainto_tsquery('english', $1)) DESC,
+        rating DESC, 
+        release_year DESC`;
+    } else {
+      query += ` ORDER BY rating DESC, release_year DESC`;
     }
-
-    if (filters.genres && filters.genres.length > 0) {
-      query += ` AND genres && $${paramIndex}`;
-      params.push(filters.genres);
-      paramIndex++;
-    }
-
-    if (filters.yearMin !== undefined) {
-      query += ` AND release_year >= $${paramIndex}`;
-      params.push(filters.yearMin);
-      paramIndex++;
-    }
-
-    if (filters.yearMax !== undefined) {
-      query += ` AND release_year <= $${paramIndex}`;
-      params.push(filters.yearMax);
-      paramIndex++;
-    }
-
-    if (filters.ratingMin !== undefined) {
-      query += ` AND rating >= $${paramIndex}`;
-      params.push(filters.ratingMin);
-      paramIndex++;
-    }
-
-    if (filters.ratingMax !== undefined) {
-      query += ` AND rating <= $${paramIndex}`;
-      params.push(filters.ratingMax);
-      paramIndex++;
-    }
-
-    if (filters.durationMin !== undefined) {
-      query += ` AND duration >= $${paramIndex}`;
-      params.push(filters.durationMin);
-      paramIndex++;
-    }
-
-    if (filters.durationMax !== undefined) {
-      query += ` AND duration <= $${paramIndex}`;
-      params.push(filters.durationMax);
-      paramIndex++;
-    }
-
-    const searchTerm = filters.q?.trim();
-    query += ` ORDER BY 
-      CASE WHEN $1 IS NOT NULL THEN 
-        ts_rank(to_tsvector('english', title || ' ' || COALESCE(description, '')), plainto_tsquery('english', $1))
-      ELSE 0 END DESC,
-      rating DESC, 
-      release_year DESC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
-
+    
+    query += ` LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
     params.push(filters.limit || 50, filters.offset || 0);
 
     return { query, params };
   }
 
   private buildCountQuery(filters: MovieSearchFilters): { query: string; params: any[] } {
-    let query = 'SELECT COUNT(*) FROM movies WHERE 1=1';
-    const params: any[] = [];
-    let paramIndex = 1;
+    // Convert MovieSearchFilters to format expected by buildSearchFilters
+    const searchFilters = {
+      q: filters.q,
+      genres: filters.genres?.join(','),
+      yearMin: filters.yearMin?.toString(),
+      yearMax: filters.yearMax?.toString(),
+      ratingMin: filters.ratingMin?.toString(),
+      ratingMax: filters.ratingMax?.toString(),
+      durationMin: filters.durationMin?.toString(),
+      durationMax: filters.durationMax?.toString(),
+    };
 
-    if (filters.q && filters.q.trim()) {
-      query += ` AND (
-        to_tsvector('english', title || ' ' || COALESCE(description, '') || ' ' || COALESCE(director, '')) 
-        @@ plainto_tsquery('english', $${paramIndex})
-        OR title ILIKE $${paramIndex + 1}
-        OR description ILIKE $${paramIndex + 1}
-        OR director ILIKE $${paramIndex + 1}
-      )`;
-      params.push(filters.q.trim(), `%${filters.q.trim()}%`);
-      paramIndex += 2;
-    }
-
-    if (filters.genres && filters.genres.length > 0) {
-      query += ` AND genres && $${paramIndex}`;
-      params.push(filters.genres);
-      paramIndex++;
-    }
-
-    if (filters.yearMin !== undefined) {
-      query += ` AND release_year >= $${paramIndex}`;
-      params.push(filters.yearMin);
-      paramIndex++;
-    }
-
-    if (filters.yearMax !== undefined) {
-      query += ` AND release_year <= $${paramIndex}`;
-      params.push(filters.yearMax);
-      paramIndex++;
-    }
-
-    if (filters.ratingMin !== undefined) {
-      query += ` AND rating >= $${paramIndex}`;
-      params.push(filters.ratingMin);
-      paramIndex++;
-    }
-
-    if (filters.ratingMax !== undefined) {
-      query += ` AND rating <= $${paramIndex}`;
-      params.push(filters.ratingMax);
-      paramIndex++;
-    }
-
-    if (filters.durationMin !== undefined) {
-      query += ` AND duration >= $${paramIndex}`;
-      params.push(filters.durationMin);
-      paramIndex++;
-    }
-
-    if (filters.durationMax !== undefined) {
-      query += ` AND duration <= $${paramIndex}`;
-      params.push(filters.durationMax);
-      paramIndex++;
-    }
+    const { whereClause, params } = buildSearchFilters(searchFilters);
+    const query = `SELECT COUNT(*) FROM movies WHERE 1=1${whereClause}`;
 
     return { query, params };
   }

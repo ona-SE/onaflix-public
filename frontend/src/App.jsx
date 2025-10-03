@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Routes, Route, createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import MovieRow from './components/MovieRow'
@@ -146,10 +146,10 @@ function Home() {
 }
 
 // Import test components
-import VideoPlayerDebug from './components/VideoPlayerDebug'
-import QuickTest from './components/QuickTest'
-import AudioTest from './components/AudioTest'
-import CategoryTest from './components/CategoryTest'
+import VideoPlayerDebug from './__tests__/components/VideoPlayerDebug'
+import QuickTest from './__tests__/components/QuickTest'
+import AudioTest from './__tests__/components/AudioTest'
+import CategoryTest from './__tests__/components/CategoryTest'
 
 const router = createBrowserRouter([
   {
