@@ -1,0 +1,40 @@
+name: Sync Main to Develop
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Fetch all branches
+        run: |
+          git fetch origin develop
+      
+      - name: Sync main to develop
+        run: |
+          git checkout develop
+          if git merge origin/main --no-edit; then
+            git push origin develop
+            echo "✅ Successfully synced main to develop"
+          else
+            echo "❌ Merge conflict detected - manual intervention required"
+            git merge --abort
+            exit 1
+          fi
