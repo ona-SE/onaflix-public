@@ -84,6 +84,8 @@ services:
         # Check if container is already running and healthy
         if docker ps --filter "name=main-postgres-1" --filter "health=healthy" --format '{{.Names}}' | grep -q '^main-postgres-1$'; then
           echo "PostgreSQL container already running and healthy"
+          echo "PostgreSQL is running, monitoring logs..."
+          docker-compose logs -f postgres
           exit 0
         fi
         
@@ -96,6 +98,8 @@ services:
           for i in {1..30}; do
             if docker ps --filter "name=main-postgres-1" --filter "health=healthy" --format '{{.Names}}' | grep -q '^main-postgres-1$'; then
               echo "PostgreSQL is healthy"
+              echo "PostgreSQL is running, monitoring logs..."
+              docker-compose logs -f postgres
               exit 0
             fi
             sleep 1
