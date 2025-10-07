@@ -370,6 +370,10 @@ tasks:
       echo "Opening demo ports..."
       gitpod environment port open 3000 --name "Ona Flix"
       gitpod environment port open 3001 --name "Catalog Service"
+      
+      # Wait a moment for ports to be fully registered
+      sleep 2
+      
       echo "Demo ports opened successfully!"
 
   checkSystemStatus:
