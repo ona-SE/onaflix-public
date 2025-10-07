@@ -113,7 +113,7 @@ services:
         for i in {1..60}; do
           if docker ps --filter "name=main-postgres-1" --filter "health=healthy" --format '{{.Names}}' | grep -q '^main-postgres-1$'; then
             echo "PostgreSQL is healthy"
-            exit 0
+            break
           fi
           # Fast checks initially, slower later
           if [ $i -lt 20 ]; then
@@ -121,11 +121,16 @@ services:
           else
             sleep 2
           fi
+          if [ $i -eq 60 ]; then
+            echo "PostgreSQL failed to become healthy"
+            docker-compose logs postgres
+            exit 1
+          fi
         done
         
-        echo "PostgreSQL failed to become healthy"
-        docker-compose logs postgres
-        exit 1
+        # Keep service running by tailing logs
+        echo "PostgreSQL is running, monitoring logs..."
+        docker-compose logs -f postgres
 
       ready: |
         if PGPASSWORD=gitpod psql -h localhost -U gitpod -d gitpodflix -c "SELECT 1" >/dev/null 2>&1; then
@@ -200,29 +205,9 @@ services:
           sleep 2
         done
         
-        # Start the service in background
+        # Start the service in foreground (service must stay running)
         echo "Starting catalog service..."
-        nohup npm run dev > /tmp/catalog.log 2>&1 &
-        echo $! > /tmp/catalog.pid
-        
-        # Wait for service to be ready with adaptive intervals
-        echo "Waiting for catalog service to be ready..."
-        for i in {1..30}; do
-          if curl -sf http://localhost:3001/health >/dev/null 2>&1; then
-            echo "Catalog service is ready"
-            exit 0
-          fi
-          # Fast checks initially, slower later
-          if [ $i -lt 10 ]; then
-            sleep 0.5
-          else
-            sleep 2
-          fi
-        done
-        
-        echo "Catalog service failed to start"
-        tail -50 /tmp/catalog.log
-        exit 1
+        exec npm run dev
       ready: |
         if curl -s http://localhost:3001/health > /dev/null; then
           echo "Catalog service is ready"
@@ -233,10 +218,6 @@ services:
         fi
       stop: |
         echo "Stopping catalog service..."
-        if [ -f /tmp/catalog.pid ]; then
-          kill $(cat /tmp/catalog.pid) 2>/dev/null || true
-          rm /tmp/catalog.pid
-        fi
         fuser -k 3001/tcp 2>/dev/null || true
         pkill -f "node.*catalog" || true
 
@@ -286,29 +267,9 @@ services:
           sleep 2
         done
 
-        # Start the service in background
+        # Start the service in foreground (service must stay running)
         echo "Starting frontend service..."
-        nohup npm run dev > /tmp/frontend.log 2>&1 &
-        echo $! > /tmp/frontend.pid
-
-        # Wait for service to be ready with adaptive intervals
-        echo "Waiting for frontend to be ready..."
-        for i in {1..30}; do
-          if curl -sf http://localhost:3000 >/dev/null 2>&1; then
-            echo "Frontend is ready"
-            exit 0
-          fi
-          # Fast checks initially, slower later
-          if [ $i -lt 10 ]; then
-            sleep 0.5
-          else
-            sleep 2
-          fi
-        done
-        
-        echo "Frontend failed to start"
-        tail -50 /tmp/frontend.log
-        exit 1
+        exec npm run dev
       ready: |
         if curl -s http://localhost:3000 > /dev/null; then
           echo "Gitpod Flix is ready"
@@ -319,10 +280,6 @@ services:
         fi
       stop: |
         echo "Stopping frontend service..."
-        if [ -f /tmp/frontend.pid ]; then
-          kill $(cat /tmp/frontend.pid) 2>/dev/null || true
-          rm /tmp/frontend.pid
-        fi
         fuser -k 3000/tcp 2>/dev/null || true
         pkill -f "node.*frontend" || true
         pkill -f "vite" || true
