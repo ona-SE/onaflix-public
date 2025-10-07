@@ -52,7 +52,8 @@ services:
         fi
         
         echo "All dependencies installed successfully"
-        exit 0
+        echo "Dependencies installed, keeping service alive..."
+        sleep infinity
       
       ready: |
         # Check if both node_modules exist
