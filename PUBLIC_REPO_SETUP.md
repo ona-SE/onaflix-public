@@ -4,8 +4,8 @@ This document explains the bidirectional sync setup between the private and publ
 
 ## Repositories
 
-- **Private**: `ona-SE/ona-flix` (source of truth, development happens here)
-- **Public**: `ona-SE/onaflix-public` (read-only mirror for visibility)
+- **Private**: `ona-SE/ona-flix` (source of truth, permanent changes happen here)
+- **Public**: `ona-SE/onaflix-public` (experimental playground, resets nightly)
 
 ## Sync Workflow
 
@@ -15,7 +15,7 @@ This document explains the bidirectional sync setup between the private and publ
 
 - **Trigger**: Every night at 2 AM UTC (also manual via workflow_dispatch)
 - **Action**: Force pushes `main` branch from private to public
-- **Purpose**: Keeps public repo synchronized with private repo as a read-only mirror
+- **Purpose**: Resets public repo to match private repo, wiping any experimental changes
 
 ## Required Secrets
 
@@ -55,18 +55,21 @@ Or wait for the nightly scheduled run at 2 AM UTC.
 
 ## Contribution Workflow
 
-The public repository is a **read-only mirror**. For external contributors:
+The public repository is an **experimental playground**:
 
 1. Fork `onaflix-public`
 2. Create a feature branch
 3. Make changes and submit a PR to `onaflix-public`
-4. **Maintainers must manually review and apply changes to `ona-flix`**
-5. Changes will appear in public repo on next nightly sync
+4. **Anyone with write access can merge PRs freely**
+5. Experiment, test, and try things out
+6. Every night at 2 AM UTC, the public repo resets to match the private repo
+7. If you want changes to persist, they must be merged into `ona-flix` (private)
 
 ## Notes
 
 - The private repository (`ona-flix`) is the **only** source of truth
-- Nightly sync from private to public uses `--force` to ensure public always matches private
-- Public repository is for visibility and community engagement only
-- All development and merging happens in the private repository
-- PRs to public repo serve as suggestions that maintainers can review and apply
+- Nightly sync from private to public uses `--force` to reset the public repo
+- Public repository is a sandbox for experimentation
+- Merge freely to the public repo - it resets every night
+- Only changes merged to the private repo will persist
+- This allows safe experimentation without affecting the production codebase

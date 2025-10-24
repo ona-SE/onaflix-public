@@ -1,5 +1,8 @@
 # OnaFlix 🎬
 
+> **⚠️ EXPERIMENTAL PLAYGROUND - This repository resets every night at 2 AM UTC!**  
+> Feel free to merge PRs and experiment - all changes are temporary. See [PUBLIC_REPO_NOTICE.md](PUBLIC_REPO_NOTICE.md) for details.
+
 A modern streaming platform demo built for Ona environments, showcasing a full-stack application with React frontend, Node.js backend, and PostgreSQL database.
 
 ## Features

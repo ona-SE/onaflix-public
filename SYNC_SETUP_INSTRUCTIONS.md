@@ -60,33 +60,39 @@ Or via GitHub UI:
 └──────────┬──────────┘
            │
            │ Nightly at 2 AM UTC
-           │ (force push)
+           │ (force push - resets public repo)
            ↓
 ┌─────────────────────┐
 │ ona-SE/onaflix-     │
 │ public              │
-│ (Public Repo)       │
-│ Read-Only Mirror    │
+│ Experimental        │
+│ Playground          │
+│ (Resets Nightly)    │
 └─────────────────────┘
 ```
 
+**Key Concept**: The public repo is like a sandbox that resets every night. 
+Experiment freely, merge PRs, try things out - it all gets reset at 2 AM UTC.
+
 ## 🤝 Contribution Workflow
 
-The public repository is a **read-only mirror**. External contributors should:
+The public repository is an **experimental playground**:
 
-1. Fork `ona-SE/onaflix-public`
+1. Anyone can fork `ona-SE/onaflix-public`
 2. Create a feature branch
 3. Make changes
 4. Submit a PR to `onaflix-public`
-5. Maintainers review and manually merge changes into `ona-flix` (private)
-6. Changes sync back to public repo on next nightly run
+5. **PRs can be merged freely by anyone with write access**
+6. Every night at 2 AM UTC, the public repo resets to match the private repo
+7. This allows experimentation without affecting the source of truth
 
 ## 📝 Notes
 
 - The private repository (`ona-flix`) is the **only** source of truth
-- Nightly sync uses `--force` to ensure public repo always matches private
-- Public repository is a read-only mirror for visibility and community engagement
-- PRs to the public repo must be manually reviewed and applied to the private repo
+- Nightly sync uses `--force` to reset public repo to match private repo
+- Public repository is an experimental playground - merge freely!
+- All changes in public repo are wiped nightly and reset to private repo state
+- If you want changes to persist, they must be merged into the private repo
 
 ## 🆘 Troubleshooting
 
