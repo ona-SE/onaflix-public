@@ -5,11 +5,11 @@
 1. ✅ Public repository `ona-SE/onaflix-public` exists
 2. ✅ Code has been pushed to the public repository
 3. ✅ Workflow created in private repo: `.github/workflows/sync-to-public.yml`
-4. ✅ Workflow created in public repo: `.github/workflows/sync-from-public.yml`
+4. ✅ One-way sync configured: Private → Public only
 
 ## ⚠️ Required: Configure Secrets
 
-You need to add GitHub secrets to both repositories for the workflows to function.
+You need to add a GitHub secret to the private repository for the workflow to function.
 
 ### Step 1: Create a GitHub Personal Access Token
 
@@ -35,20 +35,6 @@ Or via GitHub UI:
 4. Value: Paste your token
 5. Click "Add secret"
 
-### Step 3: Add Secret to Public Repository (onaflix-public)
-
-```bash
-gh secret set PRIVATE_REPO_TOKEN --repo ona-SE/onaflix-public
-# Paste your token when prompted
-```
-
-Or via GitHub UI:
-1. Go to [https://github.com/ona-SE/onaflix-public/settings/secrets/actions](https://github.com/ona-SE/onaflix-public/settings/secrets/actions)
-2. Click "New repository secret"
-3. Name: `PRIVATE_REPO_TOKEN`
-4. Value: Paste your token
-5. Click "Add secret"
-
 ## 🧪 Testing the Setup
 
 ### Test 1: Manual Trigger of Private → Public Sync
@@ -60,18 +46,9 @@ Or via GitHub UI:
 5. Wait for the workflow to complete
 6. Verify changes appear in [https://github.com/ona-SE/onaflix-public](https://github.com/ona-SE/onaflix-public)
 
-### Test 2: Public → Private Sync
-
-1. Make a small change in the public repository (e.g., edit README)
-2. Commit and push to main
-3. Check [https://github.com/ona-SE/onaflix-public/actions](https://github.com/ona-SE/onaflix-public/actions)
-4. Verify the sync workflow runs
-5. Check that the change appears in the private repository
-
 ## 📅 Automatic Sync Schedule
 
-- **Private → Public**: Runs every night at 2 AM UTC
-- **Public → Private**: Runs automatically on every push to main in public repo
+- **Private → Public**: Runs every night at 2 AM UTC (force push to keep public in sync)
 
 ## 🔄 How It Works
 
@@ -89,34 +66,27 @@ Or via GitHub UI:
 │ ona-SE/onaflix-     │
 │ public              │
 │ (Public Repo)       │
-│ Accepts PRs         │
-└──────────┬──────────┘
-           │
-           │ On push to main
-           │ (normal push)
-           ↓
-┌─────────────────────┐
-│   ona-SE/ona-flix   │
-│   (Private Repo)    │
+│ Read-Only Mirror    │
 └─────────────────────┘
 ```
 
 ## 🤝 Contribution Workflow
 
-External contributors can now:
+The public repository is a **read-only mirror**. External contributors should:
 
 1. Fork `ona-SE/onaflix-public`
 2. Create a feature branch
 3. Make changes
 4. Submit a PR to `onaflix-public`
-5. Once merged → automatically syncs to `ona-flix`
+5. Maintainers review and manually merge changes into `ona-flix` (private)
+6. Changes sync back to public repo on next nightly run
 
 ## 📝 Notes
 
-- The private repository (`ona-flix`) is the source of truth
-- Nightly sync uses `--force` to ensure public repo matches private
-- Public to private sync does NOT use force to preserve history
-- If conflicts occur, workflows will fail and require manual resolution
+- The private repository (`ona-flix`) is the **only** source of truth
+- Nightly sync uses `--force` to ensure public repo always matches private
+- Public repository is a read-only mirror for visibility and community engagement
+- PRs to the public repo must be manually reviewed and applied to the private repo
 
 ## 🆘 Troubleshooting
 
