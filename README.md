@@ -73,7 +73,7 @@ Expected output:
 ├── backend/catalog/   # Node.js API service
 ├── database/main/     # PostgreSQL setup and migrations
 ├── .devcontainer/     # Development container configuration
-├── .gitpod/          # Ona automation configuration
+├── .ona/             # Ona automation configuration
 ├── startup.sh        # 🚀 Service startup script
 ├── health-check.sh   # 🔍 Health monitoring script
 └── README.md         # This file
