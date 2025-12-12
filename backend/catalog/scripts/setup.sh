@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install dependencies
-npm install
+npm ci --ignore-scripts
 
 # Create .env file if it doesn't exist
 if [ ! -f .env ]; then
@@ -19,4 +19,4 @@ fi
 mkdir -p dist
 
 # Build TypeScript
-npx tsc 
+npm run build

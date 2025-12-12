@@ -296,7 +296,7 @@ services:
     commands:
       start: |
         cd /workspaces/ona-flix/frontend
-        PORT=3001 npx nodemon src/index.ts
+        PORT=3001 npm run dev
 
 tasks:
   seedDatabase:

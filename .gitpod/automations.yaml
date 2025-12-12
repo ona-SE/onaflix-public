@@ -14,7 +14,7 @@ services:
           cd /workspaces/ona-flix/backend/catalog
           if [ ! -d "node_modules" ] || [ ! -f "node_modules/.package-lock.json" ]; then
             echo "Installing catalog dependencies..."
-            npm ci --prefer-offline --no-audit 2>&1 | tee /tmp/catalog-install.log
+            npm ci --prefer-offline --no-audit --ignore-scripts 2>&1 | tee /tmp/catalog-install.log
           else
             echo "Catalog dependencies already installed"
           fi
@@ -26,7 +26,7 @@ services:
           cd /workspaces/ona-flix/frontend
           if [ ! -d "node_modules" ] || [ ! -f "node_modules/.package-lock.json" ]; then
             echo "Installing frontend dependencies..."
-            npm ci --prefer-offline --no-audit 2>&1 | tee /tmp/frontend-install.log
+            npm ci --prefer-offline --no-audit --ignore-scripts 2>&1 | tee /tmp/frontend-install.log
           else
             echo "Frontend dependencies already installed"
           fi
@@ -193,7 +193,7 @@ services:
         # But check just in case
         if [ ! -d "node_modules" ]; then
           echo "WARNING: node_modules not found, installing..."
-          npm ci --prefer-offline --no-audit
+          npm ci --prefer-offline --no-audit --ignore-scripts
         fi
         
         # Wait for PostgreSQL service to be ready
@@ -255,7 +255,7 @@ services:
         # But check just in case
         if [ ! -d "node_modules" ]; then
           echo "WARNING: node_modules not found, installing..."
-          npm ci --prefer-offline --no-audit
+          npm ci --prefer-offline --no-audit --ignore-scripts
         fi
 
         # Wait for backend API to be ready
