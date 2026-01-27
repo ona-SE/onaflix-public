@@ -43,6 +43,7 @@ function Navbar({ onSearchResults, onSearchToggle, isSearchActive }) {
               <a href="#" className="text-white hover:text-gray-300 transition-colors">Movies</a>
               <a href="#" className="text-white hover:text-gray-300 transition-colors">New & Popular</a>
               <a href="#" className="text-white hover:text-gray-300 transition-colors">My List</a>
+              <a href="#" className="text-white hover:text-gray-300 transition-colors">Trending</a>
             </div>
           </div>
           
