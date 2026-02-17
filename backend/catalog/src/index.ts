@@ -1,10 +1,18 @@
 import dotenv from 'dotenv';
+dotenv.config();
+
+import * as Sentry from '@sentry/node';
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  environment: process.env.NODE_ENV || 'development',
+  tracesSampleRate: 1.0,
+});
+
 import { createApp } from './app';
 import { testConnection, gracefulShutdown as shutdownDatabase } from './config/database';
 import { connectRedis, gracefulShutdown as shutdownRedis } from './config/redis';
 import { logger } from './config/logger';
-
-dotenv.config();
 
 const port = process.env.PORT || 3001;
 

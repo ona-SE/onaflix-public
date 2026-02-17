@@ -2,6 +2,7 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
+import * as Sentry from '@sentry/node';
 import { pool } from './config/database';
 import { redis } from './config/redis';
 import { logger } from './config/logger';
@@ -34,6 +35,7 @@ export const createApp = (): Express => {
   const routes = createRoutes(movieController, healthController);
   app.use(routes);
 
+  Sentry.setupExpressErrorHandler(app);
   app.use(notFoundHandler);
   app.use(errorHandler);
 
