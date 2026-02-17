@@ -576,35 +576,140 @@ tasks:
       "
       echo ""
 
-      # --- Frontend guidance ---
+      # --- Frontend errors via Sentry SDK ---
 
-      echo "6. Checking frontend service..."
-      if curl -sf http://localhost:3000 >/dev/null 2>&1; then
-        echo "   ✅ Frontend is running"
-        echo ""
-        echo "   To trigger frontend errors, open the browser console and run:"
-        echo ""
-        echo "   // Simulate failed API fetch"
-        echo "   fetch('http://localhost:3001/api/movies/nonexistent').then(r => { if (!r.ok) throw new Error('Failed to load movie: HTTP ' + r.status) }).catch(e => { import('@sentry/react').then(S => S.captureException(e)) })"
-        echo ""
-        echo "   // Simulate React component crash"
-        echo "   import('@sentry/react').then(S => { S.captureException(new TypeError(\"Cannot read properties of null (reading 'title'): MovieModal attempted to render with null movie data\")) })"
-      else
-        echo "   ⚠️  Frontend not running — start it with: gitpod automations service start gitpod-flix"
-      fi
+      echo "6. Sending realistic errors to Sentry via SDK (frontend project)..."
+      cd /workspaces/ona-flix/frontend
+      node -e "
+        const Sentry = require('@sentry/react');
+        Sentry.init({
+          dsn: 'https://e6a93e743baaae0a4d92f30257029027@o4510737672437760.ingest.de.sentry.io/4510902002319440',
+          environment: 'development',
+        });
+
+        // Simulate React component crash in MovieModal
+        const renderError = new TypeError(\"Cannot read properties of null (reading 'title')\");
+        Sentry.withScope(scope => {
+          scope.setTag('component', 'MovieModal');
+          scope.setTag('react.errorBoundary', 'true');
+          scope.setContext('component', {
+            name: 'MovieModal',
+            props: { movieId: 42, isOpen: true },
+            action: 'render',
+          });
+          scope.setContext('state', {
+            selectedMovie: null,
+            showVideoPlayer: false,
+          });
+          Sentry.captureException(renderError);
+        });
+
+        // Simulate failed API fetch for movies
+        const fetchError = new Error('Failed to fetch movies: NetworkError when attempting to fetch resource');
+        fetchError.name = 'FetchError';
+        Sentry.withScope(scope => {
+          scope.setTag('component', 'Home');
+          scope.setTag('http.method', 'GET');
+          scope.setTag('http.url', '/api/movies');
+          scope.setContext('request', {
+            url: 'http://localhost:3001/api/movies',
+            method: 'GET',
+            status: 0,
+            statusText: 'Network Error',
+          });
+          scope.addBreadcrumb({
+            category: 'navigation',
+            message: 'User navigated to /',
+            level: 'info',
+          });
+          scope.addBreadcrumb({
+            category: 'fetch',
+            message: 'GET /api/movies',
+            level: 'error',
+            data: { status_code: 0 },
+          });
+          Sentry.captureException(fetchError);
+        });
+
+        // Simulate search service error
+        const searchError = new Error('Search request failed: 503 Service Unavailable');
+        Sentry.withScope(scope => {
+          scope.setTag('component', 'SearchBar');
+          scope.setTag('http.method', 'GET');
+          scope.setTag('http.status_code', '503');
+          scope.setContext('search', {
+            query: 'inception',
+            filters: { genres: ['Sci-Fi'], yearMin: 2000 },
+            endpoint: '/api/search',
+          });
+          scope.addBreadcrumb({
+            category: 'ui.click',
+            message: 'User clicked search button',
+            level: 'info',
+          });
+          scope.addBreadcrumb({
+            category: 'ui.input',
+            message: 'User typed: inception',
+            level: 'info',
+          });
+          Sentry.captureException(searchError);
+        });
+
+        // Simulate React Router navigation error
+        const routeError = new Error(\"No route matches URL '/movies/undefined'\");
+        routeError.name = 'RouterError';
+        Sentry.withScope(scope => {
+          scope.setTag('component', 'RouterProvider');
+          scope.setContext('router', {
+            currentPath: '/movies/undefined',
+            previousPath: '/',
+            params: { movieId: 'undefined' },
+          });
+          scope.addBreadcrumb({
+            category: 'navigation',
+            message: 'Navigated from / to /movies/undefined',
+            level: 'warning',
+          });
+          Sentry.captureException(routeError);
+        });
+
+        // Simulate image loading failure
+        Sentry.withScope(scope => {
+          scope.setTag('component', 'MovieRow');
+          scope.setTag('asset.type', 'image');
+          scope.setContext('media', {
+            src: 'https://m.media-amazon.com/images/broken-poster.jpg',
+            movieTitle: 'The Dark Knight',
+            fallbackUsed: false,
+          });
+          scope.setLevel('warning');
+          Sentry.captureMessage('Movie poster failed to load for The Dark Knight', 'warning');
+        });
+
+        Sentry.flush(5000).then(() => {
+          console.log('   ✅ 5 realistic errors sent to Sentry (frontend)');
+        });
+      "
       echo ""
 
       echo "=== Done ==="
       echo "Check your Sentry dashboard for new events:"
       echo "  https://sentry.io"
       echo ""
-      echo "You should see the following issues:"
+      echo "Backend project issues:"
       echo "  • DatabaseError: Connection terminated unexpectedly"
       echo "  • RedisConnectionError: Redis connection failed"
       echo "  • TypeError: Cannot read properties of undefined (reading 'genres')"
       echo "  • TimeoutError: Request to external ratings API timed out"
       echo "  • Warning: Rate limit exceeded for /api/search"
       echo "  • Zod validation errors from invalid search params"
+      echo ""
+      echo "Frontend project issues:"
+      echo "  • TypeError: Cannot read properties of null (reading 'title') [MovieModal]"
+      echo "  • FetchError: Failed to fetch movies [Home]"
+      echo "  • Search request failed: 503 Service Unavailable [SearchBar]"
+      echo "  • RouterError: No route matches URL '/movies/undefined'"
+      echo "  • Warning: Movie poster failed to load [MovieRow]"
 
   RMRF:
     name: "rm -rf demo"
