@@ -444,11 +444,11 @@ tasks:
 
   triggerSentryTestErrors:
     name: "Trigger Sentry Test Errors"
-    description: "Send test errors to Sentry without disrupting running services"
+    description: "Send realistic test errors to Sentry without disrupting running services"
     triggeredBy:
       - manual
     command: |
-      echo "=== Sentry Test Error Trigger ==="
+      echo "=== Sentry Realistic Error Trigger ==="
       echo ""
 
       # Verify backend is running
@@ -461,42 +461,134 @@ tasks:
       echo "   ✅ Catalog service is healthy"
       echo ""
 
-      # Trigger a 404 via a non-existent route (captured by Sentry error handler)
-      echo "2. Triggering 404 error on backend..."
-      HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3001/api/sentry-test-nonexistent)
-      echo "   Sent request to /api/sentry-test-nonexistent → HTTP $HTTP_STATUS"
+      # --- Backend errors via API ---
+
+      echo "2. Triggering Zod validation error (invalid search params)..."
+      RESPONSE=$(curl -s -w "\n%{http_code}" "http://localhost:3001/api/search?yearMin=9999&ratingMin=50&limit=-1")
+      HTTP_STATUS=$(echo "$RESPONSE" | tail -1)
+      echo "   GET /api/search?yearMin=9999&ratingMin=50&limit=-1 → HTTP $HTTP_STATUS"
       echo ""
 
-      # Trigger a bad request to the movies endpoint (invalid query params)
-      echo "3. Triggering validation error on backend..."
-      HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:3001/api/movies?page=-1&limit=99999")
-      echo "   Sent request with invalid params → HTTP $HTTP_STATUS"
+      echo "3. Triggering 404 on non-existent movie endpoint..."
+      RESPONSE=$(curl -s -w "\n%{http_code}" "http://localhost:3001/api/movies/999999")
+      HTTP_STATUS=$(echo "$RESPONSE" | tail -1)
+      echo "   GET /api/movies/999999 → HTTP $HTTP_STATUS"
       echo ""
 
-      # Send a direct test exception via Node.js using the backend's Sentry DSN
-      echo "4. Sending direct test exception to Sentry (backend)..."
+      echo "4. Triggering malformed POST to seed endpoint..."
+      RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "http://localhost:3001/api/movies/seed" -H "Content-Type: application/json" -d '{"invalid": true}')
+      HTTP_STATUS=$(echo "$RESPONSE" | tail -1)
+      echo "   POST /api/movies/seed with bad payload → HTTP $HTTP_STATUS"
+      echo ""
+
+      # --- Backend errors via Sentry SDK directly ---
+
+      echo "5. Sending realistic errors to Sentry via SDK..."
       cd /workspaces/ona-flix/backend/catalog
       node -e "
         require('dotenv').config();
         const Sentry = require('@sentry/node');
         Sentry.init({
           dsn: process.env.SENTRY_DSN,
-          environment: 'test',
+          environment: 'development',
         });
-        Sentry.captureException(new Error('Sentry test error from ona-flix backend automation task'));
-        Sentry.captureMessage('Sentry test message from ona-flix backend automation task', 'warning');
+
+        // Simulate a database connection failure
+        const dbError = new Error('Connection terminated unexpectedly');
+        dbError.name = 'DatabaseError';
+        dbError.code = 'ECONNRESET';
+        Sentry.withScope(scope => {
+          scope.setTag('service', 'catalog');
+          scope.setTag('db.system', 'postgresql');
+          scope.setContext('database', {
+            host: 'localhost',
+            port: 5432,
+            database: 'gitpodflix',
+            operation: 'MovieRepository.findAll',
+          });
+          scope.setLevel('error');
+          Sentry.captureException(dbError);
+        });
+
+        // Simulate a cache failure
+        const cacheError = new Error('Redis connection to localhost:6379 failed - connect ECONNREFUSED');
+        cacheError.name = 'RedisConnectionError';
+        Sentry.withScope(scope => {
+          scope.setTag('service', 'catalog');
+          scope.setTag('cache.system', 'redis');
+          scope.setContext('cache', {
+            host: 'localhost',
+            port: 6379,
+            operation: 'CacheService.get',
+            key: 'movies:all',
+          });
+          scope.setLevel('warning');
+          Sentry.captureException(cacheError);
+        });
+
+        // Simulate a TypeError in movie data processing
+        const typeError = new TypeError(\"Cannot read properties of undefined (reading 'genres')\");
+        Sentry.withScope(scope => {
+          scope.setTag('service', 'catalog');
+          scope.setContext('movie', {
+            operation: 'MovieService.searchMovies',
+            filters: { q: 'inception', yearMin: 2000, limit: 50 },
+          });
+          scope.setFingerprint(['movie-search', 'undefined-genres']);
+          Sentry.captureException(typeError);
+        });
+
+        // Simulate an unhandled promise rejection from external API
+        const fetchError = new Error('Request to external ratings API timed out after 5000ms');
+        fetchError.name = 'TimeoutError';
+        Sentry.withScope(scope => {
+          scope.setTag('service', 'catalog');
+          scope.setTag('http.method', 'GET');
+          scope.setTag('http.url', 'https://api.ratings-service.io/v2/movies');
+          scope.setContext('request', {
+            method: 'GET',
+            url: 'https://api.ratings-service.io/v2/movies?ids=tt0137523,tt0468569',
+            timeout: 5000,
+            retries: 3,
+          });
+          scope.setLevel('error');
+          Sentry.captureException(fetchError);
+        });
+
+        // Simulate a rate limit exceeded warning
+        Sentry.withScope(scope => {
+          scope.setTag('service', 'catalog');
+          scope.setTag('middleware', 'rateLimiter');
+          scope.setContext('rateLimit', {
+            ip: '192.168.1.100',
+            endpoint: '/api/search',
+            limit: 100,
+            windowMs: 60000,
+            currentCount: 101,
+          });
+          scope.setLevel('warning');
+          Sentry.captureMessage('Rate limit exceeded for /api/search', 'warning');
+        });
+
         Sentry.flush(5000).then(() => {
-          console.log('   ✅ Test exception and message sent to Sentry');
+          console.log('   ✅ 5 realistic errors sent to Sentry (backend)');
         });
       "
       echo ""
 
-      # Check frontend is up
-      echo "5. Checking frontend service..."
+      # --- Frontend guidance ---
+
+      echo "6. Checking frontend service..."
       if curl -sf http://localhost:3000 >/dev/null 2>&1; then
         echo "   ✅ Frontend is running"
-        echo "   ℹ️  To trigger a frontend error, open the browser console and run:"
-        echo "      throw new Error('Sentry frontend test')"
+        echo ""
+        echo "   To trigger frontend errors, open the browser console and run:"
+        echo ""
+        echo "   // Simulate failed API fetch"
+        echo "   fetch('http://localhost:3001/api/movies/nonexistent').then(r => { if (!r.ok) throw new Error('Failed to load movie: HTTP ' + r.status) }).catch(e => { import('@sentry/react').then(S => S.captureException(e)) })"
+        echo ""
+        echo "   // Simulate React component crash"
+        echo "   import('@sentry/react').then(S => { S.captureException(new TypeError(\"Cannot read properties of null (reading 'title'): MovieModal attempted to render with null movie data\")) })"
       else
         echo "   ⚠️  Frontend not running — start it with: gitpod automations service start gitpod-flix"
       fi
@@ -505,6 +597,14 @@ tasks:
       echo "=== Done ==="
       echo "Check your Sentry dashboard for new events:"
       echo "  https://sentry.io"
+      echo ""
+      echo "You should see the following issues:"
+      echo "  • DatabaseError: Connection terminated unexpectedly"
+      echo "  • RedisConnectionError: Redis connection failed"
+      echo "  • TypeError: Cannot read properties of undefined (reading 'genres')"
+      echo "  • TimeoutError: Request to external ratings API timed out"
+      echo "  • Warning: Rate limit exceeded for /api/search"
+      echo "  • Zod validation errors from invalid search params"
 
   RMRF:
     name: "rm -rf demo"
