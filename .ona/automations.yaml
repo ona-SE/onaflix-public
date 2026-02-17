@@ -442,6 +442,70 @@ tasks:
       echo "  Seed database: gitpod automations task start seedDatabase"
       echo "  Open ports: gitpod automations task start openDemoPorts"
 
+  triggerSentryTestErrors:
+    name: "Trigger Sentry Test Errors"
+    description: "Send test errors to Sentry without disrupting running services"
+    triggeredBy:
+      - manual
+    command: |
+      echo "=== Sentry Test Error Trigger ==="
+      echo ""
+
+      # Verify backend is running
+      echo "1. Checking backend catalog service..."
+      if ! curl -sf http://localhost:3001/health >/dev/null 2>&1; then
+        echo "   ❌ Catalog service not running. Start it first:"
+        echo "   gitpod automations service start catalog"
+        exit 1
+      fi
+      echo "   ✅ Catalog service is healthy"
+      echo ""
+
+      # Trigger a 404 via a non-existent route (captured by Sentry error handler)
+      echo "2. Triggering 404 error on backend..."
+      HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3001/api/sentry-test-nonexistent)
+      echo "   Sent request to /api/sentry-test-nonexistent → HTTP $HTTP_STATUS"
+      echo ""
+
+      # Trigger a bad request to the movies endpoint (invalid query params)
+      echo "3. Triggering validation error on backend..."
+      HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:3001/api/movies?page=-1&limit=99999")
+      echo "   Sent request with invalid params → HTTP $HTTP_STATUS"
+      echo ""
+
+      # Send a direct test exception via Node.js using the backend's Sentry DSN
+      echo "4. Sending direct test exception to Sentry (backend)..."
+      cd /workspaces/ona-flix/backend/catalog
+      node -e "
+        require('dotenv').config();
+        const Sentry = require('@sentry/node');
+        Sentry.init({
+          dsn: process.env.SENTRY_DSN,
+          environment: 'test',
+        });
+        Sentry.captureException(new Error('Sentry test error from ona-flix backend automation task'));
+        Sentry.captureMessage('Sentry test message from ona-flix backend automation task', 'warning');
+        Sentry.flush(5000).then(() => {
+          console.log('   ✅ Test exception and message sent to Sentry');
+        });
+      "
+      echo ""
+
+      # Check frontend is up
+      echo "5. Checking frontend service..."
+      if curl -sf http://localhost:3000 >/dev/null 2>&1; then
+        echo "   ✅ Frontend is running"
+        echo "   ℹ️  To trigger a frontend error, open the browser console and run:"
+        echo "      throw new Error('Sentry frontend test')"
+      else
+        echo "   ⚠️  Frontend not running — start it with: gitpod automations service start gitpod-flix"
+      fi
+      echo ""
+
+      echo "=== Done ==="
+      echo "Check your Sentry dashboard for new events:"
+      echo "  https://sentry.io"
+
   RMRF:
     name: "rm -rf demo"
     description: "⚠️ Destructive task to show the sandboxing of Ona environments"
