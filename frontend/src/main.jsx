@@ -5,7 +5,7 @@ import App from './App'
 import './styles/index.css'
 
 Sentry.init({
-  dsn: 'https://e6a93e743baaae0a4d92f30257029027@o4510737672437760.ingest.de.sentry.io/4510902002319440',
+  dsn: 'https://37c84dfdb5be15233e5c2d2518684ce8@o4509684240941056.ingest.us.sentry.io/4510912829718528',
   environment: import.meta.env.MODE,
   tracesSampleRate: 1.0,
 })
