@@ -186,6 +186,7 @@ services:
         DB_NAME=gitpodflix
         DB_PORT=5432
         PORT=3001
+        SENTRY_DSN=https://9b57e0ffd9d44bc55f5c348cebf8964f@o4509684240941056.ingest.us.sentry.io/4510912824606720
         EOF
         fi
         
@@ -486,10 +487,9 @@ tasks:
       echo "5. Sending realistic errors to Sentry via SDK..."
       cd /workspaces/ona-flix/backend/catalog
       node -e "
-        require('dotenv').config();
         const Sentry = require('@sentry/node');
         Sentry.init({
-          dsn: process.env.SENTRY_DSN,
+          dsn: 'https://9b57e0ffd9d44bc55f5c348cebf8964f@o4509684240941056.ingest.us.sentry.io/4510912824606720',
           environment: 'development',
         });
 
