@@ -1,0 +1,94 @@
+name: PR Code Review
+description: >
+  Triggered when a PR is opened or updated. Reviews the diff for bugs,
+  security vulnerabilities, missing error handling, and style issues.
+  Posts inline comments and approves or requests changes.
+triggers:
+  - pullRequest:
+      actions:
+        - opened
+        - synchronize
+    context:
+      projects:
+        projectIds:
+          - "ONAFLIX_PROJECT_ID"
+action:
+  limits:
+    maxParallel: 3
+    maxTotal: 10
+  steps:
+    - command:
+        command: |
+          cd /workspaces/ona-flix
+          gh pr diff $PR_NUMBER > /tmp/pr-diff.txt
+          gh pr view $PR_NUMBER --json title,body,files > /tmp/pr-meta.json
+          echo "PR #$PR_NUMBER diff saved"
+
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions. Infer and record as ASSUMPTION.
+          2. Never wait for confirmation. Review all files to completion.
+          3. Be specific -- cite exact line numbers and code snippets.
+          4. Do not flag style preferences. Focus on correctness and security.
+
+          TASK: Review pull request #$PR_NUMBER.
+
+          Read /tmp/pr-diff.txt for the full diff and /tmp/pr-meta.json for metadata.
+
+          Review checklist -- check every changed file for:
+
+          SECURITY:
+          - SQL injection (string interpolation in queries instead of parameterized)
+          - XSS (unescaped user input in HTML/templates)
+          - Hardcoded secrets, API keys, or credentials
+          - Missing authentication or authorization checks
+          - Insecure deserialization
+
+          CORRECTNESS:
+          - Logic errors, off-by-one, null/undefined access
+          - Missing error handling (no try/catch around async operations)
+          - Missing input validation
+          - Race conditions in concurrent code
+
+          QUALITY:
+          - Missing tests for new functionality
+          - Incomplete error messages (generic "something went wrong")
+          - Resource leaks (unclosed connections, streams)
+
+          For each finding, write to /tmp/review-comments.md:
+          ## [SEVERITY] File:Line -- Title
+          ```
+          <code snippet>
+          ```
+          **Issue:** Description of the problem.
+          **Suggestion:** How to fix it.
+
+          Severity levels: CRITICAL, WARNING, INFO
+
+          After reviewing all files, write a summary verdict:
+          - APPROVE: No critical or warning findings. PR is safe to merge.
+          - REQUEST_CHANGES: One or more critical/warning findings need fixing.
+
+          Write the verdict to /tmp/review-verdict.txt (just the word APPROVE or REQUEST_CHANGES).
+
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions.
+          2. Never wait for confirmation.
+
+          TASK: Post the review on GitHub.
+
+          Read /tmp/review-comments.md and /tmp/review-verdict.txt.
+
+          Use the GitHub CLI to post the review:
+          - If verdict is APPROVE: gh pr review $PR_NUMBER --approve --body "<summary>"
+          - If verdict is REQUEST_CHANGES: gh pr review $PR_NUMBER --request-changes --body "<summary with findings>"
+
+          For critical findings, also post inline comments on the specific lines using:
+          gh pr comment $PR_NUMBER --body "<finding details>"
+
+    - command:
+        command: |
+          rm -f /tmp/pr-diff.txt /tmp/pr-meta.json /tmp/review-comments.md /tmp/review-verdict.txt

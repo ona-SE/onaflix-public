@@ -1,0 +1,105 @@
+name: Migration at Scale
+description: >
+  Migrates multiple legacy Node 14 services to Node 20. Updates package.json
+  engine requirements, fixes breaking changes, updates deprecated APIs,
+  and opens PRs for each repo.
+triggers:
+  - manual: {}
+    context:
+      projects:
+        projectIds:
+          - "ONAFLIX_PROJECT_ID"
+action:
+  limits:
+    maxParallel: 3
+    maxTotal: 5
+  steps:
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions. Infer and record as ASSUMPTION.
+          2. Never wait for confirmation. Process the full migration.
+          3. Run tests after every change. Do not proceed if tests fail.
+          4. Document every breaking change encountered.
+
+          TASK: Migrate this service from Node 14 to Node 20.
+
+          Step 1 -- Assess current state:
+          - Read package.json for engine requirements and dependencies
+          - Read .nvmrc or .node-version if they exist
+          - Identify Node 14-specific patterns:
+            * require() vs import (CommonJS vs ESM)
+            * Deprecated APIs (url.parse, querystring, etc.)
+            * Native addon dependencies that need recompilation
+            * Test framework version compatibility
+
+          Write assessment to migration-assessment.md.
+
+          Step 2 -- Create migration branch:
+          git checkout -b auto/node20-migration
+
+          Step 3 -- Update Node version:
+          - Update engines.node in package.json to ">=20.0.0"
+          - Update .nvmrc to "20" (create if missing)
+          - Update Dockerfile FROM node:14 to FROM node:20 (if exists)
+          - Update CI workflow node-version to "20" (if exists)
+
+          Step 4 -- Fix breaking changes:
+          Common Node 14 -> 20 issues:
+          - url.parse() -> new URL()
+          - querystring.parse() -> URLSearchParams
+          - fs.rmdir with recursive -> fs.rm with recursive
+          - Buffer() constructor -> Buffer.from() or Buffer.alloc()
+          - process.binding() removed
+          - --experimental-modules flag no longer needed
+          - punycode module deprecated
+
+          For each deprecated API found:
+          a. Replace with the modern equivalent
+          b. Run tests to verify
+          c. Commit the change
+
+          Step 5 -- Update dependencies:
+          - Run npm outdated to find stale deps
+          - Update deps that have Node 20 compatibility issues
+          - Run npm test after each update
+
+          Step 6 -- Final verification:
+          - Run full test suite
+          - Run npm audit
+          - Verify build succeeds
+
+          Step 7 -- Commit and report:
+          git add -A
+          git commit -m "chore: migrate from Node 14 to Node 20
+
+          Breaking changes fixed:
+          - <list each>"
+
+          Write migration-report.md with:
+          ## Migration Report
+          **From:** Node 14
+          **To:** Node 20
+          **Breaking changes fixed:** list
+          **Dependencies updated:** list
+          **Tests:** PASS/FAIL
+
+    - command:
+        command: git push origin HEAD
+
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions.
+          2. Never wait for confirmation.
+
+          TASK: Open a PR for the Node 20 migration.
+
+          Read migration-report.md for the summary.
+
+          Open a pull request against main with:
+          - Title: "chore: migrate to Node 20"
+          - Body: the full migration report
+
+    - command:
+        command: rm -f migration-assessment.md migration-report.md

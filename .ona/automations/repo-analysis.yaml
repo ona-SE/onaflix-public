@@ -1,0 +1,102 @@
+name: Repo Analysis and Inventory
+description: >
+  Scans all repositories in the ona-se organization. Produces a structured
+  inventory with tech stack, health metrics, and recommendations.
+triggers:
+  - schedule:
+      cron: "0 7 1 * *"
+    context:
+      projects:
+        projectIds:
+          - "ONAFLIX_PROJECT_ID"
+  - manual: {}
+    context:
+      projects:
+        projectIds:
+          - "ONAFLIX_PROJECT_ID"
+action:
+  limits:
+    maxParallel: 1
+    maxTotal: 1
+  steps:
+    - command:
+        command: |
+          gh repo list ona-se --json name,description,primaryLanguage,updatedAt,isArchived \
+            --limit 50 > /tmp/org-repos.json
+          echo "Fetched org repo list"
+
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions. Infer and record as ASSUMPTION.
+          2. Never wait for confirmation. Analyze all repos.
+          3. Be factual. Do not speculate about repo purpose beyond what README says.
+          4. All output in Markdown tables.
+
+          TASK: Produce a comprehensive inventory of all repos in ona-se.
+
+          Read /tmp/org-repos.json for the list of repositories.
+
+          For each non-archived repository:
+
+          Step 1 -- Clone and analyze:
+          Clone the repo to a temp directory. Read:
+          - README.md (purpose, setup instructions)
+          - package.json or equivalent (language, framework, dependencies)
+          - .devcontainer/devcontainer.json (dev environment config)
+          - .github/workflows/ (CI/CD setup)
+          - Dockerfile (containerization)
+          - LICENSE (licensing)
+          - Test files (test framework, coverage config)
+
+          Step 2 -- Extract metrics:
+          For each repo, record:
+          - Name and description
+          - Primary language and framework
+          - Node/Python/Go version (from engines, .nvmrc, go.mod, etc.)
+          - Number of dependencies (direct)
+          - Has CI: yes/no
+          - Has DevContainer: yes/no
+          - Has tests: yes/no
+          - Has LICENSE: yes/no
+          - Last commit date
+          - Estimated lines of code (find . -name "*.ts" -o -name "*.js" | xargs wc -l)
+
+          Step 3 -- Write inventory:
+          Write /tmp/repo-inventory.md:
+
+          ## Organization Inventory: ona-se
+          **Date:** ...
+          **Total repos:** N
+          **Active repos:** M
+
+          ### Repository Matrix
+
+          | Repo | Language | Framework | Node Ver | Deps | CI | DevContainer | Tests | License | Last Commit | LOC |
+          |------|----------|-----------|----------|------|----|-------------|-------|---------|-------------|-----|
+
+          ### Health Summary
+          - Repos with CI: X/N
+          - Repos with DevContainer: X/N
+          - Repos with tests: X/N
+          - Repos with LICENSE: X/N
+          - Repos on current Node (>=20): X/N
+
+          ### Recommendations
+          For each repo, one-line recommendation:
+          - repo-name: "Needs Node upgrade from 14 to 20"
+          - repo-name: "Missing DevContainer config"
+          - repo-name: "No CI pipeline"
+
+          Step 4 -- Clean up cloned repos:
+          rm -rf /tmp/repo-analysis-*
+
+    - command:
+        command: |
+          # Copy inventory to the repo for reference
+          cp /tmp/repo-inventory.md /workspaces/ona-flix/docs/org-inventory.md 2>/dev/null || true
+          echo "Inventory complete"
+
+    - command:
+        command: |
+          rm -f /tmp/org-repos.json /tmp/repo-inventory.md

@@ -1,0 +1,97 @@
+name: Sentry Triage and Fix
+description: >
+  Fetches unresolved Sentry issues, triages by frequency and impact,
+  diagnoses root causes from stack traces, and implements fixes.
+triggers:
+  - schedule:
+      cron: "0 8 * * 1-5"
+    context:
+      projects:
+        projectIds:
+          - "ONAFLIX_PROJECT_ID"
+  - manual: {}
+    context:
+      projects:
+        projectIds:
+          - "ONAFLIX_PROJECT_ID"
+action:
+  limits:
+    maxParallel: 1
+    maxTotal: 1
+  steps:
+    - command:
+        command: |
+          cd /workspaces/ona-flix
+          # Fetch unresolved issues from Sentry
+          # Requires SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT secrets
+          curl -s -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
+            "https://sentry.io/api/0/projects/${SENTRY_ORG}/${SENTRY_PROJECT}/issues/?query=is:unresolved&sort=freq" \
+            > /tmp/sentry-issues.json 2>&1 || echo "[]" > /tmp/sentry-issues.json
+          echo "Fetched Sentry issues"
+
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions. Infer and record as ASSUMPTION.
+          2. Never wait for confirmation. Process all issues.
+          3. Prioritize by frequency * severity. Fix highest-impact first.
+          4. Run tests after every fix.
+
+          TASK: Triage and fix Sentry errors.
+
+          Read /tmp/sentry-issues.json for the list of unresolved issues.
+
+          Step 1 -- Triage:
+          For each issue, extract:
+          - Title and error message
+          - Stack trace (file, line, function)
+          - Event count (frequency)
+          - First seen / last seen
+          - Affected users count
+
+          Rank by impact: frequency * severity.
+          Write triage to /tmp/sentry-triage.md:
+          | Rank | Issue | Events | File:Line | Severity |
+          |------|-------|--------|-----------|----------|
+
+          Step 2 -- Fix top issues:
+          git checkout -b auto/sentry-fixes-$(date +%Y%m%d)
+
+          For the top 3 issues (or fewer if less exist):
+          a. Read the stack trace to find the exact file and line.
+          b. Read the source file to understand the context.
+          c. Diagnose the root cause (null access, unhandled rejection, type error, etc.)
+          d. Implement a fix (add null check, try/catch, input validation, etc.)
+          e. Write a test that would have caught this error.
+          f. Run: cd backend/catalog && npm test
+          g. Commit: "fix: handle <error type> in <file> (Sentry: <issue-id>)"
+
+          Step 3 -- Report:
+          Write /tmp/sentry-report.md:
+          ## Sentry Triage Report
+          **Issues triaged:** N
+          **Issues fixed:** M
+          **Remaining:** list with reason why not auto-fixable
+
+    - command:
+        command: |
+          cd /workspaces/ona-flix
+          git push origin HEAD
+
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions.
+          2. Never wait for confirmation.
+
+          TASK: Open a PR with the Sentry fixes.
+
+          Read /tmp/sentry-report.md for the summary.
+
+          Open a pull request against main with:
+          - Title: "fix: resolve top Sentry errors"
+          - Body: the triage table and fix descriptions from the report
+
+    - command:
+        command: |
+          rm -f /tmp/sentry-issues.json /tmp/sentry-triage.md /tmp/sentry-report.md

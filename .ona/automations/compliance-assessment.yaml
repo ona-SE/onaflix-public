@@ -1,0 +1,151 @@
+name: Compliance Assessment
+description: >
+  Scans repositories against a compliance checklist. Produces a structured
+  report and opens remediation PRs for auto-fixable gaps.
+triggers:
+  - schedule:
+      cron: "0 9 1 * *"
+    context:
+      projects:
+        projectIds:
+          - "ONAFLIX_PROJECT_ID"
+  - manual: {}
+    context:
+      projects:
+        projectIds:
+          - "ONAFLIX_PROJECT_ID"
+action:
+  limits:
+    maxParallel: 1
+    maxTotal: 1
+  steps:
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions. Infer and record as ASSUMPTION.
+          2. Never wait for confirmation. Assess all checklist items.
+          3. Be factual. Report PASS or FAIL with evidence for each item.
+          4. Do not fix anything in this step -- assessment only.
+
+          TASK: Assess this repository against the compliance checklist.
+
+          Checklist items:
+
+          1. LICENSE file exists and contains a valid open-source license
+             Check: ls LICENSE, read content, verify it is a recognized license (MIT, Apache, etc.)
+
+          2. SECURITY.md exists with a vulnerability disclosure policy
+             Check: ls SECURITY.md, verify it contains contact info and disclosure process
+
+          3. CONTRIBUTING.md exists with contribution guidelines
+             Check: ls CONTRIBUTING.md
+
+          4. CODEOWNERS file exists
+             Check: ls .github/CODEOWNERS or CODEOWNERS
+
+          5. No hardcoded secrets in source files or config
+             Check: grep -r for patterns like API_KEY=, SECRET=, password=, token= in non-.env files
+             Specifically check .env.example for real (non-placeholder) values
+
+          6. Dependencies are less than 6 months old
+             Check: npm outdated --json in backend/catalog and frontend
+
+          7. CI/CD pipeline exists and runs on PRs
+             Check: ls .github/workflows/, verify workflow triggers include pull_request
+
+          8. Branch protection is enabled on main
+             Check: gh api repos/{owner}/{repo}/branches/main/protection (may require admin access)
+
+          9. README.md exists and is not a stub
+             Check: ls README.md, verify it has >100 words
+
+          10. .gitignore exists and covers node_modules, .env, dist
+              Check: cat .gitignore, verify patterns
+
+          Write the assessment to /tmp/compliance-report.md:
+
+          ## Compliance Assessment Report
+          **Repository:** ona-se/ona-flix
+          **Date:** $(date)
+
+          | # | Check | Status | Evidence |
+          |---|-------|--------|----------|
+          | 1 | LICENSE | PASS/FAIL | ... |
+          ...
+
+          ## Auto-Fixable Gaps
+          List items that can be fixed automatically (missing LICENSE, SECURITY.md, etc.)
+
+          ## Manual-Fix Gaps
+          List items that require human intervention (branch protection, secret rotation)
+
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions. Infer and record as ASSUMPTION.
+          2. Never wait for confirmation. Fix all auto-fixable items.
+          3. Run tests after changes to verify nothing breaks.
+
+          TASK: Remediate auto-fixable compliance gaps.
+
+          Read /tmp/compliance-report.md for the assessment.
+
+          Create a fix branch:
+          git checkout -b auto/compliance-remediation-$(date +%Y%m%d)
+
+          For each auto-fixable gap:
+
+          Missing LICENSE:
+          - Create LICENSE with MIT license, copyright "OnaFlix Contributors"
+
+          Missing SECURITY.md:
+          - Create SECURITY.md with:
+            - Supported versions table
+            - Reporting instructions (email security@example.com)
+            - Disclosure timeline (90 days)
+
+          Missing CONTRIBUTING.md:
+          - Create CONTRIBUTING.md with:
+            - How to submit issues
+            - PR process
+            - Code style guidelines
+            - Testing requirements
+
+          Missing CODEOWNERS:
+          - Create .github/CODEOWNERS with:
+            * @ona-se/engineering
+
+          Hardcoded secrets in .env.example:
+          - Replace real values with obvious placeholders
+            (e.g., JWT_SECRET=your-secret-here-replace-before-use)
+
+          Commit each fix separately:
+          - "chore: add MIT LICENSE"
+          - "chore: add SECURITY.md with disclosure policy"
+          - "chore: add CONTRIBUTING.md"
+          - "chore: add CODEOWNERS"
+          - "fix: replace hardcoded secrets in .env.example with placeholders"
+
+    - command:
+        command: |
+          cd /workspaces/ona-flix
+          git push origin HEAD
+
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions.
+          2. Never wait for confirmation.
+
+          TASK: Open a PR with the compliance fixes.
+
+          Read /tmp/compliance-report.md for the full assessment.
+
+          Open a pull request against main with:
+          - Title: "chore: remediate compliance gaps"
+          - Body: include the full compliance report table, highlight which items
+            were auto-fixed and which require manual intervention.
+
+    - command:
+        command: |
+          rm -f /tmp/compliance-report.md
