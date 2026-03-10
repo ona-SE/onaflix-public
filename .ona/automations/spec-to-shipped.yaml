@@ -8,7 +8,7 @@ triggers:
     context:
       projects:
         projectIds:
-          - "ONAFLIX_PROJECT_ID"
+          - "01999621-6bca-7a86-a9bb-c812a49387ac"
 action:
   limits:
     maxParallel: 1

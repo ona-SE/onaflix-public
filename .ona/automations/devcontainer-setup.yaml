@@ -8,7 +8,9 @@ triggers:
     context:
       projects:
         projectIds:
-          - "ONAFLIX_PROJECT_ID"
+          - "019cd9a6-0c78-7e1e-b35d-d975941b6b25"  # onaflix-admin-panel (Python/Flask)
+          - "019cd9a6-24fe-74bb-9022-6931a8bc11c2"  # onaflix-data-pipeline (Go)
+          - "019cd9a6-3df4-7da6-b42b-d99d994742d6"  # onaflix-mobile-bff (Node/TypeScript)
 action:
   limits:
     maxParallel: 3

@@ -8,7 +8,9 @@ triggers:
     context:
       projects:
         projectIds:
-          - "ONAFLIX_PROJECT_ID"
+          - "019cd9a5-c41d-708e-9055-75248a3177a6"  # onaflix-auth-service
+          - "019cd9a5-db72-7c0e-8bcb-dfb7b7cb8668"  # onaflix-catalog-service
+          - "019cd9a5-f382-79c1-b24d-6e1e18a0daa1"  # onaflix-notification-service
 action:
   limits:
     maxParallel: 3

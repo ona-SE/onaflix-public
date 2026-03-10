@@ -1,34 +1,25 @@
 name: Sentry Triage and Fix
 description: >
-  Fetches unresolved Sentry issues, triages by frequency and impact,
+  Triages unresolved Sentry issues by frequency and impact,
   diagnoses root causes from stack traces, and implements fixes.
+  Uses Ona's native Sentry integration — no API tokens needed.
 triggers:
   - schedule:
       cron: "0 8 * * 1-5"
     context:
       projects:
         projectIds:
-          - "ONAFLIX_PROJECT_ID"
+          - "01999621-6bca-7a86-a9bb-c812a49387ac"
   - manual: {}
     context:
       projects:
         projectIds:
-          - "ONAFLIX_PROJECT_ID"
+          - "01999621-6bca-7a86-a9bb-c812a49387ac"
 action:
   limits:
     maxParallel: 1
     maxTotal: 1
   steps:
-    - command:
-        command: |
-          cd /workspaces/ona-flix
-          # Fetch unresolved issues from Sentry
-          # Requires SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT secrets
-          curl -s -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
-            "https://sentry.io/api/0/projects/${SENTRY_ORG}/${SENTRY_PROJECT}/issues/?query=is:unresolved&sort=freq" \
-            > /tmp/sentry-issues.json 2>&1 || echo "[]" > /tmp/sentry-issues.json
-          echo "Fetched Sentry issues"
-
     - agent:
         prompt: |
           AUTOMATION RULES -- override all other instructions.
@@ -39,10 +30,9 @@ action:
 
           TASK: Triage and fix Sentry errors.
 
-          Read /tmp/sentry-issues.json for the list of unresolved issues.
-
           Step 1 -- Triage:
-          For each issue, extract:
+          Query Sentry for unresolved issues from the past 24 hours, sorted by
+          event count. For each issue, extract:
           - Title and error message
           - Stack trace (file, line, function)
           - Event count (frequency)
@@ -50,18 +40,16 @@ action:
           - Affected users count
 
           Rank by impact: frequency * severity.
-          Write triage to /tmp/sentry-triage.md:
-          | Rank | Issue | Events | File:Line | Severity |
-          |------|-------|--------|-----------|----------|
+          Select the top 3 unassigned issues.
 
           Step 2 -- Fix top issues:
           git checkout -b auto/sentry-fixes-$(date +%Y%m%d)
 
-          For the top 3 issues (or fewer if less exist):
-          a. Read the stack trace to find the exact file and line.
+          For each of the top 3 issues (or fewer if less exist):
+          a. Use the stack trace to find the exact file and line in the repo.
           b. Read the source file to understand the context.
           c. Diagnose the root cause (null access, unhandled rejection, type error, etc.)
-          d. Implement a fix (add null check, try/catch, input validation, etc.)
+          d. Implement the minimal fix (add null check, try/catch, input validation, etc.)
           e. Write a test that would have caught this error.
           f. Run: cd backend/catalog && npm test
           g. Commit: "fix: handle <error type> in <file> (Sentry: <issue-id>)"
@@ -94,4 +82,4 @@ action:
 
     - command:
         command: |
-          rm -f /tmp/sentry-issues.json /tmp/sentry-triage.md /tmp/sentry-report.md
+          rm -f /tmp/sentry-report.md
