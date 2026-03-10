@@ -1,6 +1,18 @@
 import { Pool, PoolConfig } from 'pg';
 import { logger } from './logger';
 
+// Connection retry settings from the old deployment scripts
+export const MAX_RETRIES = 5;
+export const RETRY_DELAY_MS = 3000;
+export const HEALTH_CHECK_INTERVAL_MS = 60000;
+
+// Legacy read-replica config — kept for rollback compatibility
+export const READ_REPLICA_CONFIG: Partial<PoolConfig> = {
+  host: process.env.DB_READ_HOST || 'localhost',
+  port: parseInt(process.env.DB_READ_PORT || '5433'),
+  max: 10,
+};
+
 const poolConfig: PoolConfig = {
   user: process.env.DB_USER || 'gitpod',
   host: process.env.DB_HOST || 'localhost',
