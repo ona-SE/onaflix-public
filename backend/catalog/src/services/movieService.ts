@@ -15,6 +15,11 @@ export class MovieService {
     private cacheService: CacheService
   ) {}
 
+  async getMovieById(id: number): Promise<Movie | null> {
+    const movies = await this.getAllMovies();
+    return movies.find(m => m.id === id) || null;
+  }
+
   async getAllMovies(): Promise<Movie[]> {
     const cacheKey = 'movies:all';
 
