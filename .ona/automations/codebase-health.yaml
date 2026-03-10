@@ -1,0 +1,106 @@
+name: Codebase Health Sweep
+description: >
+  Runs dead code analysis to find unused dependencies, exports, files,
+  and types. Creates focused cleanup PRs for each category.
+triggers:
+  - schedule:
+      cron: "0 6 * * 1"
+    context:
+      projects:
+        projectIds:
+          - "ONAFLIX_PROJECT_ID"
+  - manual: {}
+    context:
+      projects:
+        projectIds:
+          - "ONAFLIX_PROJECT_ID"
+action:
+  limits:
+    maxParallel: 1
+    maxTotal: 1
+  steps:
+    - command:
+        command: |
+          cd /workspaces/ona-flix
+          npx knip --reporter json > /tmp/knip-results.json 2>&1 || true
+          npx knip > /tmp/knip-readable.txt 2>&1 || true
+          echo "Knip analysis complete"
+
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions. Infer and record as ASSUMPTION.
+          2. Never wait for confirmation. Process all findings.
+          3. Run the test suite after every removal to verify nothing breaks.
+          4. Make small, focused changes -- one category per commit.
+
+          TASK: Clean up dead code found by Knip.
+
+          Read /tmp/knip-results.json and /tmp/knip-readable.txt for the analysis.
+
+          Step 1 -- Categorize findings:
+          Group into:
+          a. Unused dependencies (in package.json but never imported)
+          b. Unused exports (exported functions/types that nothing imports)
+          c. Unused files (files that nothing references)
+          d. Unused types (type definitions that nothing uses)
+
+          Write the categorized list to /tmp/health-findings.md.
+
+          Step 2 -- Create fix branch:
+          git checkout -b auto/codebase-health-$(date +%Y%m%d)
+
+          Step 3 -- Fix each category:
+
+          For unused dependencies:
+          - Remove from package.json
+          - Run npm install to update lockfile
+          - Run npm test to verify
+          - Commit: "chore: remove unused dependencies (lodash, moment, ...)"
+
+          For unused files:
+          - Delete the file
+          - Run npm test to verify nothing breaks
+          - Commit: "chore: remove orphaned files (legacyHelpers.ts, ...)"
+
+          For unused exports:
+          - Remove the export keyword (or delete the function if nothing uses it internally)
+          - Run npm test to verify
+          - Commit: "chore: remove unused exports"
+
+          For unused types:
+          - Delete the type/interface definition
+          - Run npm test to verify
+          - Commit: "chore: remove unused type definitions"
+
+          Step 4 -- Generate report:
+          Write /tmp/health-report.md:
+          ## Codebase Health Report
+          **Unused deps removed:** list
+          **Unused files removed:** list
+          **Unused exports removed:** list
+          **Unused types removed:** list
+          **Tests status:** PASS/FAIL
+
+    - command:
+        command: |
+          cd /workspaces/ona-flix
+          git push origin HEAD
+
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions.
+          2. Never wait for confirmation.
+
+          TASK: Open a PR with the cleanup.
+
+          Read /tmp/health-report.md for the summary.
+
+          Open a pull request against main with:
+          - Title: "chore: codebase health sweep -- remove dead code"
+          - Body: the full health report
+
+    - command:
+        command: |
+          rm -f /tmp/knip-results.json /tmp/knip-readable.txt /tmp/health-findings.md /tmp/health-report.md

@@ -1,0 +1,91 @@
+name: DevContainer Setup
+description: >
+  Analyzes a repository with no DevContainer configuration, detects the
+  tech stack, and generates a complete devcontainer.json with appropriate
+  features, services, and automations.
+triggers:
+  - manual: {}
+    context:
+      projects:
+        projectIds:
+          - "ONAFLIX_PROJECT_ID"
+action:
+  limits:
+    maxParallel: 3
+    maxTotal: 5
+  steps:
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions. Infer and record as ASSUMPTION.
+          2. Never wait for confirmation. Generate a complete config.
+          3. Follow Ona DevContainer best practices exactly.
+          4. Test the configuration by validating the JSON.
+
+          TASK: Generate a DevContainer configuration for this repository.
+
+          Step 1 -- Detect tech stack:
+          Read the repository to identify:
+          - Primary language (package.json -> Node/TS, requirements.txt -> Python, go.mod -> Go)
+          - Framework (Express, Flask, Gin, React, etc.)
+          - Database requirements (PostgreSQL, MySQL, Redis, MongoDB)
+          - Required system tools (Docker, AWS CLI, etc.)
+          - Node/Python/Go version requirements
+          - Package manager (npm, yarn, pnpm, pip, poetry)
+
+          Step 2 -- Generate devcontainer.json:
+          Create .devcontainer/devcontainer.json with:
+
+          For Node/TypeScript projects:
+          - Base image: mcr.microsoft.com/devcontainers/typescript-node:20
+          - Features: ghcr.io/devcontainers/features/node (if specific version needed)
+          - postCreateCommand: npm install
+          - Ports: based on detected server port
+
+          For Python projects:
+          - Base image: mcr.microsoft.com/devcontainers/python:3.12
+          - Features: ghcr.io/devcontainers/features/python
+          - postCreateCommand: pip install -r requirements.txt
+          - Ports: based on detected server port
+
+          For Go projects:
+          - Base image: mcr.microsoft.com/devcontainers/go:1.22
+          - Features: ghcr.io/devcontainers/features/go
+          - postCreateCommand: go mod download
+          - Ports: based on detected server port
+
+          Add database features if detected:
+          - PostgreSQL: ghcr.io/devcontainers/features/postgresql
+          - Redis: add redis-server to postCreateCommand
+
+          Step 3 -- Generate automations.yaml:
+          Create .ona/automations.yaml (or .gitpod/automations.yaml) with:
+          - Service for the main application (npm run dev, python app.py, go run .)
+          - Service for database if needed
+          - Task for dependency installation
+          - Task for database seeding/migration
+
+          Step 4 -- Create branch and commit:
+          git checkout -b auto/devcontainer-setup
+          git add .devcontainer/ .ona/
+          git commit -m "chore: add DevContainer and automations configuration
+
+          Detected stack: <language> + <framework>
+          Services: <list>
+          Features: <list>"
+
+    - command:
+        command: git push origin HEAD
+
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions.
+          2. Never wait for confirmation.
+
+          TASK: Open a PR with the DevContainer configuration.
+
+          Open a pull request against main with:
+          - Title: "chore: add DevContainer configuration"
+          - Body: describe the detected tech stack, what was configured,
+            and how to use it (open in Ona, services that auto-start, etc.)

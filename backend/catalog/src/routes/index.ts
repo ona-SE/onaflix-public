@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { MovieController } from '../controllers/movieController';
 import { HealthController } from '../controllers/healthController';
 import { searchLimiter, mutationLimiter } from '../middleware/rateLimiter';
@@ -17,6 +17,50 @@ export const createRoutes = (
   
   router.post('/api/movies/seed', mutationLimiter, movieController.seedDatabase);
   router.post('/api/movies/clear', mutationLimiter, movieController.clearDatabase);
+
+  // Movie detail -- does not guard against non-numeric id
+  router.get('/api/movies/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id = parseInt(req.params.id);
+      // No NaN check -- throws when passed to query with undefined behavior
+      const result = await movieController['movieService'].getMovieById(id);
+      if (!result) {
+        res.status(404).json({ error: 'Movie not found' });
+        return;
+      }
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  // Watchlist stub -- missing auth token causes TypeError on req.user access
+  router.post('/api/watchlist', (req: Request, _res: Response, _next: NextFunction) => {
+    const userId = (req as any).user.id;
+    const movieId = req.body.movieId;
+    // This line is never reached -- the line above throws TypeError
+    _res.json({ userId, movieId, added: true });
+  });
+
+  // Movie stats -- unhandled null dereference when no movies exist
+  router.get('/api/movies/stats/summary', async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+      const movies = await movieController['movieService'].getAllMovies();
+      const ratings = movies.map((m: any) => m.rating);
+      // Throws if ratings array is empty: Math.max(...[]) returns -Infinity,
+      // but the real issue is accessing .toFixed on potentially null ratings
+      const avgRating = ratings.reduce((a: number, b: number) => a + b, 0) / ratings.length;
+      const topMovie = movies.sort((a: any, b: any) => b.rating - a.rating)[0];
+      res.json({
+        count: movies.length,
+        averageRating: avgRating.toFixed(1),
+        topRated: topMovie.title,
+        highestRating: topMovie.rating,
+      });
+    } catch (error) {
+      next(error);
+    }
+  });
 
   return router;
 };

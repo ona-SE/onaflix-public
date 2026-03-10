@@ -1,0 +1,87 @@
+name: Self-Healing CI
+description: >
+  Triggered when a GitHub Actions CI run fails. Reads the failure logs,
+  diagnoses the root cause, implements a fix, and pushes to re-trigger CI.
+triggers:
+  - webhook:
+      event: check_run
+      filter:
+        conclusion: failure
+    context:
+      projects:
+        projectIds:
+          - "ONAFLIX_PROJECT_ID"
+  - manual: {}
+    context:
+      projects:
+        projectIds:
+          - "ONAFLIX_PROJECT_ID"
+action:
+  limits:
+    maxParallel: 1
+    maxTotal: 3
+  steps:
+    - command:
+        command: |
+          cd /workspaces/ona-flix
+          # Get the most recent failed run
+          FAILED_RUN=$(gh run list --status failure --limit 1 --json databaseId,headBranch --jq '.[0]')
+          RUN_ID=$(echo "$FAILED_RUN" | jq -r '.databaseId')
+          BRANCH=$(echo "$FAILED_RUN" | jq -r '.headBranch')
+          echo "Failed run: $RUN_ID on branch: $BRANCH"
+          echo "$RUN_ID" > /tmp/failed-run-id.txt
+          echo "$BRANCH" > /tmp/failed-branch.txt
+          # Fetch the failure logs
+          gh run view "$RUN_ID" --log-failed > /tmp/ci-failure-log.txt 2>&1
+          echo "Failure log saved to /tmp/ci-failure-log.txt"
+
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions. Infer and record as ASSUMPTION.
+          2. Never wait for confirmation. Fix the issue to completion.
+          3. Run the test suite after every change to verify the fix.
+
+          TASK: Diagnose and fix the CI failure.
+
+          Read /tmp/ci-failure-log.txt for the full failure output.
+          Read /tmp/failed-branch.txt for the branch name.
+
+          Step 1 -- Checkout the failing branch:
+          git checkout $(cat /tmp/failed-branch.txt)
+
+          Step 2 -- Diagnose:
+          Read the failure log carefully. Identify:
+          - Which step failed (install, build, test, lint)
+          - The exact error message
+          - The root cause (missing import, type error, test assertion, dependency conflict)
+
+          Write your diagnosis to /tmp/ci-diagnosis.md:
+          ## Diagnosis
+          **Failed step:** ...
+          **Error:** ...
+          **Root cause:** ...
+          **Fix plan:** ...
+
+          Step 3 -- Implement the fix:
+          Make the minimal change needed to fix the root cause.
+          Do not refactor unrelated code.
+
+          Step 4 -- Verify locally:
+          cd backend/catalog && npm test
+          If tests fail, iterate on the fix until they pass.
+
+          Step 5 -- Commit:
+          git add -A
+          git commit -m "fix: resolve CI failure -- <brief description of what was wrong>"
+
+    - command:
+        command: |
+          cd /workspaces/ona-flix
+          BRANCH=$(cat /tmp/failed-branch.txt)
+          git push origin "$BRANCH"
+          echo "Fix pushed to $BRANCH -- CI will re-trigger"
+
+    - command:
+        command: |
+          rm -f /tmp/failed-run-id.txt /tmp/failed-branch.txt /tmp/ci-failure-log.txt /tmp/ci-diagnosis.md

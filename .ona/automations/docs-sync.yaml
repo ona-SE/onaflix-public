@@ -1,0 +1,111 @@
+name: Docs Sync
+description: >
+  Compares repository documentation (/docs folder) against the source of truth
+  in Notion. Identifies stale or missing documentation and opens PRs to fix drift.
+triggers:
+  - schedule:
+      cron: "0 8 * * 1-5"
+    context:
+      projects:
+        projectIds:
+          - "ONAFLIX_PROJECT_ID"
+  - manual: {}
+    context:
+      projects:
+        projectIds:
+          - "ONAFLIX_PROJECT_ID"
+action:
+  limits:
+    maxParallel: 1
+    maxTotal: 1
+  steps:
+    - command:
+        command: |
+          cd /workspaces/ona-flix
+          # List recent code changes that might affect docs
+          git log --since="7 days ago" --name-only --pretty=format: | sort -u | grep -v '^$' > /tmp/changed-files.txt
+          echo "Changed files in last 7 days:"
+          cat /tmp/changed-files.txt
+
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions. Infer and record as ASSUMPTION.
+          2. Never wait for confirmation. Process all doc files.
+          3. Preserve existing documentation structure. Only update stale content.
+          4. Cite specific code files when correcting documentation.
+
+          TASK: Sync repository docs with the codebase and Notion source of truth.
+
+          The Notion source of truth for OnaFlix documentation is at:
+          https://www.notion.so/31f6425f2d528110ba7ccbbfab888f95
+
+          It has four subpages: API Reference, Architecture Overview, Setup Guide, Data Model.
+
+          Step 1 -- Fetch Notion content:
+          Use the Notion MCP integration to fetch each of the four documentation pages.
+          Save the content for comparison.
+
+          Step 2 -- Compare with /docs:
+          Read each file in the /docs folder:
+          - docs/api-reference.md
+          - docs/architecture.md
+          - docs/setup-guide.md
+          - docs/data-model.md
+
+          For each file, compare against:
+          a. The Notion source of truth (authoritative)
+          b. The actual codebase (ground truth for technical details)
+
+          Identify drift:
+          - Incorrect information (e.g., wrong database engine, wrong env var names)
+          - Missing fields or endpoints in API docs
+          - Outdated code examples
+          - Documented features that do not exist in the codebase
+          - Codebase features missing from documentation
+
+          Write findings to /tmp/docs-drift.md:
+          ## docs/api-reference.md
+          - [STALE] Line X: says "SQLite" but codebase uses PostgreSQL
+          - [MISSING] No documentation for duration, director, genres fields
+          ...
+
+          Step 3 -- Create fix branch:
+          git checkout -b auto/docs-sync-$(date +%Y%m%d)
+
+          Step 4 -- Update docs:
+          For each drift finding, update the /docs Markdown file to match
+          the Notion source of truth and the actual codebase.
+
+          Do NOT add content that is not in either Notion or the codebase.
+          If Notion and codebase disagree, trust the codebase.
+
+          Step 5 -- Commit:
+          git add docs/
+          git commit -m "docs: sync documentation with codebase and Notion source of truth
+
+          Fixes:
+          - <list each correction>"
+
+    - command:
+        command: |
+          cd /workspaces/ona-flix
+          git push origin HEAD
+
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions.
+          2. Never wait for confirmation.
+
+          TASK: Open a PR with the documentation updates.
+
+          Read /tmp/docs-drift.md for the list of changes.
+
+          Open a pull request against main with:
+          - Title: "docs: sync documentation with codebase"
+          - Body: list each correction made, grouped by file
+
+    - command:
+        command: |
+          rm -f /tmp/changed-files.txt /tmp/docs-drift.md
