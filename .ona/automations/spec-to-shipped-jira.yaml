@@ -1,0 +1,82 @@
+name: Spec to Shipped (Jira)
+description: >
+  Reads a feature spec, breaks it into implementable Jira tickets,
+  then executes each ticket sequentially -- implementing, testing, and
+  opening PRs until the feature is shipped.
+  Uses Ona's Atlassian MCP integration — no API tokens needed.
+triggers:
+  - manual: {}
+    context:
+      projects:
+        projectIds:
+          - "01999621-6bca-7a86-a9bb-c812a49387ac"
+action:
+  limits:
+    maxParallel: 1
+    maxTotal: 1
+  steps:
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions. Infer and record as ASSUMPTION.
+          2. Never wait for confirmation. Process all items to completion.
+          3. Create real Jira tickets with full descriptions.
+
+          TASK: Read the feature spec and create implementation tickets.
+
+          Read specs/movie-reviews.md.
+
+          Break the spec into 4-5 implementable engineering tickets. Each ticket should:
+          - Have a clear, specific title
+          - Include a description with context from the spec
+          - List concrete acceptance criteria (testable assertions)
+          - Be scoped to 1-3 hours of work
+          - Be ordered by dependency (data model first, then API, then tests)
+
+          Create each ticket in Jira under the ONAFLIX project using the Atlassian
+          integration. Set issue type to "Task", priority based on dependency order
+          (blockers = High, leaf tasks = Medium).
+
+          Write the ticket keys and titles to /tmp/spec-tickets.md:
+          1. [ONAFLIX-XXX] Title -- brief description
+          2. [ONAFLIX-XXX] Title -- brief description
+          ...
+
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions. Infer and record as ASSUMPTION.
+          2. Never wait for confirmation. Implement to completion.
+          3. Run the test suite after every change. Do not proceed if tests fail.
+          4. Each ticket gets its own branch and PR.
+
+          TASK: Implement the tickets from the spec.
+
+          Read /tmp/spec-tickets.md for the list of tickets to implement.
+          Read specs/movie-reviews.md for the full spec context.
+
+          For each ticket, in order:
+          1. Fetch the full ticket description from Jira using the Atlassian integration.
+          2. Create a branch: git checkout -b feat/movie-reviews-<ticket-number>
+          3. Implement the feature following acceptance criteria.
+             Follow existing codebase conventions:
+             - Backend: TypeScript, Express, Repository -> Service -> Controller pattern
+             - Validation: Zod schemas in types/api.types.ts
+             - Tests: Jest + Supertest in __tests__/
+          4. Write tests that verify each acceptance criterion.
+          5. Run tests: cd backend/catalog && npm test
+          6. If tests fail, fix and re-run until green.
+          7. Commit: git add -A && git commit -m "feat: <description> (<ticket-key>)"
+          8. Push: git push origin HEAD
+          9. Open a PR referencing the Jira ticket key.
+          10. Transition the Jira ticket to "In Review" and add a comment linking to the PR.
+          11. Checkout main and pull before starting the next ticket.
+
+          If a ticket depends on a previous one, cherry-pick or merge the prior branch first.
+
+          It is acceptable to complete 3-4 tickets and leave 1-2 in progress.
+          Write a summary of what was completed to /tmp/spec-results.md.
+
+    - command:
+        command: |
+          rm -f /tmp/spec-tickets.md /tmp/spec-results.md

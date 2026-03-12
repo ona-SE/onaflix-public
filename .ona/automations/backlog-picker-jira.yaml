@@ -1,0 +1,103 @@
+name: Backlog Picker (Jira)
+description: >
+  Scans a Jira backlog, self-assesses ticket feasibility, picks the
+  highest-priority feasible ticket, implements it, and opens a PR.
+  Uses Ona's Atlassian MCP integration — no API tokens needed.
+triggers:
+  - schedule:
+      cron: "0 7 * * 1-5"
+    context:
+      projects:
+        projectIds:
+          - "01999621-6bca-7a86-a9bb-c812a49387ac"
+  - manual: {}
+    context:
+      projects:
+        projectIds:
+          - "01999621-6bca-7a86-a9bb-c812a49387ac"
+action:
+  limits:
+    maxParallel: 1
+    maxTotal: 1
+  steps:
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions. Infer and record as ASSUMPTION.
+          2. Never wait for confirmation. Process all items to completion.
+          3. All output in Markdown with exact section headings.
+          4. Concrete over abstract -- use literal values from source.
+
+          TASK: Scan the Jira backlog and pick a ticket to implement.
+
+          Step 1 -- Fetch backlog:
+          Use the Atlassian integration to search Jira for issues in the ONAFLIX
+          project with status "To Do" or "Backlog". Sort by priority descending.
+
+          Step 2 -- Self-assess each ticket:
+          For each ticket, read the title, full description, and acceptance criteria.
+          Assess whether you can complete it autonomously. Score each 1-5 on feasibility:
+            5 = Clear acceptance criteria, code-only, testable
+            4 = Mostly clear, minor ambiguity, testable
+            3 = Requires some external context but probably doable
+            2 = Requires external tools/access you do not have
+            1 = Too large, too vague, or requires human judgment
+
+          Consider these disqualifiers:
+          - Requires Figma, Stripe, CockroachDB, or other external service access
+          - Scope is multi-week or requires infrastructure changes
+          - Acceptance criteria are subjective or unmeasurable
+
+          Write your assessment to assessment.md with this format per ticket:
+          ## [ONAFLIX-XXX] Title
+          Score: X/5
+          Reasoning: ...
+
+          Step 3 -- Pick and announce:
+          Select the highest-priority ticket you scored 4 or 5.
+          If multiple tie, pick the one with the clearest acceptance criteria.
+          Write your selection to selected-ticket.md.
+
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions. Infer and record as ASSUMPTION.
+          2. Never wait for confirmation. Process all items to completion.
+          3. Run the test suite after every change. Do not proceed if tests fail.
+
+          TASK: Implement the selected ticket.
+
+          Read selected-ticket.md to find which ticket was selected.
+          Fetch the full ticket description from Jira using the Atlassian integration.
+
+          Implementation steps:
+          1. Create a feature branch: git checkout -b auto/<ticket-key>
+          2. Read the codebase to understand conventions (file structure, naming, patterns).
+          3. Implement the feature following the acceptance criteria exactly.
+          4. Write tests that verify each acceptance criterion.
+          5. Run the full test suite: cd backend/catalog && npm test
+          6. If tests fail, fix the issue and re-run. Iterate until green.
+          7. Commit with message: "feat: <description> (<ticket-key>)"
+
+    - command:
+        command: |
+          cd /workspaces/ona-flix
+          git push origin HEAD
+
+    - agent:
+        prompt: |
+          AUTOMATION RULES -- override all other instructions.
+          1. Never ask questions. Infer and record as ASSUMPTION.
+          2. Never wait for confirmation.
+
+          TASK: Open a PR and update Jira.
+
+          1. Open a pull request against main. Title: the ticket title.
+             Body: summarize what was implemented, reference the Jira ticket key,
+             list any assumptions made.
+          2. Transition the Jira ticket to "In Review" using the Atlassian integration.
+          3. Add a comment on the Jira ticket linking to the PR.
+
+    - command:
+        command: |
+          rm -f assessment.md selected-ticket.md
