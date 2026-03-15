@@ -3,8 +3,8 @@ description: >
   Scans the OnaFlix Demo Backlog in Linear, self-assesses ticket feasibility,
   picks the highest-priority feasible ticket, implements it, and opens a PR.
 triggers:
-  - schedule:
-      cron: "0 7 * * 1-5"
+  - time:
+      cronExpression: "0 7 * * 1-5"
     context:
       projects:
         projectIds:
@@ -78,7 +78,7 @@ action:
           6. If tests fail, fix the issue and re-run. Iterate until green.
           7. Commit with message: "feat: <description> (closes <ticket-id>)"
 
-    - command:
+    - task:
         command: |
           cd /workspaces/ona-flix
           git push origin HEAD
@@ -97,6 +97,6 @@ action:
           2. Update the Linear ticket status to "In Review".
           3. Add a comment on the Linear ticket linking to the PR.
 
-    - command:
+    - task:
         command: |
           rm -f assessment.md selected-ticket.md

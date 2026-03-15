@@ -86,7 +86,7 @@ action:
           **Dependencies updated:** list
           **Tests:** PASS/FAIL
 
-    - command:
+    - task:
         command: git push origin HEAD
 
     - agent:
@@ -103,5 +103,5 @@ action:
           - Title: "chore: migrate to Node 20"
           - Body: the full migration report
 
-    - command:
+    - task:
         command: rm -f migration-assessment.md migration-report.md

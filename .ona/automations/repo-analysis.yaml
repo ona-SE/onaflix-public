@@ -3,8 +3,8 @@ description: >
   Scans all repositories in the ona-se organization. Produces a structured
   inventory with tech stack, health metrics, and recommendations.
 triggers:
-  - schedule:
-      cron: "0 7 1 * *"
+  - time:
+      cronExpression: "0 7 1 * *"
     context:
       projects:
         projectIds:
@@ -35,7 +35,7 @@ action:
     maxParallel: 1
     maxTotal: 1
   steps:
-    - command:
+    - task:
         command: |
           gh repo list ona-se --json name,description,primaryLanguage,updatedAt,isArchived \
             --limit 50 > /tmp/org-repos.json
@@ -107,12 +107,12 @@ action:
           Step 4 -- Clean up cloned repos:
           rm -rf /tmp/repo-analysis-*
 
-    - command:
+    - task:
         command: |
           # Copy inventory to the repo for reference
           cp /tmp/repo-inventory.md /workspaces/ona-flix/docs/org-inventory.md 2>/dev/null || true
           echo "Inventory complete"
 
-    - command:
+    - task:
         command: |
           rm -f /tmp/org-repos.json /tmp/repo-inventory.md

@@ -76,7 +76,7 @@ action:
           Services: <list>
           Features: <list>"
 
-    - command:
+    - task:
         command: git push origin HEAD
 
     - agent:

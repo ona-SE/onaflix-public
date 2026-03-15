@@ -75,6 +75,6 @@ action:
           It is acceptable to complete 3-4 tickets and leave 1-2 in progress.
           Write a summary of what was completed to /tmp/spec-results.md.
 
-    - command:
+    - task:
         command: |
           rm -f /tmp/spec-tickets.md /tmp/spec-results.md

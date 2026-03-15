@@ -4,10 +4,7 @@ description: >
   security vulnerabilities, missing error handling, and style issues.
   Posts inline comments and approves or requests changes.
 triggers:
-  - pullRequest:
-      actions:
-        - opened
-        - synchronize
+  - manual: {}
     context:
       projects:
         projectIds:
@@ -17,7 +14,7 @@ action:
     maxParallel: 3
     maxTotal: 10
   steps:
-    - command:
+    - task:
         command: |
           cd /workspaces/ona-flix
           gh pr diff $PR_NUMBER > /tmp/pr-diff.txt
@@ -89,6 +86,6 @@ action:
           For critical findings, also post inline comments on the specific lines using:
           gh pr comment $PR_NUMBER --body "<finding details>"
 
-    - command:
+    - task:
         command: |
           rm -f /tmp/pr-diff.txt /tmp/pr-meta.json /tmp/review-comments.md /tmp/review-verdict.txt

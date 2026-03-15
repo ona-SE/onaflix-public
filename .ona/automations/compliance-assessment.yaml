@@ -3,8 +3,8 @@ description: >
   Scans repositories against a compliance checklist. Produces a structured
   report and opens remediation PRs for auto-fixable gaps.
 triggers:
-  - schedule:
-      cron: "0 9 1 * *"
+  - time:
+      cronExpression: "0 9 1 * *"
     context:
       projects:
         projectIds:
@@ -126,7 +126,7 @@ action:
           - "chore: add CODEOWNERS"
           - "fix: replace hardcoded secrets in .env.example with placeholders"
 
-    - command:
+    - task:
         command: |
           cd /workspaces/ona-flix
           git push origin HEAD
@@ -146,6 +146,6 @@ action:
           - Body: include the full compliance report table, highlight which items
             were auto-fixed and which require manual intervention.
 
-    - command:
+    - task:
         command: |
           rm -f /tmp/compliance-report.md

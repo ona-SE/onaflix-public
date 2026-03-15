@@ -3,8 +3,8 @@ description: >
   Compares repository documentation (/docs folder) against the source of truth
   in Notion. Identifies stale or missing documentation and opens PRs to fix drift.
 triggers:
-  - schedule:
-      cron: "0 8 * * 1-5"
+  - time:
+      cronExpression: "0 8 * * 1-5"
     context:
       projects:
         projectIds:
@@ -19,7 +19,7 @@ action:
     maxParallel: 1
     maxTotal: 1
   steps:
-    - command:
+    - task:
         command: |
           cd /workspaces/ona-flix
           # List recent code changes that might affect docs
@@ -87,7 +87,7 @@ action:
           Fixes:
           - <list each correction>"
 
-    - command:
+    - task:
         command: |
           cd /workspaces/ona-flix
           git push origin HEAD
@@ -106,6 +106,6 @@ action:
           - Title: "docs: sync documentation with codebase"
           - Body: list each correction made, grouped by file
 
-    - command:
+    - task:
         command: |
           rm -f /tmp/changed-files.txt /tmp/docs-drift.md

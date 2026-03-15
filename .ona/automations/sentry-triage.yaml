@@ -4,8 +4,8 @@ description: >
   diagnoses root causes from stack traces, and implements fixes.
   Uses Ona's native Sentry integration — no API tokens needed.
 triggers:
-  - schedule:
-      cron: "0 8 * * 1-5"
+  - time:
+      cronExpression: "0 8 * * 1-5"
     context:
       projects:
         projectIds:
@@ -61,7 +61,7 @@ action:
           **Issues fixed:** M
           **Remaining:** list with reason why not auto-fixable
 
-    - command:
+    - task:
         command: |
           cd /workspaces/ona-flix
           git push origin HEAD
@@ -80,6 +80,6 @@ action:
           - Title: "fix: resolve top Sentry errors"
           - Body: the triage table and fix descriptions from the report
 
-    - command:
+    - task:
         command: |
           rm -f /tmp/sentry-report.md

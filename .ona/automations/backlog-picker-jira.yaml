@@ -1,15 +1,9 @@
 name: Backlog Picker (Jira)
 description: >
-  Scans a Jira backlog, self-assesses ticket feasibility, picks the
-  highest-priority feasible ticket, implements it, and opens a PR.
-  Uses Ona's Atlassian MCP integration — no API tokens needed.
+  Scans the Jira backlog (ona-demo.atlassian.net, project KAN), self-assesses
+  ticket feasibility, picks the highest-priority feasible ticket, implements it,
+  and opens a PR. Uses Jira REST API with JIRA_API_TOKEN secret.
 triggers:
-  - schedule:
-      cron: "0 7 * * 1-5"
-    context:
-      projects:
-        projectIds:
-          - "01999621-6bca-7a86-a9bb-c812a49387ac"
   - manual: {}
     context:
       projects:
@@ -20,6 +14,16 @@ action:
     maxParallel: 1
     maxTotal: 1
   steps:
+    - task:
+        command: |
+          curl -s -u "joe@ona.com:$JIRA_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            -X POST \
+            -d '{"jql":"project=KAN AND status=\"To Do\" ORDER BY priority DESC","maxResults":15,"fields":["summary","description","issuetype","priority","status"]}' \
+            "https://ona-demo.atlassian.net/rest/api/3/search/jql" \
+            > /tmp/backlog.json
+          echo "Fetched $(python3 -c 'import json; print(len(json.load(open("/tmp/backlog.json")).get("issues",[])))') tickets from Jira"
+
     - agent:
         prompt: |
           AUTOMATION RULES -- override all other instructions.
@@ -28,76 +32,43 @@ action:
           3. All output in Markdown with exact section headings.
           4. Concrete over abstract -- use literal values from source.
 
-          TASK: Scan the Jira backlog and pick a ticket to implement.
+          Read /tmp/backlog.json. This is a Jira API response containing backlog
+          tickets from the KAN project at ona-demo.atlassian.net.
 
-          Step 1 -- Fetch backlog:
-          Use the Atlassian integration to search Jira for issues in the ONAFLIX
-          project with status "To Do" or "Backlog". Sort by priority descending.
+          For each ticket:
+          1. Read the key, summary, description, and any acceptance criteria
+          2. Assess whether you can complete it autonomously. Consider:
+             - Is the scope clear enough to implement and verify?
+             - Can you run tests to validate your work?
+             - Does it require external tools or access you do not have?
+             - Is it too large for a single session?
+          3. Score each ticket 1-5 on feasibility (5 = definitely can do, 1 = cannot)
 
-          Step 2 -- Self-assess each ticket:
-          For each ticket, read the title, full description, and acceptance criteria.
-          Assess whether you can complete it autonomously. Score each 1-5 on feasibility:
-            5 = Clear acceptance criteria, code-only, testable
-            4 = Mostly clear, minor ambiguity, testable
-            3 = Requires some external context but probably doable
-            2 = Requires external tools/access you do not have
-            1 = Too large, too vague, or requires human judgment
+          Output your assessment as a Markdown table with columns:
+          Key | Summary | Priority | Feasibility (1-5) | Reasoning
 
-          Consider these disqualifiers:
-          - Requires Figma, Stripe, CockroachDB, or other external service access
-          - Scope is multi-week or requires infrastructure changes
-          - Acceptance criteria are subjective or unmeasurable
+          Pick the highest-priority ticket you scored 4 or 5. If multiple tickets
+          tie on priority, pick the one with the clearest acceptance criteria.
 
-          Write your assessment to assessment.md with this format per ticket:
-          ## [ONAFLIX-XXX] Title
-          Score: X/5
-          Reasoning: ...
+          Write the picked ticket key to /tmp/picked_ticket_id.txt (just the key,
+          e.g. "KAN-4").
 
-          Step 3 -- Pick and announce:
-          Select the highest-priority ticket you scored 4 or 5.
-          If multiple tie, pick the one with the clearest acceptance criteria.
-          Write your selection to selected-ticket.md.
+          Then implement the ticket. Follow the ona-flix codebase conventions:
+          - React frontend in frontend/src/
+          - Express backend in backend/
+          - Tests with the project test framework
 
-    - agent:
-        prompt: |
-          AUTOMATION RULES -- override all other instructions.
-          1. Never ask questions. Infer and record as ASSUMPTION.
-          2. Never wait for confirmation. Process all items to completion.
-          3. Run the test suite after every change. Do not proceed if tests fail.
+          Write tests that cover the acceptance criteria. Run the test suite and
+          iterate until all tests pass.
 
-          TASK: Implement the selected ticket.
+          After implementation is complete, stage and commit your changes:
+          git add -A && git commit -m "feat: implement $(cat /tmp/picked_ticket_id.txt)"
 
-          Read selected-ticket.md to find which ticket was selected.
-          Fetch the full ticket description from Jira using the Atlassian integration.
-
-          Implementation steps:
-          1. Create a feature branch: git checkout -b auto/<ticket-key>
-          2. Read the codebase to understand conventions (file structure, naming, patterns).
-          3. Implement the feature following the acceptance criteria exactly.
-          4. Write tests that verify each acceptance criterion.
-          5. Run the full test suite: cd backend/catalog && npm test
-          6. If tests fail, fix the issue and re-run. Iterate until green.
-          7. Commit with message: "feat: <description> (<ticket-key>)"
-
-    - command:
+    - task:
         command: |
-          cd /workspaces/ona-flix
-          git push origin HEAD
-
-    - agent:
-        prompt: |
-          AUTOMATION RULES -- override all other instructions.
-          1. Never ask questions. Infer and record as ASSUMPTION.
-          2. Never wait for confirmation.
-
-          TASK: Open a PR and update Jira.
-
-          1. Open a pull request against main. Title: the ticket title.
-             Body: summarize what was implemented, reference the Jira ticket key,
-             list any assumptions made.
-          2. Transition the Jira ticket to "In Review" using the Atlassian integration.
-          3. Add a comment on the Jira ticket linking to the PR.
-
-    - command:
-        command: |
-          rm -f assessment.md selected-ticket.md
+          TICKET_ID=$(cat /tmp/picked_ticket_id.txt 2>/dev/null || echo "KAN-X")
+          SUMMARY=$(git log -1 --format=%s)
+          gh pr create \
+            --title "$TICKET_ID: $SUMMARY" \
+            --body "Resolves $TICKET_ID. Implemented by Ona Backlog Picker automation." \
+            --head "$(git branch --show-current)"

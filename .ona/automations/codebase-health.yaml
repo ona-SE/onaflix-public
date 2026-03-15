@@ -3,8 +3,8 @@ description: >
   Runs dead code analysis to find unused dependencies, exports, files,
   and types. Creates focused cleanup PRs for each category.
 triggers:
-  - schedule:
-      cron: "0 6 * * 1"
+  - time:
+      cronExpression: "0 6 * * 1"
     context:
       projects:
         projectIds:
@@ -19,7 +19,7 @@ action:
     maxParallel: 1
     maxTotal: 1
   steps:
-    - command:
+    - task:
         command: |
           cd /workspaces/ona-flix
           npx knip --reporter json > /tmp/knip-results.json 2>&1 || true
@@ -82,7 +82,7 @@ action:
           **Unused types removed:** list
           **Tests status:** PASS/FAIL
 
-    - command:
+    - task:
         command: |
           cd /workspaces/ona-flix
           git push origin HEAD
@@ -101,6 +101,6 @@ action:
           - Title: "chore: codebase health sweep -- remove dead code"
           - Body: the full health report
 
-    - command:
+    - task:
         command: |
           rm -f /tmp/knip-results.json /tmp/knip-readable.txt /tmp/health-findings.md /tmp/health-report.md
