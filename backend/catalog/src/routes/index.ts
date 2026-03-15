@@ -1,11 +1,13 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { MovieController } from '../controllers/movieController';
 import { HealthController } from '../controllers/healthController';
+import { ReviewController } from '../controllers/reviewController';
 import { searchLimiter, mutationLimiter } from '../middleware/rateLimiter';
 
 export const createRoutes = (
   movieController: MovieController,
-  healthController: HealthController
+  healthController: HealthController,
+  reviewController?: ReviewController
 ): Router => {
   const router = Router();
 
@@ -61,6 +63,14 @@ export const createRoutes = (
       next(error);
     }
   });
+
+  // Review routes
+  if (reviewController) {
+    router.post('/api/movies/:movieId/reviews', mutationLimiter, reviewController.createReview);
+    router.get('/api/movies/:movieId/reviews/summary', searchLimiter, reviewController.getReviewSummary);
+    router.get('/api/movies/:movieId/reviews', searchLimiter, reviewController.getReviews);
+    router.delete('/api/movies/:movieId/reviews/:reviewId', mutationLimiter, reviewController.deleteReview);
+  }
 
   return router;
 };

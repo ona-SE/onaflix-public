@@ -17,8 +17,21 @@ export const SuggestionsQuerySchema = z.object({
   q: z.string().min(2, 'Query must be at least 2 characters'),
 });
 
+export const CreateReviewSchema = z.object({
+  user_name: z.string().min(1).max(100),
+  rating: z.coerce.number().int().min(1).max(5),
+  text: z.string().min(10).max(2000),
+});
+
+export const ReviewPaginationSchema = z.object({
+  limit: z.coerce.number().int().min(1).max(50).optional().default(10),
+  offset: z.coerce.number().int().min(0).optional().default(0),
+});
+
 export type SearchQuery = z.infer<typeof SearchQuerySchema>;
 export type SuggestionsQuery = z.infer<typeof SuggestionsQuerySchema>;
+export type CreateReviewInput = z.infer<typeof CreateReviewSchema>;
+export type ReviewPaginationQuery = z.infer<typeof ReviewPaginationSchema>;
 
 export interface ApiError {
   error: string;

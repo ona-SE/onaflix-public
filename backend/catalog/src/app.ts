@@ -7,10 +7,13 @@ import { pool } from './config/database';
 import { redis } from './config/redis';
 import { logger } from './config/logger';
 import { MovieRepository } from './repositories/movieRepository';
+import { ReviewRepository } from './repositories/reviewRepository';
 import { CacheService } from './services/cacheService';
 import { MovieService } from './services/movieService';
+import { ReviewService } from './services/reviewService';
 import { MovieController } from './controllers/movieController';
 import { HealthController } from './controllers/healthController';
+import { ReviewController } from './controllers/reviewController';
 import { createRoutes } from './routes';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import { requestLogger } from './middleware/requestLogger';
@@ -27,12 +30,15 @@ export const createApp = (): Express => {
   app.use(apiLimiter);
 
   const movieRepository = new MovieRepository(pool);
+  const reviewRepository = new ReviewRepository(pool);
   const cacheService = new CacheService(redis);
   const movieService = new MovieService(movieRepository, cacheService);
+  const reviewService = new ReviewService(reviewRepository, movieService);
   const movieController = new MovieController(movieService);
   const healthController = new HealthController(cacheService);
+  const reviewController = new ReviewController(reviewService);
 
-  const routes = createRoutes(movieController, healthController);
+  const routes = createRoutes(movieController, healthController, reviewController);
   app.use(routes);
 
   Sentry.setupExpressErrorHandler(app);
