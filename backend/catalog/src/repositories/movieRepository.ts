@@ -96,7 +96,7 @@ export class MovieRepository {
 
   async truncate(): Promise<void> {
     try {
-      await this.pool.query('TRUNCATE TABLE movies');
+      await this.pool.query('TRUNCATE TABLE movies CASCADE');
       logger.info('Movies table truncated');
     } catch (error) {
       logger.error('Error truncating movies table', { error });
@@ -107,7 +107,7 @@ export class MovieRepository {
   async seed(): Promise<void> {
     try {
       await this.pool.query(`
-        TRUNCATE TABLE movies;
+        TRUNCATE TABLE movies CASCADE;
         INSERT INTO movies (title, description, release_year, rating, image_url) VALUES
         ('The Shawshank Redemption', 'Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.', 1994, 9.3, 'https://m.media-amazon.com/images/M/MV5BNDE3ODcxYzMtY2YzZC00NmNlLWJiNDMtZDViZWM2MzIxZDYwXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_.jpg'),
         ('The Godfather', 'The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.', 1972, 9.2, 'https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg'),

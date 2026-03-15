@@ -23,7 +23,7 @@ export const createRoutes = (
   // Movie detail -- does not guard against non-numeric id
   router.get('/api/movies/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = parseInt(req.params.id as string);
       // No NaN check -- throws when passed to query with undefined behavior
       const result = await movieController['movieService'].getMovieById(id);
       if (!result) {
