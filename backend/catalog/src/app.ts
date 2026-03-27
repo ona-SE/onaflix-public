@@ -11,6 +11,7 @@ import { ReviewRepository } from './repositories/reviewRepository';
 import { CacheService } from './services/cacheService';
 import { MovieService } from './services/movieService';
 import { ReviewService } from './services/reviewService';
+import { RecommendationService } from './services/recommendationService';
 import { MovieController } from './controllers/movieController';
 import { HealthController } from './controllers/healthController';
 import { ReviewController } from './controllers/reviewController';
@@ -34,11 +35,12 @@ export const createApp = (): Express => {
   const cacheService = new CacheService(redis);
   const movieService = new MovieService(movieRepository, cacheService);
   const reviewService = new ReviewService(reviewRepository, movieService);
+  const recommendationService = new RecommendationService(movieRepository, cacheService);
   const movieController = new MovieController(movieService);
   const healthController = new HealthController(cacheService);
   const reviewController = new ReviewController(reviewService);
 
-  const routes = createRoutes(movieController, healthController, reviewController);
+  const routes = createRoutes(movieController, healthController, reviewController, recommendationService);
   app.use(routes);
 
   Sentry.setupExpressErrorHandler(app);

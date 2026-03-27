@@ -2,6 +2,7 @@ import { MovieRepository } from '../repositories/movieRepository';
 import { CacheService } from './cacheService';
 import { Movie, MovieSearchFilters, SearchResult, Suggestion } from '../types/movie.types';
 import { logger } from '../config/logger';
+import { EventEmitter } from 'events';
 
 export class MovieService {
   private readonly CACHE_TTL = {

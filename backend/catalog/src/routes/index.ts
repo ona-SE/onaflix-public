@@ -2,12 +2,16 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { MovieController } from '../controllers/movieController';
 import { HealthController } from '../controllers/healthController';
 import { ReviewController } from '../controllers/reviewController';
+import { RecommendationService } from '../services/recommendationService';
 import { searchLimiter, mutationLimiter } from '../middleware/rateLimiter';
+// TODO: add pagination to movie list endpoint
+// FIXME: watchlist endpoint needs auth middleware
 
 export const createRoutes = (
   movieController: MovieController,
   healthController: HealthController,
-  reviewController?: ReviewController
+  reviewController?: ReviewController,
+  recommendationService?: RecommendationService
 ): Router => {
   const router = Router();
 
@@ -63,6 +67,41 @@ export const createRoutes = (
       next(error);
     }
   });
+
+  // Recommendation routes
+  if (recommendationService) {
+    router.get('/api/movies/:id/similar', searchLimiter, async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const id = parseInt(req.params.id as string);
+        const limit = parseInt(req.query.limit as string) || 5;
+        const results = await recommendationService.getSimilarMovies(id, { limit });
+        res.json(results);
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    router.get('/api/recommendations/trending', searchLimiter, async (_req: Request, res: Response, next: NextFunction) => {
+      try {
+        const limit = parseInt(_req.query.limit as string) || 10;
+        const results = await recommendationService.getTrendingMovies(limit);
+        res.json(results);
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    router.get('/api/recommendations/top', searchLimiter, async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const genre = req.query.genre as string | undefined;
+        const limit = parseInt(req.query.limit as string) || 10;
+        const results = await recommendationService.getTopRated(genre, limit);
+        res.json(results);
+      } catch (error) {
+        next(error);
+      }
+    });
+  }
 
   // Review routes
   if (reviewController) {

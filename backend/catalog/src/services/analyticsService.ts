@@ -29,6 +29,7 @@ export class AnalyticsService {
   }
 
   trackMovieView(movieId: number, userId?: string): void {
+    console.log(`Tracking movie view: ${movieId}`);
     this.addEvent({
       eventType: 'movie_view',
       movieId,

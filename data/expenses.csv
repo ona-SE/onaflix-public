@@ -1,0 +1,57 @@
+date,category,vendor,amount,description
+2025-07-03,Software,GitHub,450.00,Annual team plan renewal
+2025-07-08,Travel,United Airlines,1250.00,Flight to customer onsite (NYC)
+2025-07-08,Travel,Marriott Hotels,680.00,Hotel for NYC customer visit (2 nights)
+2025-07-12,Office Supplies,Amazon Business,89.50,Monitors and cables for new hires
+2025-07-15,Software,Figma,180.00,Design tool licenses (3 seats)
+2025-07-19,Meals & Entertainment,DoorDash,145.00,Team lunch for sprint review
+2025-07-22,Training,Udemy Business,299.00,Annual learning platform subscription
+2025-07-28,Software,Datadog,520.00,Monitoring platform monthly
+2025-08-02,Office Supplies,Staples,62.30,Printer paper and toner
+2025-08-05,Travel,Delta Airlines,890.00,Flight to conference (Austin)
+2025-08-05,Travel,Hilton Hotels,475.00,Hotel for Austin conference (2 nights)
+2025-08-10,Software,Slack,340.00,Team communication monthly
+2025-08-14,Meals & Entertainment,Uber Eats,98.00,Client dinner delivery
+2025-08-18,Training,Coursera,199.00,Cloud certification courses
+2025-08-22,Software,AWS,1850.00,Cloud infrastructure monthly
+2025-08-25,Office Supplies,Amazon Business,215.00,Standing desk accessories
+2025-08-30,Meals & Entertainment,Grubhub,76.50,Team celebration lunch
+2025-09-03,Software,GitHub,450.00,Monthly platform fee
+2025-09-06,Travel,Southwest Airlines,420.00,Flight to partner meeting (Denver)
+2025-09-06,Travel,Hyatt Hotels,310.00,Hotel for Denver meeting (1 night)
+2025-09-10,Office Supplies,Best Buy,340.00,Webcams and headsets
+2025-09-15,Software,Datadog,520.00,Monitoring platform monthly
+2025-09-18,Training,O'Reilly Media,499.00,Technical library subscription
+2025-09-20,Meals & Entertainment,DoorDash,112.00,Sprint retrospective lunch
+2025-09-25,Software,AWS,1920.00,Cloud infrastructure monthly
+2025-09-28,Software,Notion,160.00,Team workspace monthly
+2025-10-01,Travel,American Airlines,1100.00,Flight to customer onsite (Chicago)
+2025-10-01,Travel,Marriott Hotels,520.00,Hotel for Chicago visit (2 nights)
+2025-10-05,Software,Slack,340.00,Team communication monthly
+2025-10-08,Office Supplies,Amazon Business,178.00,Ergonomic keyboards
+2025-10-12,Meals & Entertainment,Uber Eats,134.00,Quarterly team dinner
+2025-10-15,Software,Datadog,520.00,Monitoring platform monthly
+2025-10-18,Training,PluralSight,350.00,Security training licenses
+2025-10-22,Software,AWS,2100.00,Cloud infrastructure monthly (usage spike)
+2025-10-25,Office Supplies,Staples,45.00,Office supplies restock
+2025-10-30,Travel,Lyft,85.00,Ground transport for customer visits
+2025-11-03,Software,GitHub,450.00,Monthly platform fee
+2025-11-06,Travel,United Airlines,780.00,Flight to team offsite (Portland)
+2025-11-06,Travel,Hilton Hotels,890.00,Hotel for Portland offsite (3 nights)
+2025-11-10,Meals & Entertainment,DoorDash,210.00,Offsite team dinners
+2025-11-14,Software,Datadog,520.00,Monitoring platform monthly
+2025-11-18,Software,AWS,1980.00,Cloud infrastructure monthly
+2025-11-20,Office Supplies,Amazon Business,295.00,Monitor arms and cable management
+2025-11-22,Training,Udemy Business,299.00,Quarterly learning credits
+2025-11-25,Software,Notion,160.00,Team workspace monthly
+2025-11-28,Meals & Entertainment,Grubhub,88.00,Thanksgiving team lunch
+2025-12-02,Software,Slack,340.00,Team communication monthly
+2025-12-05,Travel,Delta Airlines,650.00,Flight to year-end customer review (Boston)
+2025-12-05,Travel,Marriott Hotels,410.00,Hotel for Boston review (1 night)
+2025-12-08,Office Supplies,Best Buy,420.00,Holiday equipment refresh
+2025-12-12,Software,Datadog,520.00,Monitoring platform monthly
+2025-12-15,Software,AWS,2050.00,Cloud infrastructure monthly
+2025-12-18,Meals & Entertainment,DoorDash,185.00,Holiday team celebration
+2025-12-20,Training,Coursera,199.00,New year learning prep
+2025-12-22,Software,Figma,180.00,Design tool renewal
+2025-12-28,Office Supplies,Amazon Business,156.00,New year office supplies
